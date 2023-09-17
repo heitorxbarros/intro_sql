@@ -1,0 +1,44 @@
+---
+title: "Introdução a bases de dados e SQL"
+subtitle: "Parte 2"
+author: "Heitor Barros"
+institute: "FP/SUBGGC/CGRH/CTAP"
+date: ""
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    css: xaringan-themer.css
+---
+class: center, middle
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_accent(
+  base_color = "#004b80",
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Montserrat", "300", "300i"),
+  code_font_google   = google_font("Fira Mono")
+)
+```
+
+```{r xaringan-logo, echo=FALSE}
+xaringanExtra::use_logo(
+  image_url = "logo.png",
+  link_url = "prefeitura.rio",
+  position = xaringanExtra::css_position(top = "1em", right = "1em"),
+  width = "200px"
+)
+
+```
+
+# SQL
+
+---
+class: inverse, center, middle
+
+# Structured Query Language
+
+---

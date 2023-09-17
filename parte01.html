@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introdução a bases de dados e SQL</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Heitor Barros" />
+    <script src="libs/header-attrs-2.21/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Introdução a bases de dados e SQL
+]
+.subtitle[
+## Parte 1
+]
+.author[
+### Heitor Barros
+]
+.institute[
+### FP/SUBGGC/CGRH/CTAP
+]
+
+---
+
+class: center, middle
+
+
+<div>
+<style type="text/css">.xaringan-extra-logo {
+width: 200px;
+height: 128px;
+z-index: 0;
+background-image: url(logo.png);
+background-size: contain;
+background-repeat: no-repeat;
+position: absolute;
+top:1em;right:1em;
+}
+</style>
+<script>(function () {
+  let tries = 0
+  function addLogo () {
+    if (typeof slideshow === 'undefined') {
+      tries += 1
+      if (tries < 10) {
+        setTimeout(addLogo, 100)
+      }
+    } else {
+      document.querySelectorAll('.remark-slide-content:not(.title-slide):not(.inverse):not(.hide_logo)')
+        .forEach(function (slide) {
+          const logo = document.createElement('a')
+          logo.classList = 'xaringan-extra-logo'
+          logo.href = 'prefeitura.rio'
+          slide.appendChild(logo)
+        })
+    }
+  }
+  document.addEventListener('DOMContentLoaded', addLogo)
+})()</script>
+</div>
+
+# Introdução
+
+---
+class: inverse, center, middle
+
+# O que é um banco de dados?
+
+---
+
+# Introdução
+
+### O que é um banco de dados?
+
+De maneira simplificada podemos definir **banco de dados (BD)** como um &lt;span style="color:red;"&gt;*repositório central*&lt;/span&gt; de informações que podem ser consultadas e/ou atualizadas por &lt;span style="color:red;"&gt;*diversos usuários*&lt;/span&gt; simultaneamente.
+
+&lt;img src="images/BD.png" width="70%" style="display: block; margin: auto;" /&gt;
+---
+
+### Introdução
+
+- Interagimos diariamente com bancos de dados de maneira direta ou indireta.
+
+--
+
+- Conversas ao celular, transações bancarias e consultas ao **ERGON** são exemplos de operações que produzem registros em bancos de dados.
+
+--
+
+- Sempre que visitamos algum site (Google, globo.com, processo.rio, ...) existe um BD **"por trás da cena"** para retornar a informação requisitada. 
+
+--
+
+- A grande maioria dos sistemas que usamos tem como peça fundamental um ou mais bancos de dados. 
+
+---
+
+### Principais características dos BDs
+
+--
+
+- São projetados, construídos e populados com um propósito específico. Os dados contidos em um BD representam algum aspecto do mundo real, denominado &lt;span style="color:red;"&gt;**minimundo**&lt;/span&gt;. Qualquer mudança no minimundo deve ser refletida no BD.
+
+--
+
+- Armazena conteúdo de interesse para &lt;span style="color:red;"&gt;**muitos usuários**&lt;/span&gt;.
+
+--
+
+- Seus dados são enxergados e manipulados de maneira unificada, podendo ser acessados a partir de um &lt;span style="color:red;"&gt;**repositório central**&lt;/span&gt;.
+
+--
+
+- Ao invés de estarem estruturados em planilhas ou arquivos CSV, os dados do BD são estruturados em um software denominado &lt;span style="color:red;"&gt;**Sistema Gerenciador de Banco de Dados (SGBD)**&lt;/span&gt;. 
+---
+
+### Principais características dos BDs
+.pull-left[
+- **Exemplo:** &lt;strong style="color:red;"&gt;*ERGON*&lt;/strong&gt;
+
+- **Minimundo:** sistema de gestão de pessoas para setor público que gera automaticamente a folha de pagamento, incluindo os eventos retroativos e a contagem de tempo
+
+- **Usuários:** Funcionários da Prefeitura
+
+- **Repositório Central:** ERGON
+
+- **SGBD:** ORACLE
+]
+.pull-right[
+&lt;img src="images/ergon.png" width="100%" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+---
+### Principais características dos BDs
+
+- Bancos de dados podem ser de **qualquer tamanho** ou **complexidade**. Atualmente, os bancos de dados de empresas rotineiramente armazenam **terabytes** ($10^{12}$ bytes) ou **pentabytes** ($10^{15}$ bytes) de dados, que são servidos aos seus usuários.
+
+- Cadastros no ERGON: 
+  + 336.953 funcionários;
+  + 574.299 vínculos;
+  + 1.020 tipos de vantagem;
+  
+---
+### Sistema Gerenciador de Banco &lt;br&gt;de Dados
+
+- Software especial e muito sofisticado que permite a definição, construção, manipulação e compartilhamento de bancos de dados entre vários usuários e aplicações. 
+- Ele é também utilizado para garantir a segurança dos dados, protegendo-os contra falhas (ex: falhas de hardware) ou tentativas de acesso não autorizado.
+- Alguns exemplos de SGBD’s famosos: 
+
+&lt;img src="images/SGBD.png" width="150%" style="display: block; margin: auto;" /&gt;
+
+---
+### Tipos de usuários de um SGBD
+- **DBA** (*database administrator*): responsável pela instalação, autorização do acesso, monitoramento do uso e da administração geral do SBGD.
+
+- **Projetista**: responsável pelo projeto e criação do banco de dados de um determinado sistema da empresa. Para tal, ele
+precisa receber autorização do DBA.
+
+- **Usuário Final**: usuários que consultam ou atualizam o banco de dados, através de algum sistema.
+
+--
+
+- **Cientista de dados**: usuário interessado em consultar, coletar, explorar e analisar os dados armazenados em um SGBD, 
+normalmente utilizando uma linguagem de consulta como a SQL.
+
+---
+### Funcionalidades de um SGBD
+1. Permitir com que usuários **definam** e **construam** BDs, especificando suas *estruturas de armazenamento* (esquemas) com o uso de uma linguagem de definição de dados.
+
+&lt;img src="images/funcionalidade_sgbd1.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+### Funcionalidades de um SGBD
+&lt;ol start="2"&gt;
+
+&lt;li&gt; Dar aos usuários a habilidade de consultar (querying) os dados e modifica-los, com o uso de uma linguagem de manipulação de dados.
+
+&lt;/ol&gt;
+
+&lt;img src="images/funcionalidade_sgbd2.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+### Funcionalidades de um SGBD
+&lt;ol start="3"&gt;
+&lt;li&gt; Suportar o armazenamento de &lt;strong style="color:red;"&gt;grandes quantidades de dados&lt;/strong&gt;, permitindo o acesso &lt;strong&gt;eficiente&lt;/strong&gt; às informações por múltiplos usuários, de forma concorrente.
+&lt;/ol&gt;
+
+&lt;img src="images/funcionalidade_sgbd3.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+### Funcionalidades de um SGBD
+&lt;ol start="4"&gt;
+&lt;li&gt; Oferecer um sistema de &lt;strong style="color:red;"&gt;backup&lt;/strong&gt; que permita a recuperação de dados que sejam corrompidos (por motivo de falha de hardware ou software) ou perdidos de forma acidental. &lt;/br&gt;
+&lt;li&gt; Oferecer mecanismos para &lt;strong style="color:red;"&gt;controle de acesso&lt;/strong&gt; não autorizado.
+&lt;ul&gt; 
+&lt;li&gt; Quando múltiplos usuários compartilham o acesso a um banco de dados, é comum que muitos deles não estejam autorizados a acessar todas as informações contidas no banco.
+&lt;li&gt; Através do sistema de segurança e controle de acesso do SGBD, o DBA pode especificar as restrições de acesso associadas a cada perfil/conta de usuário.
+&lt;/ul&gt;
+&lt;li&gt; Garantir que as  &lt;strong style="color:red;"&gt;restrições de integridade&lt;/strong&gt; associadas aos dados (definidas pelo Projetista do Banco) sejam sempre respeitadas, para que o banco mantenha se sempre em um estado consistente.
+&lt;ul&gt;
+&lt;li&gt; &lt;strong&gt;Ex.:&lt;/strong&gt; Não permitir que um mesmo funcionário seja cadastrado duas vezes;
+&lt;li&gt; Não permitir que um texto seja gravado no campo referente à data de nascimento; 
+&lt;/ul&gt;
+&lt;/ol&gt;
+
+---
+### Editores de texto
+Os editores de texto são ferramentas de software projetadas para **criar**, **modificar**, **formatar** e **armazenar** documentos de texto. Eles têm uma variedade de usos e são amplamente utilizados na programação e desenvolvimento de software.
+&lt;/br&gt;
+- **NOTEPAD++**: editor de texto altamente versátil e amplamente reconhecido por sua capacidade de realçar a sintaxe SQL, o que facilita significativamente a escrita e a compreensão das instruções SQL.
+- **SQL*Plus**: interface de linha de comando fornecida pela Oracle Corporation para interagir com bancos de dados Oracle, permitindo que os usuários executem consultas SQL, gerenciem objetos do banco de dados e obtenham resultados de consultas em texto simples. 
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
