@@ -195,3 +195,58 @@ Os editores de texto são ferramentas de software projetadas para **criar**, **m
 </br>
 - **NOTEPAD++**: editor de texto altamente versátil e amplamente reconhecido por sua capacidade de realçar a sintaxe SQL, o que facilita significativamente a escrita e a compreensão das instruções SQL.
 - **SQL*Plus**: interface de linha de comando fornecida pela Oracle Corporation para interagir com bancos de dados Oracle, permitindo que os usuários executem consultas SQL, gerenciem objetos do banco de dados e obtenham resultados de consultas em texto simples. 
+
+---
+class: inverse, center, middle
+
+# Teoria de conjuntos
+
+---
+
+```{r conjuntos, echo=FALSE, message=F, warning=F, dpi=600}
+library(ggplot2)
+library(patchwork)
+library(ggforce)
+library(dplyr)
+library(latex2exp)
+
+y=seq(-.75,.75, by=.001)+2 
+x=sqrt(.75^2-y^2)+1
+x2=-x+2
+df = data.frame(x,y) |> 
+  filter(y<1+sqrt(.75^2-.5^2) & y > 1-sqrt(.75^2-.5^2))
+
+
+p1 <- ggplot() +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, fill = "darkgreen") +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
+      geom_text(aes(x = c(.5,2.5), y = rep(.25,2), label = c("A","B")), size = 10) +
+      geom_text(aes(x = 0.25, y = 2, label = "u"), size = 10) +
+      geom_text(aes(x = 1.5, y = 2, label = "AUB"), size = 10) +
+      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
+      theme_void() + 
+      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
+            panel.background = element_rect(fill = "#fff2d7",
+                                
+                                size = 0.5, linetype = "solid"))
+
+p2 <- ggplot() +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
+      geom_point(data = df, aes(x=x,y=y), color = 'red')
+      # geom_point(aes(x=(sqrt(.75^2-seq(1+sqrt(.75^2-.5^2),1-sqrt(.75^2-.5^2), by = -.01)^2)+1),
+      #                y= seq(1+sqrt(.75^2-.5^2),1-sqrt(.75^2-.5^2), by = .01)), color ="red") +
+      
+      geom_point(aes(x= 1.5,  y = 1+sqrt(.75^2-.5^2)), color ="red") +
+      geom_text(aes(x = c(.5,2.5), y = rep(.25,2), label = c("A","B")), size = 10) +
+      geom_text(aes(x = 0.25, y = 2, label = "u"), size = 10) +
+      geom_text(aes(x = 1.5, y = 2, label = "AnB"), size = 10) +
+      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
+      theme_void() + 
+      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
+            panel.background = element_rect(fill = "#fff2d7",
+                                
+                                size = 0.5, linetype = "solid"))
+
+p1+p2
+```
+

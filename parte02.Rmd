@@ -49,20 +49,24 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
 
 ```{r tabela, echo=F}
 tibble::tibble(
-  Finalidade = c("Recuperar dados",
+  FINALIDADE = c("Recuperar dados",
                  "Manipular dados",
                  "Definir dados",
                  "Controlar transações"), 
-  Instruções = c("SELECT",
+  INSTRUÇÕES = c("SELECT",
                  "INSERT, UPDATE e DELETE",
                  "CREATE, ALTER e DROP",
                  "COMMIT e ROLLBACK"),
-  Descrição = c("Recupera registros armazenados em tabelas do banco de dados",
+  DESCRIÇÃO = c("Recupera registros armazenados em tabelas do banco de dados",
                 "Inserção, alteração e remoção de registros de tabelas do banco de dados. Este subconjunto de instruções da SQL é                  conhecido como DML (Data Manipulation Language)",
                 "Criação, alteração e exclusão de objetos do banco de dados (ex.: tabelas, índices, etc.). Este subconjunto de                     instruções é conhecido como DDL (Data Definition Language).",
                 "Gerenciam as modificações realizadas pelos comandos DML. Permitem agrupar as alterações dos dados em transações                   lógicas.")
 ) |> 
-  gt::gt()
+  gt::gt() |> 
+  gt::tab_style(style = gt::cell_text(weight = "bold",size = 18), 
+                locations = gt::cells_column_labels()) |> 
+  gt::opt_stylize(style = 5, color = "blue", add_row_striping = F)
+
 ```
 
 ---
@@ -157,16 +161,17 @@ tibble::tibble(
   )
 ) |> 
   gt::gt() |> 
-  gt::data_color(columns = TIPO, apply_to = "text",colors =  viridis::viridis(3)) |> 
+  gt::data_color(columns = TIPO, apply_to = "text",colors =  c("darkgreen","darkblue","black")) |> 
   gt::data_color(columns = `PODE SER NULL`, apply_to = "text",colors =  c("black","orangered3")) |> 
   gt::tab_options(table.font.size = 15,
                   container.width = 750,
                   container.height = 300,
                   table.align='center') |> 
   gt::tab_style(style = gt::cell_text(weight = "bold",size = 18), 
-                locations = gt::cells_column_labels())
+                locations = gt::cells_column_labels()) |> 
+  gt::opt_stylize(style = 5, color = "blue", add_row_striping = F)
 
-
+# blue cyan pink green red gray
 # OWNER;TABLE_NAME        ;COLUMN_NAME    ;DATA_TYPE;NULLABLE
 # ERGON;FICHAS_FINANCEIRAS;COMPLEMENTO    ;VARCHAR2 ;Y
 # ERGON;FICHAS_FINANCEIRAS;CORRECAO       ;NUMBER   ;Y
