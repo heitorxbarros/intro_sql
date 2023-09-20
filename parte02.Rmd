@@ -171,40 +171,7 @@ tibble::tibble(
                 locations = gt::cells_column_labels()) |> 
   gt::opt_stylize(style = 5, color = "blue", add_row_striping = F)
 
-# blue cyan pink green red gray
-# OWNER;TABLE_NAME        ;COLUMN_NAME    ;DATA_TYPE;NULLABLE
-# ERGON;FICHAS_FINANCEIRAS;COMPLEMENTO    ;VARCHAR2 ;Y
-# ERGON;FICHAS_FINANCEIRAS;CORRECAO       ;NUMBER   ;Y
-# ERGON;FICHAS_FINANCEIRAS;DESC_VANT      ;VARCHAR2 ;N
-# ERGON;FICHAS_FINANCEIRAS;EMP_CODIGO     ;NUMBER   ;N
-# ERGON;FICHAS_FINANCEIRAS;EXECUCAO       ;NUMBER   ;Y
-# ERGON;FICHAS_FINANCEIRAS;LANCAMENTO     ;NUMBER   ;N
-# ERGON;FICHAS_FINANCEIRAS;MES_ANO_DIREITO;DATE     ;N
-# ERGON;FICHAS_FINANCEIRAS;MES_ANO_FOLHA  ;DATE     ;N
-# ERGON;FICHAS_FINANCEIRAS;NUMFUNC        ;NUMBER   ;N
-# ERGON;FICHAS_FINANCEIRAS;NUMPENS        ;NUMBER   ;Y
-# ERGON;FICHAS_FINANCEIRAS;NUMVINC        ;NUMBER   ;N
-# ERGON;FICHAS_FINANCEIRAS;NUM_FOLHA      ;NUMBER   ;N
-# ERGON;FICHAS_FINANCEIRAS;RUBRICA        ;NUMBER   ;N
-# ERGON;FICHAS_FINANCEIRAS;TIPO_RUBRICA   ;NUMBER   ;N
-# ERGON;FICHAS_FINANCEIRAS;VALOR          ;NUMBER   ;N
-# 
-# 
-# "NUMFUNC": Número de identificação do funcionário.
-# "NUMVINC": Número de vínculo associado ao funcionário.
-# "NUMPENS": Número de identificação do plano de pensão.
-# "EMP_CODIGO": Código de identificação da empresa ou empregador.
-# "MES_ANO_FOLHA": Mês e ano da folha de pagamento.
-# "MES_ANO_DIREITO": Mês e ano do direito associado aos dados.
-# "NUM_FOLHA": Número da folha de pagamento.
-# "RUBRICA": Código ou descrição da rubrica associada a um pagamento ou dedução.
-# "TIPO_RUBRICA": Tipo de rubrica, como salário, benefício, dedução, etc.
-# "VALOR": Valor associado à rubrica para um determinado funcionário.
-# "LANCAMENTO": Data de lançamento da rubrica.
-# "EXECUCAO": Informações sobre a execução do pagamento ou dedução.
-# "CORRECAO": Dados relacionados a correções ou ajustes na rubrica.
-# "COMPLEMENTO": Informações adicionais relacionadas à rubrica.
-# "DESC_VANT": Descrição de vantagens ou benefícios associados à rubrica.
 ```
 
+---
 
