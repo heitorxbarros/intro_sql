@@ -42,3 +42,164 @@ class: inverse, center, middle
 # Structured Query Language
 
 ---
+### SQL
+
+Sistemas gerenciais de bancos de dados são manipulados através de uma linguagem padrão, desenvolvida especificamente para o ambiente relacional, denominada **SQL**. 
+A linguagem SQL é composta por um reduzido conjunto de **instruções** que permitem manipular um banco de dados com diferentes finalidades.
+
+```{r tabela, echo=F}
+tibble::tibble(
+  Finalidade = c("Recuperar dados",
+                 "Manipular dados",
+                 "Definir dados",
+                 "Controlar transações"), 
+  Instruções = c("SELECT",
+                 "INSERT, UPDATE e DELETE",
+                 "CREATE, ALTER e DROP",
+                 "COMMIT e ROLLBACK"),
+  Descrição = c("Recupera registros armazenados em tabelas do banco de dados",
+                "Inserção, alteração e remoção de registros de tabelas do banco de dados. Este subconjunto de instruções da SQL é                  conhecido como DML (Data Manipulation Language)",
+                "Criação, alteração e exclusão de objetos do banco de dados (ex.: tabelas, índices, etc.). Este subconjunto de                     instruções é conhecido como DDL (Data Definition Language).",
+                "Gerenciam as modificações realizadas pelos comandos DML. Permitem agrupar as alterações dos dados em transações                   lógicas.")
+) |> 
+  gt::gt()
+```
+
+---
+class: inverse, center, middle
+
+# SELECT
+
+---
+### SELECT
+
+Focaremos na instrução **SELECT**, que nos permite realizar consultas sobre todos os registros armazenados em nossos bancos de dados. Usaremos as tabelas do <strong style="color:red;">ERGON</strong> em todos os exemplos.
+
+--
+</br></br>
+Inicialmente, vamos trabalhar com a tabela <strong style="color:red;">FICHAS_FINANCEIRAS</strong>. 
+
+```{r tabela2, echo=F}
+tibble::tibble(
+  ATRIBUTO = c(
+    "NUMFUNC",
+    "NUMVINC",
+    "NUMPENS",
+    "EMP_CODIGO",
+    "MES_ANO_FOLHA",
+    "MES_ANO_DIREITO",
+    "NUM_FOLHA",
+    "RUBRICA",
+    "TIPO_RUBRICA",
+    "VALOR",
+    "LANCAMENTO",
+    "EXECUCAO",
+    "CORRECAO",
+    "COMPLEMENTO",
+    "DESC_VANT"
+    ), 
+  TIPO = c(
+    "NUMBER",
+    "NUMBER",
+    "NUMBER",
+    "NUMBER",
+    "DATE",
+    "DATE",
+    "NUMBER",
+    "NUMBER",
+    "NUMBER",
+    "NUMBER",
+    "NUMBER",
+    "NUMBER",
+    "NUMBER",
+    "VARCHAR2",
+    "VARCHAR2"
+           ),
+  PK = c(
+    NULL
+  ),
+  `PODE SER NULL` = c(
+    "NÃO",
+    "NÃO",
+    "SIM",
+    "NÃO",
+    "NÃO",
+    "NÃO",
+    "NÃO",
+    "NÃO",
+    "NÃO",
+    "NÃO",
+    "NÃO",
+    "SIM",
+    "SIM",
+    "SIM",
+    "NÃO"
+    ),
+  FK = c(
+    NULL
+  ),
+  DESCRIÇÃO = c(
+    "Código de identificação do funcionário",
+    "Código de identificação do vínculo",
+    "Código de identificação do pensionista",
+    "Código de identificação da empresa",
+    "Mês/Ano da folha de pagamento",
+    "Mês/Ano do direito (competência)",
+    "Número da folha de pagamento",
+    "Código da rubrica associada ao pagamento",
+    "Tipo da rubrica (1 = Mesmo mês da competência; 2 = Mês diferente da competência)",
+    "Valor do pagamento",
+    "Código do lançamento",
+    "Número da execução da folha",
+    "CORRECAO (?)",
+    "Informação adicional associada à rubrica",
+    "Tipo da rubrica (1 = Vantagem; 2 = Desconto)"
+  )
+) |> 
+  gt::gt() |> 
+  gt::data_color(columns = TIPO, apply_to = "text",colors =  viridis::viridis(3)) |> 
+  gt::data_color(columns = `PODE SER NULL`, apply_to = "text",colors =  c("black","orangered3")) |> 
+  gt::tab_options(table.font.size = 15,
+                  container.width = 750,
+                  container.height = 300,
+                  table.align='center') |> 
+  gt::tab_style(style = gt::cell_text(weight = "bold",size = 18), 
+                locations = gt::cells_column_labels())
+
+
+# OWNER;TABLE_NAME        ;COLUMN_NAME    ;DATA_TYPE;NULLABLE
+# ERGON;FICHAS_FINANCEIRAS;COMPLEMENTO    ;VARCHAR2 ;Y
+# ERGON;FICHAS_FINANCEIRAS;CORRECAO       ;NUMBER   ;Y
+# ERGON;FICHAS_FINANCEIRAS;DESC_VANT      ;VARCHAR2 ;N
+# ERGON;FICHAS_FINANCEIRAS;EMP_CODIGO     ;NUMBER   ;N
+# ERGON;FICHAS_FINANCEIRAS;EXECUCAO       ;NUMBER   ;Y
+# ERGON;FICHAS_FINANCEIRAS;LANCAMENTO     ;NUMBER   ;N
+# ERGON;FICHAS_FINANCEIRAS;MES_ANO_DIREITO;DATE     ;N
+# ERGON;FICHAS_FINANCEIRAS;MES_ANO_FOLHA  ;DATE     ;N
+# ERGON;FICHAS_FINANCEIRAS;NUMFUNC        ;NUMBER   ;N
+# ERGON;FICHAS_FINANCEIRAS;NUMPENS        ;NUMBER   ;Y
+# ERGON;FICHAS_FINANCEIRAS;NUMVINC        ;NUMBER   ;N
+# ERGON;FICHAS_FINANCEIRAS;NUM_FOLHA      ;NUMBER   ;N
+# ERGON;FICHAS_FINANCEIRAS;RUBRICA        ;NUMBER   ;N
+# ERGON;FICHAS_FINANCEIRAS;TIPO_RUBRICA   ;NUMBER   ;N
+# ERGON;FICHAS_FINANCEIRAS;VALOR          ;NUMBER   ;N
+# 
+# 
+# "NUMFUNC": Número de identificação do funcionário.
+# "NUMVINC": Número de vínculo associado ao funcionário.
+# "NUMPENS": Número de identificação do plano de pensão.
+# "EMP_CODIGO": Código de identificação da empresa ou empregador.
+# "MES_ANO_FOLHA": Mês e ano da folha de pagamento.
+# "MES_ANO_DIREITO": Mês e ano do direito associado aos dados.
+# "NUM_FOLHA": Número da folha de pagamento.
+# "RUBRICA": Código ou descrição da rubrica associada a um pagamento ou dedução.
+# "TIPO_RUBRICA": Tipo de rubrica, como salário, benefício, dedução, etc.
+# "VALOR": Valor associado à rubrica para um determinado funcionário.
+# "LANCAMENTO": Data de lançamento da rubrica.
+# "EXECUCAO": Informações sobre a execução do pagamento ou dedução.
+# "CORRECAO": Dados relacionados a correções ou ajustes na rubrica.
+# "COMPLEMENTO": Informações adicionais relacionadas à rubrica.
+# "DESC_VANT": Descrição de vantagens ou benefícios associados à rubrica.
+```
+
+
