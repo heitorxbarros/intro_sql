@@ -210,43 +210,44 @@ library(ggforce)
 library(dplyr)
 library(latex2exp)
 
-y=seq(-.75,.75, by=.001)+2 
-x=sqrt(.75^2-y^2)+1
-x2=-x+2
-df = data.frame(x,y) |> 
-  filter(y<1+sqrt(.75^2-.5^2) & y > 1-sqrt(.75^2-.5^2))
+y=seq(-.75,.75, by=.001) 
+x=sqrt(.75^2-y^2)
+x2=x+1
+y2=y+1
+x3=-x+2
+df = data.frame(x2,y2) |> 
+  filter(y2<1+sqrt(.75^2-.5^2) & y2 > 1-sqrt(.75^2-.5^2)) |> 
+  rbind(data.frame(x2=x3,y2=y2) |> 
+  filter(y2<1+sqrt(.75^2-.5^2) & y2 > 1-sqrt(.75^2-.5^2)))
 
 
 p1 <- ggplot() +
       geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, fill = "darkgreen") +
       geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
       geom_text(aes(x = c(.5,2.5), y = rep(.25,2), label = c("A","B")), size = 10) +
-      geom_text(aes(x = 0.25, y = 2, label = "u"), size = 10) +
-      geom_text(aes(x = 1.5, y = 2, label = "AUB"), size = 10) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 10) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A\\cup B$",bold = T, output="character"),
+               size = 10, parse=TRUE, color = "darkred") +
       coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
       theme_void() + 
       theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
             panel.background = element_rect(fill = "#fff2d7",
-                                
                                 size = 0.5, linetype = "solid"))
 
 p2 <- ggplot() +
+      geom_polygon(data = df, aes(x=x2,y=y2), fill = "darkgreen") +
       geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
-      geom_point(data = df, aes(x=x,y=y), color = 'red')
-      # geom_point(aes(x=(sqrt(.75^2-seq(1+sqrt(.75^2-.5^2),1-sqrt(.75^2-.5^2), by = -.01)^2)+1),
-      #                y= seq(1+sqrt(.75^2-.5^2),1-sqrt(.75^2-.5^2), by = .01)), color ="red") +
-      
-      geom_point(aes(x= 1.5,  y = 1+sqrt(.75^2-.5^2)), color ="red") +
+      # geom_point(aes(x= 1.5,  y = 1+sqrt(.75^2-.5^2)), color ="red") +
       geom_text(aes(x = c(.5,2.5), y = rep(.25,2), label = c("A","B")), size = 10) +
-      geom_text(aes(x = 0.25, y = 2, label = "u"), size = 10) +
-      geom_text(aes(x = 1.5, y = 2, label = "AnB"), size = 10) +
+      # geom_text(aes(x = 0.25, y = 2, label = "u"), size = 10) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 10) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A\\cap B$",bold = T, output="character"), 
+               size = 10, parse=TRUE, color = "darkred") +
       coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
       theme_void() + 
       theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
             panel.background = element_rect(fill = "#fff2d7",
-                                
                                 size = 0.5, linetype = "solid"))
 
 p1+p2
 ```
-
