@@ -209,3 +209,43 @@ No exemplo, selecionamos as colunas **MES_ANO_FOLHA**, **NUM_FOLHA**, **LANCAMEN
 knitr::include_graphics("images/FICHAS_FINANCEIRAS2.png")
 ```
 ]
+
+---
+### SELECT 
+
+#### **DEFINIÇÃO 1**: Sintaxe da instrução **SELECT** básica
+Uma instrução **SELECT** básica deve ser composta por ao menos duas cláusulas (partes):
+1. Uma cláusula **SELECT** que especifica as colunas a serem exibidas (* ou lista de colunas);
+2. Uma cláusula **FROM** que especifica a tabela que contém as colunas listadas na cláusula **SELECT**.
+
+```{sql eval = F}
+SELECT * | col 1, ..., col n 
+FROM tabela;
+```
+
+As instruções SQL não fazem distinção entre letras maiúsculas e minúsculas. Muitas vezes as cláusulas costumam ser colocadas em linhas separadas (como na definição acima e nos exemplos anteriores) com a única finalidade de melhorar a legibilidade (ou seja: não
+há problema em colocar a cláusula FROM na mesma linha da cláusula SELECT).
+
+.footnote[[1] Nesse contexto, a notação "**|**" significa **OU**.]
+
+---
+### SELECT
+Selecionando valores sem linhas duplicadas usando a palavra-chave **DISTINCT**.
+```{sql eval = F}
+SELECT DISTINCT NUM_FOLHA 
+FROM ERGON.FICHAS_FINANCEIRAS;
+```
+
+.pull-left[
+Embora existam múltiplos registros na tabela <strong style="color:red;">FICHAS_FINANCEIRAS</strong> para cada **NUM_FOLHA**, a consulta retorna cada valor único apenas uma vez. O comportamento padrão do SQL é o oposto: se a palavra-chave **DISTINCT** não for usada, a consulta retornará valores repetidos **sem suprimir nenhuma linha**. 
+]
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS3.png")
+```
+]
+
+---
+### SELECT
+
+
