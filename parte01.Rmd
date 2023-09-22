@@ -27,7 +27,6 @@ style_mono_accent(
 ```{r xaringan-logo, echo=FALSE}
 xaringanExtra::use_logo(
   image_url = "logo.png",
-  link_url = "prefeitura.rio",
   position = xaringanExtra::css_position(top = "1em", right = "1em"),
   width = "200px"
 )
@@ -202,8 +201,10 @@ class: inverse, center, middle
 # Teoria de conjuntos
 
 ---
+### Teoria de conjuntos
 
-```{r conjuntos, echo=FALSE, message=F, warning=F, dpi=600}
+
+```{r conjuntos, echo=FALSE, message=F, warning=F,out.width="80%", fig.align='center', dpi=600}
 library(ggplot2)
 library(patchwork)
 library(ggforce)
@@ -221,33 +222,104 @@ df = data.frame(x2,y2) |>
   filter(y2<1+sqrt(.75^2-.5^2) & y2 > 1-sqrt(.75^2-.5^2)))
 
 
+
 p1 <- ggplot() +
-      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, fill = "darkgreen") +
+      geom_circle(aes(x0 = c(1),y0 = c(1), r = rep(.75,1)), size = 2, fill = "darkgreen") +
       geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
-      geom_text(aes(x = c(.5,2.5), y = rep(.25,2), label = c("A","B")), size = 10) +
-      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 10) +
-      annotate("text",x = 1.5, y = 2, label = TeX("$A\\cup B$",bold = T, output="character"),
-               size = 10, parse=TRUE, color = "darkred") +
+      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A$",bold = T, output="character"),
+               size = 8, parse=TRUE, color = "darkred") +
       coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
       theme_void() + 
       theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
-            panel.background = element_rect(fill = "#fff2d7",
-                                size = 0.5, linetype = "solid"))
+            panel.background = element_rect(fill = "#fff2d7", size = 0.5, linetype = "solid"),
+            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
 
 p2 <- ggplot() +
+      geom_circle(aes(x0 = c(1),y0 = c(1), r = rep(.75,1)), size = 2, fill = "#fff2d7") +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
+      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A'$",bold = T, output="character"),
+               size = 8, parse=TRUE, color = "darkred") +
+      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
+      theme_void() + 
+      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
+            panel.background = element_rect(fill = "darkgreen", size = 0.5, linetype = "solid"),
+            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
+
+p3 <- ggplot() +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, fill = "darkgreen") +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
+      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A\\cup B$",bold = T, output="character"),
+               size = 8, parse=TRUE, color = "darkred") +
+      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
+      theme_void() + 
+      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
+            panel.background = element_rect(fill = "#fff2d7", size = 0.5, linetype = "solid"),
+            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
+
+p4 <- ggplot() +
       geom_polygon(data = df, aes(x=x2,y=y2), fill = "darkgreen") +
       geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
       # geom_point(aes(x= 1.5,  y = 1+sqrt(.75^2-.5^2)), color ="red") +
-      geom_text(aes(x = c(.5,2.5), y = rep(.25,2), label = c("A","B")), size = 10) +
+      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
       # geom_text(aes(x = 0.25, y = 2, label = "u"), size = 10) +
-      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 10) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
       annotate("text",x = 1.5, y = 2, label = TeX("$A\\cap B$",bold = T, output="character"), 
-               size = 10, parse=TRUE, color = "darkred") +
+               size = 8, parse=TRUE, color = "darkred") +
       coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
       theme_void() + 
       theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
-            panel.background = element_rect(fill = "#fff2d7",
-                                size = 0.5, linetype = "solid"))
+            panel.background = element_rect(fill = "#fff2d7", size = 0.5, linetype = "solid"),
+            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
 
-p1+p2
+p4 <- ggplot() +
+      geom_polygon(data = df, aes(x=x2,y=y2), fill = "darkgreen") +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
+      # geom_point(aes(x= 1.5,  y = 1+sqrt(.75^2-.5^2)), color ="red") +
+      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
+      # geom_text(aes(x = 0.25, y = 2, label = "u"), size = 10) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A\\cap B$",bold = T, output="character"), 
+               size = 8, parse=TRUE, color = "darkred") +
+      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
+      theme_void() + 
+      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
+            panel.background = element_rect(fill = "#fff2d7", size = 0.5, linetype = "solid"),
+            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
+
+p5 <- ggplot() +
+      geom_circle(aes(x0 = c(1),y0 = c(1), r = rep(.75,1)), size = 2, fill = "darkgreen") +
+      geom_circle(aes(x0 = c(2),y0 = c(1), r = rep(.75,1)), size = 2, fill = "#fff2d7") +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
+      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A - B$",bold = T, output="character"),
+               size = 8, parse=TRUE, color = "darkred") +
+      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
+      theme_void() + 
+      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
+            panel.background = element_rect(fill = "#fff2d7", size = 0.5, linetype = "solid"),
+            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
+
+p6 <- ggplot() +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, fill = "darkgreen") +
+      geom_polygon(data = df, aes(x=x2,y=y2), fill = "#fff2d7") +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
+      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A\\cup B - A\\cap B$",bold = T, output="character"),
+               size = 4, parse=TRUE, color = "darkred") +
+      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
+      theme_void() + 
+      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
+            panel.background = element_rect(fill = "#fff2d7", size = 0.5, linetype = "solid"),
+            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
+
+
+p1+p2+p3+p4+p5+p6
 ```

@@ -17,7 +17,7 @@ class: center, middle
 ```{r xaringan-themer, include=FALSE, warning=FALSE}
 library(xaringanthemer)
 style_mono_accent(
-  base_color = "#004b80",
+  base_color = "#004b80", 
   header_font_google = google_font("Josefin Sans"),
   text_font_google   = google_font("Montserrat", "300", "300i"),
   code_font_google   = google_font("Fira Mono")
@@ -27,7 +27,6 @@ style_mono_accent(
 ```{r xaringan-logo, echo=FALSE}
 xaringanExtra::use_logo(
   image_url = "logo.png",
-  link_url = "prefeitura.rio",
   position = xaringanExtra::css_position(top = "1em", right = "1em"),
   width = "200px"
 )
@@ -174,4 +173,39 @@ tibble::tibble(
 ```
 
 ---
+### SELECT
+Selecionando **todos** os registros de uma tabela.  
+```{sql eval = F}
+SELECT * 
+FROM ERGON.FICHAS_FINANCEIRAS;
+```
 
+.pull-left[
+Para exibir todas as colunas de uma tabela, deve-se utilizar a palavra-chave **SELECT** seguida de um __*__ (asterisco). A tabela a ser consultada deve ser indicada após a palavra-chave **FROM**. 
+</br>
+No exemplo, selecionamos todos os registros da tabela <strong style="color:red;">FICHAS_FINANCEIRAS</strong>.
+]
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS.png")
+```
+]
+
+---
+### SELECT
+Selecionando **colunas específicas** de uma tabela.
+```{sql eval = F}
+SELECT MES_ANO_FOLHA, NUM_FOLHA, LANCAMENTO 
+FROM ERGON.FICHAS_FINANCEIRAS;
+```
+
+.pull-left[
+Para selecionar colunas específicas de uma tabela a lista de nomes das colunas deve ser especificada logo após a palavra-chave **SELECT**. Os nomes das colunas devem ser separados por vírgulas.
+</br>
+No exemplo, selecionamos as colunas **MES_ANO_FOLHA**, **NUM_FOLHA**, **LANCAMENTO** da tabela <strong style="color:red;">FICHAS_FINANCEIRAS</strong>.
+]
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS2.png")
+```
+]

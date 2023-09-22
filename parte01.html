@@ -4,7 +4,7 @@
     <title>Introdução a bases de dados e SQL</title>
     <meta charset="utf-8" />
     <meta name="author" content="Heitor Barros" />
-    <script src="libs/header-attrs-2.21/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -52,9 +52,9 @@ top:1em;right:1em;
     } else {
       document.querySelectorAll('.remark-slide-content:not(.title-slide):not(.inverse):not(.hide_logo)')
         .forEach(function (slide) {
-          const logo = document.createElement('a')
+          const logo = document.createElement('div')
           logo.classList = 'xaringan-extra-logo'
-          logo.href = 'prefeitura.rio'
+          logo.href = null
           slide.appendChild(logo)
         })
     }
@@ -219,8 +219,10 @@ class: inverse, center, middle
 # Teoria de conjuntos
 
 ---
+### Teoria de conjuntos
 
-![](parte01_files/figure-html/conjuntos-1.png)&lt;!-- --&gt;
+
+&lt;img src="parte01_files/figure-html/conjuntos-1.png" width="80%" style="display: block; margin: auto;" /&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
