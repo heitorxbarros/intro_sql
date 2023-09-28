@@ -110,12 +110,13 @@ knitr::include_graphics("images/ergon.png")
 ---
 ### Principais características dos BDs
 
-- Bancos de dados podem ser de **qualquer tamanho** ou **complexidade**. Atualmente, os bancos de dados de empresas rotineiramente armazenam **terabytes** ($10^{12}$ bytes) ou **pentabytes** ($10^{15}$ bytes) de dados, que são servidos aos seus usuários.
+- Bancos de dados podem ser de **qualquer tamanho** ou **complexidade**. Atualmente, os bancos de dados de empresas rotineiramente armazenam **terabytes** ( $10^{12}$ bytes) ou **pentabytes** ( $10^{15}$ bytes) de dados, que são servidos aos seus usuários.
 
 - Cadastros no ERGON: 
-  + 336.953 funcionários;
-  + 574.299 vínculos;
-  + 1.020 tipos de vantagem;
+  + $336.953$ funcionários;
+  + $574.299$ vínculos;
+  + $1.020$ tipos de vantagem;
+  + $1,4*10^{9}$ registros na tabela <strong style="color:red;">FICHAS_FINANCEIRAS</strong>.
   
 ---
 ### Sistema Gerenciador de Banco <br>de Dados
@@ -189,11 +190,15 @@ knitr::include_graphics("images/funcionalidade_sgbd3.png")
 </ol>
 
 ---
-### Editores de texto
-Os editores de texto são ferramentas de software projetadas para **criar**, **modificar**, **formatar** e **armazenar** documentos de texto. Eles têm uma variedade de usos e são amplamente utilizados na programação e desenvolvimento de software.
+### Ferramentas
+Durante o curso, usaremos algumas ferramentas na interação com bancos de dados.
+
+<ol>
+<li> <strong>Editores de texto:</strong> Ferramentas de software projetadas para <strong style="color:red;">criar</strong>, <strong style="color:red;">modificar</strong>, <strong style="color:red;">formatar</strong> e <strong style="color:red;">armazenar</strong> documentos de texto. Eles têm uma variedade de usos e são amplamente utilizados na programação e desenvolvimento de software.  <strong>Ex.: NOTEPAD++</strong> 
 </br>
-- **NOTEPAD++**: editor de texto altamente versátil e amplamente reconhecido por sua capacidade de realçar a sintaxe SQL, o que facilita significativamente a escrita e a compreensão das instruções SQL.
-- **SQL*Plus**: interface de linha de comando fornecida pela Oracle Corporation para interagir com bancos de dados Oracle, permitindo que os usuários executem consultas SQL, gerenciem objetos do banco de dados e obtenham resultados de consultas em texto simples. 
+<li> <strong>Interface de Linha de Comando (CLI):</strong> Usados para executar tarefas em aplicações diversas. Geralmente, possuem um formato simples, exibindo apenas os comandos seus e resultados. <strong>Ex.: SQL*Plus</strong> 
+<li> <strong>Oracle forms:</strong> Software usado para criar interfaces para interação com bancos de dados Oracle. Permite ao usuário final carregar, alterar e visualizar dados sem precisar escrever comandos SQL. <strong>Ex.: ERGON</strong> 
+</ol>
 
 ---
 class: inverse, center, middle

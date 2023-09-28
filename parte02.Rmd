@@ -20,7 +20,7 @@ style_mono_accent(
   base_color = "#004b80", 
   header_font_google = google_font("Josefin Sans"),
   text_font_google   = google_font("Montserrat", "300", "300i"),
-  code_font_google   = google_font("Fira Mono")
+  code_font_google   = google_font("Fira Mono"),
 )
 ```
 
@@ -40,10 +40,12 @@ class: inverse, center, middle
 
 # Structured Query Language
 
+<p1 style='color:gray;font-size:24px'><i> linguagem de consultas estruturadas </i></p1>
+
 ---
 ### SQL
 
-Sistemas gerenciais de bancos de dados são manipulados através de uma linguagem padrão, desenvolvida especificamente para o ambiente relacional, denominada **SQL**. 
+Sistemas gerenciadores de bancos de dados são manipulados através de uma linguagem padrão, desenvolvida especificamente para o ambiente relacional, denominada **SQL**. 
 A linguagem SQL é composta por um reduzido conjunto de **instruções** que permitem manipular um banco de dados com diferentes finalidades.
 
 ```{r tabela, echo=F}
@@ -75,8 +77,7 @@ class: inverse, center, middle
 
 ---
 ### SELECT
-
-Focaremos na instrução **SELECT**, que nos permite realizar consultas sobre todos os registros armazenados em nossos bancos de dados. Usaremos as tabelas do <strong style="color:red;">ERGON</strong> em todos os exemplos.
+No trabalho com bancos de dados e SQL, a tarefa mais comum é recuperar dados de uma ou mais tabelas. A instrução **SELECT**  nos permite realizar consultas sobre todos os registros armazenados em nossos bancos de dados. Usaremos as tabelas do <strong style="color:red;">ERGON</strong> em todos os exemplos.
 
 --
 </br></br>
@@ -102,26 +103,26 @@ tibble::tibble(
     "DESC_VANT"
     ), 
   TIPO = c(
-    "NUMBER",
-    "NUMBER",
-    "NUMBER",
-    "NUMBER",
+    "NUMBER(9)",
+    "NUMBER(8)",
+    "NUMBER(2)", 
+    "NUMBER(2)",
     "DATE",
     "DATE",
-    "NUMBER",
-    "NUMBER",
-    "NUMBER",
-    "NUMBER",
-    "NUMBER",
-    "NUMBER",
-    "NUMBER",
-    "VARCHAR2",
-    "VARCHAR2"
+    "NUMBER(8)",
+    "NUMBER(8)",
+    "NUMBER(1)",
+    "NUMBER(11,2)",
+    "NUMBER(14)",
+    "NUMBER(5)",
+    "NUMBER(11,2)",
+    "VARCHAR2(20)",
+    "VARCHAR2(1)"
            ),
   PK = c(
     NULL
   ),
-  `PODE SER NULL` = c(
+  `PODE SER NULL*` = c(
     "NÃO",
     "NÃO",
     "SIM",
@@ -154,17 +155,17 @@ tibble::tibble(
     "Valor do pagamento",
     "Código do lançamento",
     "Número da execução da folha",
-    "CORRECAO (?)",
+    "Correção monetária",
     "Informação adicional associada à rubrica",
     "Tipo da rubrica (1 = Vantagem; 2 = Desconto)"
   )
 ) |> 
   gt::gt() |> 
-  gt::data_color(columns = TIPO, apply_to = "text",colors =  c("darkgreen","darkblue","black")) |> 
-  gt::data_color(columns = `PODE SER NULL`, apply_to = "text",colors =  c("black","orangered3")) |> 
+  # gt::data_color(columns = TIPO, apply_to = "text",colors =  c("darkgreen","darkblue","black")) |> 
+  gt::data_color(columns = `PODE SER NULL*`, apply_to = "text",colors =  c("black","orangered3")) |> 
   gt::tab_options(table.font.size = 15,
                   container.width = 750,
-                  container.height = 300,
+                  container.height = 250,
                   table.align='center') |> 
   gt::tab_style(style = gt::cell_text(weight = "bold",size = 18), 
                 locations = gt::cells_column_labels()) |> 
@@ -172,9 +173,10 @@ tibble::tibble(
 
 ```
 
+.footnote[\* **NULL** é uma palavra que atribui um valor nulo para um campo, célula ou código em um banco de dados.]
 ---
 ### SELECT
-Selecionando **todos** os registros de uma tabela.  
+**Exemplo 1:** Selecionando **todos** os registros de uma tabela.  
 ```{sql eval = F}
 SELECT * 
 FROM ERGON.FICHAS_FINANCEIRAS;
@@ -193,7 +195,7 @@ knitr::include_graphics("images/FICHAS_FINANCEIRAS.png")
 
 ---
 ### SELECT
-Selecionando **colunas específicas** de uma tabela.
+**Exemplo 2:** Selecionando **colunas específicas** de uma tabela.
 ```{sql eval = F}
 SELECT MES_ANO_FOLHA, NUM_FOLHA, LANCAMENTO 
 FROM ERGON.FICHAS_FINANCEIRAS;
@@ -213,9 +215,9 @@ knitr::include_graphics("images/FICHAS_FINANCEIRAS2.png")
 ---
 ### SELECT 
 
-#### **DEFINIÇÃO 1**: Sintaxe da instrução **SELECT** básica
+#### **Definição 1**: Sintaxe da instrução **SELECT** básica
 Uma instrução **SELECT** básica deve ser composta por ao menos duas cláusulas (partes):
-1. Uma cláusula **SELECT** que especifica as colunas a serem exibidas (* ou lista de colunas);
+1. Uma cláusula **SELECT** que especifica a coluna a ser exibida (ou lista de colunas);
 2. Uma cláusula **FROM** que especifica a tabela que contém as colunas listadas na cláusula **SELECT**.
 
 ```{sql eval = F}
@@ -226,11 +228,11 @@ FROM tabela;
 As instruções SQL não fazem distinção entre letras maiúsculas e minúsculas. Muitas vezes as cláusulas costumam ser colocadas em linhas separadas (como na definição acima e nos exemplos anteriores) com a única finalidade de melhorar a legibilidade (ou seja: não
 há problema em colocar a cláusula FROM na mesma linha da cláusula SELECT).
 
-.footnote[[1] Nesse contexto, a notação "**|**" significa **OU**.]
+.footnote[\* Nesse contexto, a notação "**|**" significa **OU**.]
 
 ---
 ### SELECT
-Selecionando valores sem linhas duplicadas usando a palavra-chave **DISTINCT**.
+**Exemplo 3:** Selecionando valores sem linhas duplicadas usando a palavra-chave **DISTINCT**.
 ```{sql eval = F}
 SELECT DISTINCT NUM_FOLHA 
 FROM ERGON.FICHAS_FINANCEIRAS;
@@ -247,5 +249,79 @@ knitr::include_graphics("images/FICHAS_FINANCEIRAS3.png")
 
 ---
 ### SELECT
+A palavra **DISTINCT** também pode ser utilizada com múltiplas colunas. Com isto, todas as combinações de valores distintas das colunas podem ser identificadas. 
 
+```{sql eval = F}
+SELECT DISTINCT NUM_FOLHA, MES_ANO_FOLHA 
+FROM ERGON.FICHAS_FINANCEIRAS;
+```
+.pull-left[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600, fig.cap='SELECT COM DISTINCT'}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS4.png")
+```
+]
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600, fig.cap='SELECT SEM DISTINCT'}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS5.png")
+```
+]
+---
+### SELECT 
+**Exemplo 4:** Definindo rótulos (apelidos) para as colunas.
+```{sql eval = F}
+SELECT DISTINCT NUM_FOLHA AS FOLHA, MES_ANO_FOLHA AS MES 
+FROM ERGON.FICHAS_FINANCEIRAS;
+```
+.pull-left[
+<p style='font-size:18px;align=justify'>
+Ao exibir o resultado de uma consulta, os nomes das colunas selecionadas é exibido no cabeçalho por padrão. No entanto, podemos definir novos rótulos para as colunas na cláusula <strong>SELECT</strong>. Para isso, podemos usar o termo <strong>AS</strong> após o nome da coluna (ex.: NUM_FOLHA AS FOLHA). Na maioria dos SGBDs, o uso do termo <strong>AS</strong> é opcional e pode ser suprimido (ex.: NUM_FOLHA FOLHA). Alguns SGBDs, como o ORACLE, permitem o uso de espaços e caractéres especiais (tais como “*”, “#” ou “$”). Nesse caso, é preciso definir o nome do rótulo entre aspas duplas (ex.: NUM_FOLHA "NÚMERO FOLHA").
+</p>
+]
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS6.png")
+```
+]
+---
+### SELECT 
+#### **Definição 2**: Sintaxe estendida da instrução **SELECT** básica
+Uma instrução **SELECT** pode **opcionalmente** conter rótulos para as colunas. Também de maneira opcional, uma instrução SQL pode fazer uso da palavra-chave **DISTINCT** para suprimir linhas repetidas. Com isto, o quadro a seguir apresenta o modelo estendido para a sintaxe de uma instrução **SELECT** (as partes opcionais são exibidas entre colchetes).   
 
+```{sql eval = F}
+SELECT [DISTINCT] * | col 1 [AS apelido 1], ..., col n [AS apelido n]
+FROM tabela;
+```
+---
+class: inverse, center, middle
+
+# WHERE
+
+---
+class: center, middle
+
+# Restringindo conjuntos de dados
+
+---
+### WHERE
+
+Ao trabalhar com bases de dados, podemos estar interessados em recuperar apenas parte de uma tabela. Para isso, podemos usar uma cláusula para **limitar** quais linhas vamos selecionar. Além disso, ao lidar com grandes bases de dados, muitas vezes é inviável recuperar tabelas completas devido ao custo operacional. A instrução **WHERE** nos permite filtrar os dados usando um ou mais critérios.  
+
+---
+### WHERE
+**Exemplo 5:** Selecionando todos os registros de uma tabela com uma **característica específica**.  
+```{sql eval = F}
+SELECT * 
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023';
+```
+
+.pull-left[
+No exemplo, a instrução **SELECT** recupera os registros da tabela <strong style="color:red;">FICHAS_FINANCEIRAS</strong> cujo valor da coluna **MES_ANO_FOLHA** seja igual a <strong style="color:red;">01/09/2023</strong>. Para isso, usamos a cláusula **WHERE** após a cláusula **FROM**. 
+]
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS7.png")
+```
+]
+---
+### WHERE
