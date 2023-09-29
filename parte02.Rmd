@@ -325,7 +325,7 @@ knitr::include_graphics("images/FICHAS_FINANCEIRAS7.png")
 ]
 ---
 ### WHERE
-**Exemplo 6:** Usando WHERE para coluna não selecionada.  
+**Exemplo 6:** Usando **WHERE** para coluna não selecionada.  
 ```{sql eval = F}
 SELECT DISTINCT NUM_FOLHA, RUBRICA 
 FROM ERGON.FICHAS_FINANCEIRAS 
@@ -340,13 +340,225 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula <strong>WHERE</s
 ]
 .pull-right[
 ```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
-knitr::include_graphics("images/FICHAS_FINANCEIRAS7.png")
+knitr::include_graphics("images/FICHAS_FINANCEIRAS8.png")
 ```
 ]
 ---
 ### WHERE
-#### **Operadores Lógicos:** São usados para testar a legitimidade de algumas condições. Os operadores lógicos, como operadores de comparação, retornam um tipo de dados Boolean com um valor <strong style="color:red;">TRUE</strong>, <strong style="color:red;">FALSE</strong> ou <strong style="color:red;">UNKNOWN</strong> (verdadeiro, falso ou desconhecido).
+#### **Operadores Lógicos:** São usados para testar a legitimidade de algumas condições. Os operadores lógicos, como operadores de comparação, retornam um tipo de dados booleano com um valor <strong style="color:red;">TRUE</strong>, <strong style="color:red;">FALSE</strong> ou <strong style="color:red;">UNKNOWN</strong> (verdadeiro, falso ou desconhecido). 
+
+```{r tabela3, echo=F}
+tibble::tibble(
+  OPERADOR = c("AND",
+                "OR",
+                "NOT"), 
+  SIGNIFICADO = c('Retorna <a style="color:red">TRUE</a> se todas as condições avaliadas forem verdadeiras.',
+                  'Retorna <a style="color:red">TRUE</a> se ao menos uma das condições avaliadas for verdadeira.',
+                  'Retorna <a style="color:red">TRUE</a> se a condição seguinte for <a style="color:red">FALSE</a>.')
+) |> 
+  gt::gt() |> 
+  gt::tab_style(style = gt::cell_text(weight = "bold",size = 18), 
+                locations = gt::cells_column_labels()) |> 
+  gt::fmt_markdown(columns = 'SIGNIFICADO') |> 
+  gt::opt_stylize(style = 5, color = "blue", add_row_striping = F)
+
+```
 
 ---
 ### WHERE
-**Exemplo 7:** Usando WHERE com operadores lógicos.  
+**Exemplo 7:** Usando **WHERE** com operador lógico **AND** (E).  
+
+```{sql eval = F}
+SELECT *  
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 1;
+```
+.pull-left[
+O operador lógico **AND** retorna as linhas para as quais ambas as condições são verdadeiras. No exemplo, a consulta retorna todos os registros com **MES_ANO_FOLHA** igual a <strong style="color:red;">01/09/2023</strong> e **NUM_FOLHA** igual a <strong style="color:red;">1</strong>. 
+
+]
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS9.png")
+```
+]
+---
+### WHERE
+**Exemplo 7:** Usando **WHERE** com operador lógico **OR** (OU).  
+
+```{sql eval = F}
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/08/2023' OR MES_ANO_FOLHA = '01/09/2023' 
+ORDER BY 2;
+```
+.pull-left[
+O operador lógico **OU** retorna as linhas para as quais uma ou mais condições são verdadeiras. No exemplo, a consulta retorna todos os registros com **MES_ANO_FOLHA** igual a <strong style="color:red;">01/08/2023</strong> ou a igual a <strong style="color:red;">01/09/2023</strong>. 
+
+]
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS10.png")
+```
+]
+---
+### WHERE
+**Exemplo 8:** Usando **WHERE** com operador lógico **NOT** (NÃO).  
+
+```{sql eval = F}
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/08/2023' AND NOT (NUM_FOLHA = 1);
+```
+.pull-left[
+O operador lógico **NOT** retorna as linhas para as quais a condição é falsa. No exemplo, a consulta retorna todos os registros com **MES_ANO_FOLHA** igual a <strong style="color:red;">01/08/2023</strong> e cujo **NUM_FOLHA** não é a igual a <strong style="color:red;">1</strong>. 
+
+]
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS11.png")
+```
+]
+---
+### WHERE
+**Exemplo 9:** Usando **WHERE** com operador lógico **NOT** (NÃO) com mais de uma condição.  
+
+```{sql eval = F}
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/08/2023' 
+AND NOT (NUM_FOLHA = 1 OR NUM_FOLHA = 2 OR NUM_FOLHA = 3);
+```
+.pull-left[
+O operador lógico **NOT** retorna as linhas para as quais a condição é falsa. No exemplo, a consulta retorna todos os registros com **MES_ANO_FOLHA** igual a <strong style="color:red;">01/08/2023</strong> e cujo **NUM_FOLHA** não é a igual a <strong style="color:red;">1</strong>, <strong style="color:red;">2</strong> ou <strong style="color:red;">3</strong>. 
+
+]
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS12.png")
+```
+]
+---
+### WHERE
+#### **Definição 3**: Sintaxe da cláusula **WHERE**
+A cláusula **WHERE** é utilizada para restringir as linhas que serão retornadas ou analisadas por uma consulta, de acordo com um ou mais critérios. Trata-se de uma cláusula opcional, ao contrário de **SELECT** e **FROM**, que são cláusulas obrigatórias. Dentro de um comando SQL, a palavra-chave **WHERE** deve ser colocada logo após a lista de tabelas associadas à cláusula **FROM** (Obs.: a cláusula FROM conterá mais de uma tabela sempre que for necessário realizar uma operação de junção; porém este assunto será abordado apenas nas próximas aulas). Além disso, a palavra-chave **WHERE** deve possuir uma ou mais condições associadas.
+```{sql eval = F}
+SELECT [DISTINCT] * | col 1 [AS apelido 1], ..., col n [AS apelido n]
+FROM tabela
+[WHERE condição(ões)];
+```
+---
+### WHERE
+#### **Operadores de comparação:** São usados para analisar valores de uma expressão e retornar um valor booleano.
+
+```{r tabela4, echo=F}
+tibble::tibble(
+  OPERADOR = c("=",
+                "<>",
+                ">",
+               ">=",
+               "<",
+               "<=",
+               "BETWEEN",
+               "IN",
+               "LIKE"), 
+  SIGNIFICADO = c('Igual a',
+                  'Diferente de',
+                  'Maior do que',
+                  'Maior ou igual a',
+                  'Menor do que',
+                  'Menor ou igual a',
+                  'Verifica se valor está dentro de uma determinada faixa de valores',
+                  'Verifica se valor pertence a um determinado conjunto de valores',
+                  'Busca texto (valor alfanumérico) em uma determinada string (sequência de caracteres alfanuméricos)')
+) |> 
+  gt::gt() |> 
+  gt::tab_style(style = gt::cell_text(weight = "bold",size = 18), 
+                locations = gt::cells_column_labels()) |> 
+  gt::fmt_markdown(columns = 'SIGNIFICADO') |> 
+  gt::opt_stylize(style = 5, color = "blue", add_row_striping = F)
+
+```
+
+---
+### WHERE
+**Exemplo 10:** Usando **WHERE** com operador de comparação **<>** (diferente de...).
+
+```{sql eval = F}
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/08/2023' AND NUM_FOLHA <> 1;
+```
+
+.pull-left[
+O uso de operadores de comparação nos permite controlar de maneira simples o resultados das consultas. Geralmente, podemos obter o mesmo resultado realizando diferentes consultas. O exemplo acima retorna um resultado igual ao do Exemplo 8.  
+]
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS13.png")
+```
+]
+---
+### WHERE
+**Exemplo 11:** Usando **WHERE** com operador de comparação **>=** (maior ou igual a...).
+
+```{sql eval = F}
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/08/2023' AND NUM_FOLHA >= 90;
+```
+
+```{r echo=FALSE, out.width="60%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS14.png")
+```
+---
+### WHERE
+**Exemplo 12:** Usando **WHERE** com operador de comparação **BETWEEN** (entre...).
+```{sql eval = F}
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA BETWEEN 1 AND 10;
+```
+.pull-left[
+O operador de comparação **BETWEEN** retorna todas as linhas cujos valores estejam **contidos em um intervalo**, incluindo as "pontas". Para este operador, o **limite inferior deve ser especificado inicialmente**.  
+]
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS15.png")
+```
+]
+---
+### WHERE
+**Exemplo 13:** Usando **WHERE** com operador de comparação **BETWEEN** (entre...) com dados alfanuméricos.
+```{sql eval = F}
+SELECT DISTINCT MES_ANO_FOLHA, COMPLEMENTO  
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND COMPLEMENTO BETWEEN 'A' AND 'C';
+```
+.pull-left[
+O operador **BETWEEN** também pode ser usado com datas (Ex.: *MES_ANO_FOLHA BETWEEN '01/07/2023' AND '15/08/2023'*) ou dados alfanuméricos.
+]
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS17.png")
+```
+]
+---
+### WHERE
+**Exemplo 14:** Usando **WHERE** com operador de comparação **IN** (pertence a...).
+```{sql eval = F}
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA IN ('01/01/2023','01/06/2023') 
+ORDER BY 2;
+```
+
+.pull-left[
+O operador **IN** retorna todas as linhas cujos valores pertencem a um determinado conjunto, que deve ser especificado entre partênteses. Este operador pode ser utilizado tanto para avaliar campos **alfanuméricos**, como para a avaliação de campos **numéricos** do tipo inteiro.
+]
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS16.png")
+```
+]
+---
