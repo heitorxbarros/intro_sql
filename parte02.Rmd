@@ -81,7 +81,7 @@ No trabalho com bancos de dados e SQL, a tarefa mais comum é recuperar dados de
 
 --
 </br></br>
-Inicialmente, vamos trabalhar com a tabela <strong style="color:red;">FICHAS_FINANCEIRAS</strong>. 
+Inicialmente, vamos trabalhar com a tabela <strong style="color:red;">FICHAS_FINANCEIRAS</strong>, que armazena os registros de vantagens e descontos da folha de pagamento. 
 
 ```{r tabela2, echo=F}
 tibble::tibble(
@@ -274,7 +274,7 @@ FROM ERGON.FICHAS_FINANCEIRAS;
 ```
 .pull-left[
 <p style='font-size:18px;align=justify'>
-Ao exibir o resultado de uma consulta, os nomes das colunas selecionadas é exibido no cabeçalho por padrão. No entanto, podemos definir novos rótulos para as colunas na cláusula <strong>SELECT</strong>. Para isso, podemos usar o termo <strong>AS</strong> após o nome da coluna (ex.: NUM_FOLHA AS FOLHA). Na maioria dos SGBDs, o uso do termo <strong>AS</strong> é opcional e pode ser suprimido (ex.: NUM_FOLHA FOLHA). Alguns SGBDs, como o ORACLE, permitem o uso de espaços e caractéres especiais (tais como “*”, “#” ou “$”). Nesse caso, é preciso definir o nome do rótulo entre aspas duplas (ex.: NUM_FOLHA "NÚMERO FOLHA").
+Ao exibir o resultado de uma consulta, os nomes das colunas selecionadas são exibidos no cabeçalho por padrão. No entanto, podemos definir novos rótulos para as colunas na cláusula <strong>SELECT</strong>. Para isso, podemos usar o termo <strong>AS</strong> após o nome da coluna (ex.: NUM_FOLHA AS FOLHA). Na maioria dos SGBDs, o uso do termo <strong>AS</strong> é opcional e pode ser suprimido (ex.: NUM_FOLHA FOLHA). Alguns SGBDs, como o ORACLE, permitem o uso de espaços e caractéres especiais (tais como “*”, “#” ou “$”). Nesse caso, é preciso definir o nome do rótulo entre aspas duplas (ex.: NUM_FOLHA "NÚMERO DA FOLHA").
 </p>
 ]
 .pull-right[
@@ -325,3 +325,28 @@ knitr::include_graphics("images/FICHAS_FINANCEIRAS7.png")
 ]
 ---
 ### WHERE
+**Exemplo 6:** Usando WHERE para coluna não selecionada.  
+```{sql eval = F}
+SELECT DISTINCT NUM_FOLHA, RUBRICA 
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023';
+```
+
+.pull-left[
+<p style='font-size:15px;align=justify'>
+Toda instrução <strong>SELECT</strong> básica começa com a palavra-chave <strong>SELECT</strong> seguida do nome de uma ou mais colunas que serão exibidas para o usuário. Depois vem a palavra <strong>FROM</strong> seguida do nome de uma tabela (as colunas exibidas devem pertencer a esta tabela).
+Caso seja necessário restringir linhas, utiliza-se a cláusula <strong>WHERE</strong> associada a um ou mais testes sobre colunas da tabela indicada na cláusula <strong>FROM</strong>. É importante deixar claro que existe uma independência entre as colunas exibidas e as colunas testadas. Em outras palavras: é possível envolver colunas em testes da cláusula <strong>WHERE</strong> mesmo que elas não façam parte da lista de colunas a serem recuperadas no <strong>SELECT</strong>. A única exigência é que todas as colunas façam parte da(s) tabela(s) indicada(s) na cláusula <strong>FROM</strong>. 
+</p>
+]
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS7.png")
+```
+]
+---
+### WHERE
+#### **Operadores Lógicos:** São usados para testar a legitimidade de algumas condições. Os operadores lógicos, como operadores de comparação, retornam um tipo de dados Boolean com um valor <strong style="color:red;">TRUE</strong>, <strong style="color:red;">FALSE</strong> ou <strong style="color:red;">UNKNOWN</strong> (verdadeiro, falso ou desconhecido).
+
+---
+### WHERE
+**Exemplo 7:** Usando WHERE com operadores lógicos.  
