@@ -49,7 +49,7 @@ class: inverse, center, middle
 
 De maneira simplificada podemos definir **banco de dados (BD)** como um <span style="color:red;">*repositório central*</span> de informações que podem ser consultadas e/ou atualizadas por <span style="color:red;">*diversos usuários*</span> simultaneamente.
 
-```{r echo=FALSE, out.width="70%", fig.align='center', dpi=300}
+```{r echo=FALSE, out.width="60%", fig.align='center', dpi=300}
 knitr::include_graphics("images/BD.png")
 ```
 ---
@@ -104,7 +104,7 @@ knitr::include_graphics("images/BD.png")
 - **SGBD:** ORACLE
 ]
 .pull-right[
-```{r echo=FALSE, out.width="100%", fig.align='left', dpi=300}
+```{r echo=FALSE, out.width="80%", fig.align='center', dpi=300}
 knitr::include_graphics("images/ergon.png")
 ```
 ]
@@ -148,7 +148,7 @@ normalmente utilizando uma linguagem de consulta como a SQL.
 ### Funcionalidades de um SGBD
 1. Permitir com que usuários **definam** e **construam** BDs, especificando suas *estruturas de armazenamento* (esquemas) com o uso de uma linguagem de definição de dados.
 
-```{r echo=FALSE, out.width="100%", fig.align='center', dpi=300}
+```{r echo=FALSE, out.width="90%", fig.align='center', dpi=300}
 knitr::include_graphics("images/funcionalidade_sgbd1.png")
 ```
 
@@ -160,7 +160,7 @@ knitr::include_graphics("images/funcionalidade_sgbd1.png")
 
 </ol>
 
-```{r echo=FALSE, out.width="100%", fig.align='center', dpi=300}
+```{r echo=FALSE, out.width="80%", fig.align='center', dpi=300}
 knitr::include_graphics("images/funcionalidade_sgbd2.png")
 ```
 
@@ -170,7 +170,7 @@ knitr::include_graphics("images/funcionalidade_sgbd2.png")
 <li> Suportar o armazenamento de <strong style="color:red;">grandes quantidades de dados</strong>, permitindo o acesso <strong>eficiente</strong> às informações por múltiplos usuários, de forma concorrente.
 </ol>
 
-```{r echo=FALSE, out.width="100%", fig.align='center', dpi=300}
+```{r echo=FALSE, out.width="75%", fig.align='center', dpi=300}
 knitr::include_graphics("images/funcionalidade_sgbd3.png")
 ```
 
@@ -208,9 +208,16 @@ class: inverse, center, middle
 
 ---
 ### Teoria de conjuntos
-
-
-```{r conjuntos, echo=FALSE, message=F, warning=F,out.width="80%", fig.align='center', dpi=600}
+Conjuntos são **coleções de objetos**, onde cada objeto é chamado de **elemento**. Elementos de um conjunto são únicos e não possuem uma ordem específica. Exemplo: $A =  \{1, 2, 3\}$ é um conjunto com os elementos $1$, $2$ e $3$. 
+.pull-left[
+**Operações fundamentais:**
+* **Complementar:**  O complemento de um conjunto A é composto por todos os elementos que não estão em A, mas que pertencem ao universo. Exemplo: $A' = \{4,5,6,7,8,9,10\}$
+* **União:** Combinação de elementos de dois conjuntos em um novo conjunto. Exemplo: $A ∪ B = \{1, 2, 3\} ∪ \{3, 4, 5\} = \{1, 2, 3, 4, 5\}$;
+* **Interseção:** Seleciona elementos comuns a ambos os conjuntos. Exemplo: $A ∩ B = \{1, 2, 3\} ∩ \{3, 4, 5\} = \{3\}$;
+* **Diferença:** Remove elementos do segundo conjunto do primeiro. Exemplo: $A - B = \{1, 2, 3\} - \{3, 4, 5\} = \{1, 2\}$;
+]
+.pull-right[
+```{r conjuntos, echo=FALSE, message=F, warning=F,out.width="100%", fig.align='center', dpi=600}
 library(ggplot2)
 library(patchwork)
 library(ggforce)
@@ -327,5 +334,12 @@ p6 <- ggplot() +
             plot.margin = unit(c(.25,.25,.25,.25), "cm"))
 
 
-p1+p2+p3+p4+p5+p6
+p1+p2+p3+p4+p5+p6+plot_layout(ncol = 3, guides = 'collect',)
 ```
+]
+---
+### Referências
+
+* Material do Curso "Bases de Dados" - Prof. Eduardo Corrêa Gonçalves (ENCE/IBGE);
+* Livro Introdução à linguagem SQL - Thomas Nield (O'REILLY);
+* Documentação [SQL Language Reference](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/index.html#Oracle%C2%AE-Database) (ORACLE)

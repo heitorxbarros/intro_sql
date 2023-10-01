@@ -14,5 +14,5 @@ output:
       countIncrementalSlides: false
     css: xaringan-themer.css
 ---
-#### Parte 1: Bases de dados e SGBDs
-#### Parte 2: Fundamentos de SQL (SELECT, FROM, WHERE, ORDER BY)
+#### [Parte 1](https://heitorxbarros.github.io/intro_sql/parte01): Bases de dados e SGBDs
+#### [Parte 2](https://heitorxbarros.github.io/intro_sql/parte02): Fundamentos de SQL (SELECT, FROM, WHERE, ORDER BY)

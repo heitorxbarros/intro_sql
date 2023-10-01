@@ -78,7 +78,7 @@ class: inverse, center, middle
 
 De maneira simplificada podemos definir **banco de dados (BD)** como um &lt;span style="color:red;"&gt;*repositório central*&lt;/span&gt; de informações que podem ser consultadas e/ou atualizadas por &lt;span style="color:red;"&gt;*diversos usuários*&lt;/span&gt; simultaneamente.
 
-&lt;img src="images/BD.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/BD.png" width="60%" style="display: block; margin: auto;" /&gt;
 ---
 
 ### Introdução
@@ -131,7 +131,7 @@ De maneira simplificada podemos definir **banco de dados (BD)** como um &lt;span
 - **SGBD:** ORACLE
 ]
 .pull-right[
-&lt;img src="images/ergon.png" width="100%" style="display: block; margin: auto auto auto 0;" /&gt;
+&lt;img src="images/ergon.png" width="80%" style="display: block; margin: auto;" /&gt;
 ]
 ---
 ### Principais características dos BDs
@@ -171,7 +171,7 @@ normalmente utilizando uma linguagem de consulta como a SQL.
 ### Funcionalidades de um SGBD
 1. Permitir com que usuários **definam** e **construam** BDs, especificando suas *estruturas de armazenamento* (esquemas) com o uso de uma linguagem de definição de dados.
 
-&lt;img src="images/funcionalidade_sgbd1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/funcionalidade_sgbd1.png" width="90%" style="display: block; margin: auto;" /&gt;
 
 ---
 ### Funcionalidades de um SGBD
@@ -181,7 +181,7 @@ normalmente utilizando uma linguagem de consulta como a SQL.
 
 &lt;/ol&gt;
 
-&lt;img src="images/funcionalidade_sgbd2.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/funcionalidade_sgbd2.png" width="80%" style="display: block; margin: auto;" /&gt;
 
 ---
 ### Funcionalidades de um SGBD
@@ -189,7 +189,7 @@ normalmente utilizando uma linguagem de consulta como a SQL.
 &lt;li&gt; Suportar o armazenamento de &lt;strong style="color:red;"&gt;grandes quantidades de dados&lt;/strong&gt;, permitindo o acesso &lt;strong&gt;eficiente&lt;/strong&gt; às informações por múltiplos usuários, de forma concorrente.
 &lt;/ol&gt;
 
-&lt;img src="images/funcionalidade_sgbd3.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/funcionalidade_sgbd3.png" width="75%" style="display: block; margin: auto;" /&gt;
 
 ---
 ### Funcionalidades de um SGBD
@@ -225,9 +225,23 @@ class: inverse, center, middle
 
 ---
 ### Teoria de conjuntos
+Conjuntos são **coleções de objetos**, onde cada objeto é chamado de **elemento**. Elementos de um conjunto são únicos e não possuem uma ordem específica. Exemplo: `\(A =  \{1, 2, 3\}\)` é um conjunto com os elementos `\(1\)`, `\(2\)` e `\(3\)`. 
+.pull-left[
+**Operações fundamentais:**
+* **Complementar:**  O complemento de um conjunto A é composto por todos os elementos que não estão em A, mas que pertencem ao universo. Exemplo: `\(A' = \{4,5,6,7,8,9,10\}\)`
+* **União:** Combinação de elementos de dois conjuntos em um novo conjunto. Exemplo: `\(A ∪ B = \{1, 2, 3\} ∪ \{3, 4, 5\} = \{1, 2, 3, 4, 5\}\)`;
+* **Interseção:** Seleciona elementos comuns a ambos os conjuntos. Exemplo: `\(A ∩ B = \{1, 2, 3\} ∩ \{3, 4, 5\} = \{3\}\)`;
+* **Diferença:** Remove elementos do segundo conjunto do primeiro. Exemplo: `\(A - B = \{1, 2, 3\} - \{3, 4, 5\} = \{1, 2\}\)`;
+]
+.pull-right[
+&lt;img src="parte01_files/figure-html/conjuntos-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+---
+### Referências
 
-
-&lt;img src="parte01_files/figure-html/conjuntos-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+* Material do Curso "Bases de Dados" - Prof. Eduardo Corrêa Gonçalves (ENCE/IBGE);
+* Livro Introdução à linguagem SQL - Thomas Nield (O'REILLY);
+* Documentação [SQL Language Reference](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/index.html#Oracle%C2%AE-Database) (ORACLE)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
