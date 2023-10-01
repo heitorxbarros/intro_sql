@@ -8,6 +8,7 @@ output:
   xaringan::moon_reader:
     lib_dir: libs
     nature:
+      ratio: '16:9'
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
@@ -80,10 +81,10 @@ class: inverse, center, middle
 No trabalho com bancos de dados e SQL, a tarefa mais comum é recuperar dados de uma ou mais tabelas. A instrução **SELECT**  nos permite realizar consultas sobre todos os registros armazenados em nossos bancos de dados. Usaremos as tabelas do <strong style="color:red;">ERGON</strong> em todos os exemplos.
 
 --
-</br></br>
+</br> </br>
 Inicialmente, vamos trabalhar com a tabela <strong style="color:red;">FICHAS_FINANCEIRAS</strong>, que armazena os registros de vantagens e descontos da folha de pagamento. 
 
-```{r tabela2, echo=F}
+```{r tabela2, echo=F, warning=F}
 tibble::tibble(
   ATRIBUTO = c(
     "NUMFUNC",
@@ -202,9 +203,9 @@ FROM ERGON.FICHAS_FINANCEIRAS;
 ```
 
 .pull-left[
-Para selecionar colunas específicas de uma tabela a lista de nomes das colunas deve ser especificada logo após a palavra-chave **SELECT**. Os nomes das colunas devem ser separados por vírgulas.
+Para selecionar colunas específicas de uma tabela, a lista de nomes das colunas deve ser especificada logo após a palavra-chave **SELECT**. Os nomes das colunas devem ser separados por vírgulas.
 </br>
-No exemplo, selecionamos as colunas **MES_ANO_FOLHA**, **NUM_FOLHA**, **LANCAMENTO** da tabela <strong style="color:red;">FICHAS_FINANCEIRAS</strong>.
+No exemplo, selecionamos as colunas **MES_ANO_FOLHA**, **NUM_FOLHA** e **LANCAMENTO** da tabela <strong style="color:red;">FICHAS_FINANCEIRAS</strong>.
 ]
 .pull-right[
 ```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
@@ -562,3 +563,44 @@ knitr::include_graphics("images/FICHAS_FINANCEIRAS16.png")
 ```
 ]
 ---
+### WHERE
+**Exemplo 15:** Usando **WHERE** com operador de comparação **NOT IN** (não pertence a...).
+```{sql eval = F}
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/08/2023' AND NUM_FOLHA NOT IN (1,2,3);
+```
+#### ALTERAR IMAGEM
+.pull-left[
+O operador **NOT IN** retorna todas as linhas cujos valores **não pertencem** a um determinado conjunto.
+]
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS17.png")
+```
+]
+---
+### WHERE
+**Exemplo 16:** Usando **WHERE** com operador de comparação **LIKE**.
+```{sql eval = F}
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/08/2023' AND COMPLEMENTO LIKE 'ADIC%';
+```
+
+.pull-left[
+<p style='font-size:15px;align=justify'>
+O operador <strong>LIKE</strong> é usado para buscar um determinado padrão alfanumérico em uma coluna. É usado em conjunto com os caractéres especiais <strong>%</strong> e <strong>_</strong>.
+<ul style='font-size:15px;align=justify'>
+<li> O caractere <strong>%</strong> é corresponde a zero, um ou vários caracteres em uma string. Por exemplo se usarmos <strong>"LIKE 'a%'"</strong>, encontraremos qualquer string que comece com a letra 'a', seguida por zero, um ou vários caracteres, como 'azul', 'atividade', 'a', etc.
+<li>O caractere <strong>_</strong> corresponde a exatamente um caractere qualquer em uma string. Por exemplo, se usarmos <strong>"LIKE '_mar'"</strong>, encontraremos strings com 4 caracteres e que terminem com 'mar', como 'amar' e 'Omar'. 
+</ul>
+</p>
+]
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS17.png")
+```
+]
+---
+### EXERCÍCIOS
