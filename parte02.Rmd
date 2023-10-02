@@ -628,7 +628,7 @@ knitr::include_graphics("images/DESC_FUNCIONARIOS.png")
 
 5. Com seu número de funcionário (**NUMFUNC**) e número do vínculo (**NUMVINC**), crie uma consulta para recuperar a Data início (**DTINI**) e quantidade de triênio (**VALOR**) usando a tabela <strong style="color:red;">ERGON.VANTAGENS</strong> com o campo **VANTAGEM** igual a "TRIENIO LIMITE-AUTO". 
 </br>
-<small>*DICA: O triênio mais recente terá data fim (DTFIM) nula*.</small>
+<small>*DICA: O triênio mais recente terá data fim (DTFIM) nula (Ex.: WHERE DTFIM IS NULL)*.</small>
 
 ---
 class: inverse, center, middle
