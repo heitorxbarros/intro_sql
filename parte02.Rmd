@@ -576,14 +576,14 @@ O operador **NOT IN** retorna todas as linhas cujos valores **não pertencem** a
 ]
 .pull-right[
 ```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
-knitr::include_graphics("images/FICHAS_FINANCEIRAS17.png")
+knitr::include_graphics("images/FICHAS_FINANCEIRAS18.png")
 ```
 ]
 ---
 ### WHERE
 **Exemplo 17:** Usando **WHERE** com operador de comparação **LIKE**.
 ```{sql eval = F}
-SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
+SELECT DISTINCT MES_ANO_FOLHA, COMPLEMENTO  
 FROM ERGON.FICHAS_FINANCEIRAS 
 WHERE MES_ANO_FOLHA = '01/08/2023' AND COMPLEMENTO LIKE 'ADIC%';
 ```
@@ -599,8 +599,165 @@ O operador <strong>LIKE</strong> é usado para buscar um determinado padrão alf
 ]
 .pull-right[
 ```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
-knitr::include_graphics("images/FICHAS_FINANCEIRAS17.png")
+knitr::include_graphics("images/FICHAS_FINANCEIRAS19.png")
 ```
 ]
 ---
+### FUNÇÃO DESC
+A função **DESC** fornece a descrição de uma determinada tabela. A consulta retorna os nomes das colunas, se podem ou não assumir o valor null e o tipo de cada coluna. 
+</br></br>
+**Exemplo 18:** Descrição da tabela <strong style="color:red;">ERGON.FUNCIONARIOS</strong>.
+```{sql eval = F}
+DESC ERGON.FUNCIONARIOS;
+```
+
+```{r echo=FALSE, out.width="50%", fig.align='center', dpi=600}
+knitr::include_graphics("images/DESC_FUNCIONARIOS.png")
+```
+
+---
 ### EXERCÍCIOS
+
+1. Crie uma consulta para recuperar todos os códigos de empresa (**EMP_CODIGO**) únicos para o mês de janeiro de 2023 usando a tabela <strong style="color:red;">ERGON.FICHAS_FINANCEIRAS</strong>.
+
+2. Crie uma consulta para recuperar todas as rubricas e seus nomes usando a tabela <strong style="color:red;">ERGON.RUBRICAS</strong>.
+
+3. Crie uma consulta para recuperar seu número de funcionário (**NUMERO**) usando a tabela <strong style="color:red;">ERGON.FUNCIONARIOS</strong>.
+
+4. Com seu número de funcionário (**NUMFUNC**), crie uma consulta para recuperar sua data de posse (**DTPOSSE**), número do vínculo (**NUMERO**) e tipo de vínculo (**TIPOVINC**) usando a tabela <strong style="color:red;">ERGON.VINCULOS</strong>. 
+
+5. Com seu número de funcionário (**NUMFUNC**) e número do vínculo (**NUMVINC**), crie uma consulta para recuperar a Data início (**DTINI**) e quantidade de triênio (**VALOR**) usando a tabela <strong style="color:red;">ERGON.VANTAGENS</strong> com o campo **VANTAGEM** igual a "TRIENIO LIMITE-AUTO". 
+</br>
+<small>*DICA: O triênio mais recente terá data fim (DTFIM) nula*.</small>
+
+---
+class: inverse, center, middle
+
+# ORDER BY
+
+---
+class: center, middle
+
+# Ordenando os resultados
+
+---
+### ORDER BY
+Em muitas situações práticas pode existir a necessidade de especificar a ordem de exibição dos registros. A cláusula **ORDER BY** pode ser usada no final de um comando **SELECT** para ordenar or resultados.
+
+**Exemplo 19:** Ordenando registros de uma tabela.
+```{sql eval = F}
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 55 AND RUBRICA = 996 
+ORDER BY VALOR;
+```
+
+.pull-left[
+Por definição, os resultados retornados após a execução de um comando **SELECT** não são ordenados por nenhum critério (ou seja: nenhuma coluna específica… o SGBD entrega os resultados na ordem que for “mais rápida” de buscá-los). No entanto, é possível especificar que os resultados sejam ordenados por uma ou mais colunas, através do uso da cláusula **ORDER BY**.
+]
+.pull-right[
+```{r echo=FALSE, out.width="80%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS20.png")
+```
+]
+---
+### ORDER BY
+
+**Exemplo 20:** Ordenando registros de uma tabela usando mais de uma coluna.
+```{sql eval = F}
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 55 AND RUBRICA IN (50,53) 
+ORDER BY VALOR, RUBRICA;
+```
+
+.pull-left[
+Ao usar mais de uma coluna com a cláusula **ORDER BY**, o resultado é ordenado de maneira **ascendente** respeitando a ordem das colunas na cláusula (ordena primeiro com base na *COLUNA 1*, depois com base na *COLUNA 2*). Não há limite para o número de colunas a serem
+especificadas na cláusula **ORDER BY**.
+]
+.pull-right[
+```{r echo=FALSE, out.width="90%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS21.png")
+```
+]
+---
+### ORDER BY
+**Exemplo 21:** Ordenação decrescente de registros.
+```{sql eval = F}
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 55 AND RUBRICA IN (50,53) 
+ORDER BY VALOR DESC, ASC RUBRICA;
+```
+
+.pull-left[
+Para ordenar registros de maneira **descendente**, usamos a palavra-chave **DESC** após o nome da coluna na cláusula **ORDER BY**. Podemos usar a palavra-chave **ASC** para definir uma ordenação **ascendente**, mas seu uso é opcional.
+]
+.pull-right[
+```{r echo=FALSE, out.width="90%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS22.png")
+```
+]
+---
+### ORDER BY
+**Exemplo 22:** Ordenando registros por posição relativa de um campo.
+```{sql eval = F}
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 55 AND RUBRICA IN (50,53) 
+ORDER BY 4, 3;
+```
+
+.pull-left[
+Os SGBDs também permitem utilizar a cláusula ORDER BY para ordernar resultados pela posição relativa em um resultado, onde o primeiro campo do resultado tem a posição relativa 1, o campo seguinte 2, e assim por diante. O Exemplo 22 ordena a consulta pelos campos **VALOR** e **RUBRICA**, respectivamente. O resultado é identico ao resultado do Exemplo 20.
+]
+.pull-right[
+```{r echo=FALSE, out.width="90%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS23.png")
+```
+]
+---
+### ORDER BY
+**Exemplo 23:** Ordenando registros usando campos não selecionados.
+```{sql eval = F}
+SELECT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 55 AND RUBRICA IN (50,53)  
+ORDER BY NUMFUNC;
+```
+
+.pull-left[
+É possível ordenar registros usando colunas que não constam na cláusula **SELECT**, mas que fazem parte da tabela. Se a palavra-chave **DISTINCT** for usada na cláusula **SELECT** ou se a consulta contém a uma cláusula **GROUP BY** a coluna de ordenação deve estar na cláusula **SELECT**. Também podemos usar os termos **NULL LAST** e **NULL FIRST** para definir como valores **NULL** são avaliados. Com **NULL LAST**, os termos **NULL** aparecem no final da consulta. Com **NULL FIRST**, aparecem no início.
+]
+.pull-right[
+```{r echo=FALSE, out.width="90%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS24.png")
+```
+]
+---
+### ORDER BY
+#### **Definição 4**: Cláusula **ORDER BY**
+A ordem de exibição dos resultados de uma consulta pode ser especificada pela cláusula **ORDER BY**. Quando esta cláusula for utilizada, ela deverá ser sempre a última da instrução SQL. 
+```{sql eval = F}
+SELECT [DISTINCT] * | col 1 [AS apelido 1],..., col n [AS apelido n]
+FROM tabela
+[WHERE condição(ões)]
+[ORDER BY lista de campos];
+```
+
+Na maioria dos SGBDs, os apelidos de colunas podem ser referenciados em uma cláusula **ORDER BY**, mas não podem ser referenciados em uma cláusula **WHERE**. 
+---
+### Exercícios
+
+1. Crie uma consulta pra recuperar os 10 maiores valores da rubrica 999 da folha 1 de janeiro de 2023. 
+</br>
+<small>*DICA: Podemos restringir o total de linhas usando a palavra chave ROWNUM na cláusula WHERE (Ex.: WHERE ROWNUM <= 5)*.</small>
+
+2. Modifique o **Exercício 2** sobre a cláusula **WHERE** e ordene o resultado pelo nome de maneira decrescente.
+
+---
+### Referências
+
+* Material do Curso "Bases de Dados" - Prof. Eduardo Corrêa Gonçalves (ENCE/IBGE);
+* Livro Introdução à linguagem SQL - Thomas Nield (O'REILLY);
+* Documentação [SQL Language Reference](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/index.html#Oracle%C2%AE-Database) (ORACLE)

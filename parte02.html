@@ -4,7 +4,7 @@
     <title>Introdução a bases de dados e SQL</title>
     <meta charset="utf-8" />
     <meta name="author" content="Heitor Barros" />
-    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -78,26 +78,14 @@ class: inverse, center, middle
 Sistemas gerenciadores de bancos de dados são manipulados através de uma linguagem padrão, desenvolvida especificamente para o ambiente relacional, denominada **SQL**. 
 A linguagem SQL é composta por um reduzido conjunto de **instruções** que permitem manipular um banco de dados com diferentes finalidades.
 
-<div id="trbjgtjfvh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#trbjgtjfvh table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<div id="numsaitqkk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#trbjgtjfvh thead, #trbjgtjfvh tbody, #trbjgtjfvh tfoot, #trbjgtjfvh tr, #trbjgtjfvh td, #trbjgtjfvh th {
-  border-style: none;
-}
-
-#trbjgtjfvh p {
-  margin: 0;
-  padding: 0;
-}
-
-#trbjgtjfvh .gt_table {
+#numsaitqkk .gt_table {
   display: table;
   border-collapse: collapse;
-  line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
@@ -120,36 +108,7 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   border-left-color: #D5D5D5;
 }
 
-#trbjgtjfvh .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#trbjgtjfvh .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#trbjgtjfvh .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#trbjgtjfvh .gt_heading {
+#numsaitqkk .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -161,13 +120,42 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   border-right-color: #D3D3D3;
 }
 
-#trbjgtjfvh .gt_bottom_border {
+#numsaitqkk .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#numsaitqkk .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#numsaitqkk .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#numsaitqkk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D5D5D5;
 }
 
-#trbjgtjfvh .gt_col_headings {
+#numsaitqkk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D5D5D5;
@@ -182,7 +170,7 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   border-right-color: #D3D3D3;
 }
 
-#trbjgtjfvh .gt_col_heading {
+#numsaitqkk .gt_col_heading {
   color: #FFFFFF;
   background-color: #004D80;
   font-size: 100%;
@@ -202,7 +190,7 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   overflow-x: hidden;
 }
 
-#trbjgtjfvh .gt_column_spanner_outer {
+#numsaitqkk .gt_column_spanner_outer {
   color: #FFFFFF;
   background-color: #004D80;
   font-size: 100%;
@@ -214,15 +202,15 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   padding-right: 4px;
 }
 
-#trbjgtjfvh .gt_column_spanner_outer:first-child {
+#numsaitqkk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#trbjgtjfvh .gt_column_spanner_outer:last-child {
+#numsaitqkk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#trbjgtjfvh .gt_column_spanner {
+#numsaitqkk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D5D5D5;
@@ -234,11 +222,7 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   width: 100%;
 }
 
-#trbjgtjfvh .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#trbjgtjfvh .gt_group_heading {
+#numsaitqkk .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -264,7 +248,7 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   text-align: left;
 }
 
-#trbjgtjfvh .gt_empty_group_heading {
+#numsaitqkk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -279,15 +263,15 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   vertical-align: middle;
 }
 
-#trbjgtjfvh .gt_from_md > :first-child {
+#numsaitqkk .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#trbjgtjfvh .gt_from_md > :last-child {
+#numsaitqkk .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#trbjgtjfvh .gt_row {
+#numsaitqkk .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -306,7 +290,7 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   overflow-x: hidden;
 }
 
-#trbjgtjfvh .gt_stub {
+#numsaitqkk .gt_stub {
   color: #FFFFFF;
   background-color: #929292;
   font-size: 100%;
@@ -319,7 +303,7 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   padding-right: 5px;
 }
 
-#trbjgtjfvh .gt_stub_row_group {
+#numsaitqkk .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -333,15 +317,11 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   vertical-align: top;
 }
 
-#trbjgtjfvh .gt_row_group_first td {
+#numsaitqkk .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#trbjgtjfvh .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#trbjgtjfvh .gt_summary_row {
+#numsaitqkk .gt_summary_row {
   color: #FFFFFF;
   background-color: #5F5F5F;
   text-transform: inherit;
@@ -351,16 +331,16 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   padding-right: 5px;
 }
 
-#trbjgtjfvh .gt_first_summary_row {
+#numsaitqkk .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D5D5D5;
 }
 
-#trbjgtjfvh .gt_first_summary_row.thick {
+#numsaitqkk .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#trbjgtjfvh .gt_last_summary_row {
+#numsaitqkk .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -370,7 +350,7 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   border-bottom-color: #D5D5D5;
 }
 
-#trbjgtjfvh .gt_grand_summary_row {
+#numsaitqkk .gt_grand_summary_row {
   color: #FFFFFF;
   background-color: #929292;
   text-transform: inherit;
@@ -380,7 +360,7 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   padding-right: 5px;
 }
 
-#trbjgtjfvh .gt_first_grand_summary_row {
+#numsaitqkk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -390,21 +370,11 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   border-top-color: #D5D5D5;
 }
 
-#trbjgtjfvh .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D5D5D5;
-}
-
-#trbjgtjfvh .gt_striped {
+#numsaitqkk .gt_striped {
   background-color: #F4F4F4;
 }
 
-#trbjgtjfvh .gt_table_body {
+#numsaitqkk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D5D5D5;
@@ -413,7 +383,7 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   border-bottom-color: #D5D5D5;
 }
 
-#trbjgtjfvh .gt_footnotes {
+#numsaitqkk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -427,16 +397,16 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   border-right-color: #D3D3D3;
 }
 
-#trbjgtjfvh .gt_footnote {
+#numsaitqkk .gt_footnote {
   margin: 0px;
   font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-#trbjgtjfvh .gt_sourcenotes {
+#numsaitqkk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -450,7 +420,7 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   border-right-color: #D3D3D3;
 }
 
-#trbjgtjfvh .gt_sourcenote {
+#numsaitqkk .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -458,70 +428,71 @@ A linguagem SQL é composta por um reduzido conjunto de **instruções** que per
   padding-right: 5px;
 }
 
-#trbjgtjfvh .gt_left {
+#numsaitqkk .gt_left {
   text-align: left;
 }
 
-#trbjgtjfvh .gt_center {
+#numsaitqkk .gt_center {
   text-align: center;
 }
 
-#trbjgtjfvh .gt_right {
+#numsaitqkk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#trbjgtjfvh .gt_font_normal {
+#numsaitqkk .gt_font_normal {
   font-weight: normal;
 }
 
-#trbjgtjfvh .gt_font_bold {
+#numsaitqkk .gt_font_bold {
   font-weight: bold;
 }
 
-#trbjgtjfvh .gt_font_italic {
+#numsaitqkk .gt_font_italic {
   font-style: italic;
 }
 
-#trbjgtjfvh .gt_super {
+#numsaitqkk .gt_super {
   font-size: 65%;
 }
 
-#trbjgtjfvh .gt_footnote_marks {
+#numsaitqkk .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
-  position: initial;
 }
 
-#trbjgtjfvh .gt_asterisk {
+#numsaitqkk .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#trbjgtjfvh .gt_indent_1 {
+#numsaitqkk .gt_indent_1 {
   text-indent: 5px;
 }
 
-#trbjgtjfvh .gt_indent_2 {
+#numsaitqkk .gt_indent_2 {
   text-indent: 10px;
 }
 
-#trbjgtjfvh .gt_indent_3 {
+#numsaitqkk .gt_indent_3 {
   text-indent: 15px;
 }
 
-#trbjgtjfvh .gt_indent_4 {
+#numsaitqkk .gt_indent_4 {
   text-indent: 20px;
 }
 
-#trbjgtjfvh .gt_indent_5 {
+#numsaitqkk .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="FINALIDADE">FINALIDADE</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="INSTRUÇÕES">INSTRUÇÕES</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="DESCRIÇÃO">DESCRIÇÃO</th>
@@ -560,26 +531,14 @@ No trabalho com bancos de dados e SQL, a tarefa mais comum é recuperar dados de
 Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICHAS_FINANCEIRAS&lt;/strong&gt;, que armazena os registros de vantagens e descontos da folha de pagamento. 
 
 
-<div id="acqfrbdxac" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:900px;height:250px;">
-<style>#acqfrbdxac table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<div id="usxvwtjdov" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:900px;height:250px;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#acqfrbdxac thead, #acqfrbdxac tbody, #acqfrbdxac tfoot, #acqfrbdxac tr, #acqfrbdxac td, #acqfrbdxac th {
-  border-style: none;
-}
-
-#acqfrbdxac p {
-  margin: 0;
-  padding: 0;
-}
-
-#acqfrbdxac .gt_table {
+#usxvwtjdov .gt_table {
   display: table;
   border-collapse: collapse;
-  line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
@@ -602,36 +561,7 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   border-left-color: #D5D5D5;
 }
 
-#acqfrbdxac .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#acqfrbdxac .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#acqfrbdxac .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#acqfrbdxac .gt_heading {
+#usxvwtjdov .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -643,13 +573,42 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   border-right-color: #D3D3D3;
 }
 
-#acqfrbdxac .gt_bottom_border {
+#usxvwtjdov .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#usxvwtjdov .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#usxvwtjdov .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#usxvwtjdov .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D5D5D5;
 }
 
-#acqfrbdxac .gt_col_headings {
+#usxvwtjdov .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D5D5D5;
@@ -664,7 +623,7 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   border-right-color: #D3D3D3;
 }
 
-#acqfrbdxac .gt_col_heading {
+#usxvwtjdov .gt_col_heading {
   color: #FFFFFF;
   background-color: #004D80;
   font-size: 100%;
@@ -684,7 +643,7 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   overflow-x: hidden;
 }
 
-#acqfrbdxac .gt_column_spanner_outer {
+#usxvwtjdov .gt_column_spanner_outer {
   color: #FFFFFF;
   background-color: #004D80;
   font-size: 100%;
@@ -696,15 +655,15 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   padding-right: 4px;
 }
 
-#acqfrbdxac .gt_column_spanner_outer:first-child {
+#usxvwtjdov .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#acqfrbdxac .gt_column_spanner_outer:last-child {
+#usxvwtjdov .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#acqfrbdxac .gt_column_spanner {
+#usxvwtjdov .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D5D5D5;
@@ -716,11 +675,7 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   width: 100%;
 }
 
-#acqfrbdxac .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#acqfrbdxac .gt_group_heading {
+#usxvwtjdov .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -746,7 +701,7 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   text-align: left;
 }
 
-#acqfrbdxac .gt_empty_group_heading {
+#usxvwtjdov .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -761,15 +716,15 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   vertical-align: middle;
 }
 
-#acqfrbdxac .gt_from_md > :first-child {
+#usxvwtjdov .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#acqfrbdxac .gt_from_md > :last-child {
+#usxvwtjdov .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#acqfrbdxac .gt_row {
+#usxvwtjdov .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -788,7 +743,7 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   overflow-x: hidden;
 }
 
-#acqfrbdxac .gt_stub {
+#usxvwtjdov .gt_stub {
   color: #FFFFFF;
   background-color: #929292;
   font-size: 100%;
@@ -801,7 +756,7 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   padding-right: 5px;
 }
 
-#acqfrbdxac .gt_stub_row_group {
+#usxvwtjdov .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -815,15 +770,11 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   vertical-align: top;
 }
 
-#acqfrbdxac .gt_row_group_first td {
+#usxvwtjdov .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#acqfrbdxac .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#acqfrbdxac .gt_summary_row {
+#usxvwtjdov .gt_summary_row {
   color: #FFFFFF;
   background-color: #5F5F5F;
   text-transform: inherit;
@@ -833,16 +784,16 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   padding-right: 5px;
 }
 
-#acqfrbdxac .gt_first_summary_row {
+#usxvwtjdov .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D5D5D5;
 }
 
-#acqfrbdxac .gt_first_summary_row.thick {
+#usxvwtjdov .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#acqfrbdxac .gt_last_summary_row {
+#usxvwtjdov .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -852,7 +803,7 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   border-bottom-color: #D5D5D5;
 }
 
-#acqfrbdxac .gt_grand_summary_row {
+#usxvwtjdov .gt_grand_summary_row {
   color: #FFFFFF;
   background-color: #929292;
   text-transform: inherit;
@@ -862,7 +813,7 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   padding-right: 5px;
 }
 
-#acqfrbdxac .gt_first_grand_summary_row {
+#usxvwtjdov .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -872,21 +823,11 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   border-top-color: #D5D5D5;
 }
 
-#acqfrbdxac .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D5D5D5;
-}
-
-#acqfrbdxac .gt_striped {
+#usxvwtjdov .gt_striped {
   background-color: #F4F4F4;
 }
 
-#acqfrbdxac .gt_table_body {
+#usxvwtjdov .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D5D5D5;
@@ -895,7 +836,7 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   border-bottom-color: #D5D5D5;
 }
 
-#acqfrbdxac .gt_footnotes {
+#usxvwtjdov .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -909,16 +850,16 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   border-right-color: #D3D3D3;
 }
 
-#acqfrbdxac .gt_footnote {
+#usxvwtjdov .gt_footnote {
   margin: 0px;
   font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-#acqfrbdxac .gt_sourcenotes {
+#usxvwtjdov .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -932,7 +873,7 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   border-right-color: #D3D3D3;
 }
 
-#acqfrbdxac .gt_sourcenote {
+#usxvwtjdov .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -940,70 +881,71 @@ Inicialmente, vamos trabalhar com a tabela &lt;strong style="color:red;"&gt;FICH
   padding-right: 5px;
 }
 
-#acqfrbdxac .gt_left {
+#usxvwtjdov .gt_left {
   text-align: left;
 }
 
-#acqfrbdxac .gt_center {
+#usxvwtjdov .gt_center {
   text-align: center;
 }
 
-#acqfrbdxac .gt_right {
+#usxvwtjdov .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#acqfrbdxac .gt_font_normal {
+#usxvwtjdov .gt_font_normal {
   font-weight: normal;
 }
 
-#acqfrbdxac .gt_font_bold {
+#usxvwtjdov .gt_font_bold {
   font-weight: bold;
 }
 
-#acqfrbdxac .gt_font_italic {
+#usxvwtjdov .gt_font_italic {
   font-style: italic;
 }
 
-#acqfrbdxac .gt_super {
+#usxvwtjdov .gt_super {
   font-size: 65%;
 }
 
-#acqfrbdxac .gt_footnote_marks {
+#usxvwtjdov .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
-  position: initial;
 }
 
-#acqfrbdxac .gt_asterisk {
+#usxvwtjdov .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#acqfrbdxac .gt_indent_1 {
+#usxvwtjdov .gt_indent_1 {
   text-indent: 5px;
 }
 
-#acqfrbdxac .gt_indent_2 {
+#usxvwtjdov .gt_indent_2 {
   text-indent: 10px;
 }
 
-#acqfrbdxac .gt_indent_3 {
+#usxvwtjdov .gt_indent_3 {
   text-indent: 15px;
 }
 
-#acqfrbdxac .gt_indent_4 {
+#usxvwtjdov .gt_indent_4 {
   text-indent: 20px;
 }
 
-#acqfrbdxac .gt_indent_5 {
+#usxvwtjdov .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="ATRIBUTO">ATRIBUTO</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="TIPO">TIPO</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="PODE SER NULL*">PODE SER NULL*</th>
@@ -1250,26 +1192,14 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
 ### WHERE
 #### **Operadores Lógicos:** São usados para testar a legitimidade de algumas condições. Os operadores lógicos, como operadores de comparação, retornam um tipo de dados booleano com um valor &lt;strong style="color:red;"&gt;TRUE&lt;/strong&gt;, &lt;strong style="color:red;"&gt;FALSE&lt;/strong&gt; ou &lt;strong style="color:red;"&gt;UNKNOWN&lt;/strong&gt; (verdadeiro, falso ou desconhecido). 
 
-<div id="lcxtzsapld" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#lcxtzsapld table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<div id="meitnczqkw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#lcxtzsapld thead, #lcxtzsapld tbody, #lcxtzsapld tfoot, #lcxtzsapld tr, #lcxtzsapld td, #lcxtzsapld th {
-  border-style: none;
-}
-
-#lcxtzsapld p {
-  margin: 0;
-  padding: 0;
-}
-
-#lcxtzsapld .gt_table {
+#meitnczqkw .gt_table {
   display: table;
   border-collapse: collapse;
-  line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
@@ -1292,36 +1222,7 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   border-left-color: #D5D5D5;
 }
 
-#lcxtzsapld .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#lcxtzsapld .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#lcxtzsapld .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#lcxtzsapld .gt_heading {
+#meitnczqkw .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1333,13 +1234,42 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   border-right-color: #D3D3D3;
 }
 
-#lcxtzsapld .gt_bottom_border {
+#meitnczqkw .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#meitnczqkw .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#meitnczqkw .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#meitnczqkw .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D5D5D5;
 }
 
-#lcxtzsapld .gt_col_headings {
+#meitnczqkw .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D5D5D5;
@@ -1354,7 +1284,7 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   border-right-color: #D3D3D3;
 }
 
-#lcxtzsapld .gt_col_heading {
+#meitnczqkw .gt_col_heading {
   color: #FFFFFF;
   background-color: #004D80;
   font-size: 100%;
@@ -1374,7 +1304,7 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   overflow-x: hidden;
 }
 
-#lcxtzsapld .gt_column_spanner_outer {
+#meitnczqkw .gt_column_spanner_outer {
   color: #FFFFFF;
   background-color: #004D80;
   font-size: 100%;
@@ -1386,15 +1316,15 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   padding-right: 4px;
 }
 
-#lcxtzsapld .gt_column_spanner_outer:first-child {
+#meitnczqkw .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#lcxtzsapld .gt_column_spanner_outer:last-child {
+#meitnczqkw .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#lcxtzsapld .gt_column_spanner {
+#meitnczqkw .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D5D5D5;
@@ -1406,11 +1336,7 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   width: 100%;
 }
 
-#lcxtzsapld .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#lcxtzsapld .gt_group_heading {
+#meitnczqkw .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1436,7 +1362,7 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   text-align: left;
 }
 
-#lcxtzsapld .gt_empty_group_heading {
+#meitnczqkw .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1451,15 +1377,15 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   vertical-align: middle;
 }
 
-#lcxtzsapld .gt_from_md > :first-child {
+#meitnczqkw .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#lcxtzsapld .gt_from_md > :last-child {
+#meitnczqkw .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#lcxtzsapld .gt_row {
+#meitnczqkw .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1478,7 +1404,7 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   overflow-x: hidden;
 }
 
-#lcxtzsapld .gt_stub {
+#meitnczqkw .gt_stub {
   color: #FFFFFF;
   background-color: #929292;
   font-size: 100%;
@@ -1491,7 +1417,7 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   padding-right: 5px;
 }
 
-#lcxtzsapld .gt_stub_row_group {
+#meitnczqkw .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1505,15 +1431,11 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   vertical-align: top;
 }
 
-#lcxtzsapld .gt_row_group_first td {
+#meitnczqkw .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#lcxtzsapld .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#lcxtzsapld .gt_summary_row {
+#meitnczqkw .gt_summary_row {
   color: #FFFFFF;
   background-color: #5F5F5F;
   text-transform: inherit;
@@ -1523,16 +1445,16 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   padding-right: 5px;
 }
 
-#lcxtzsapld .gt_first_summary_row {
+#meitnczqkw .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D5D5D5;
 }
 
-#lcxtzsapld .gt_first_summary_row.thick {
+#meitnczqkw .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#lcxtzsapld .gt_last_summary_row {
+#meitnczqkw .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1542,7 +1464,7 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   border-bottom-color: #D5D5D5;
 }
 
-#lcxtzsapld .gt_grand_summary_row {
+#meitnczqkw .gt_grand_summary_row {
   color: #FFFFFF;
   background-color: #929292;
   text-transform: inherit;
@@ -1552,7 +1474,7 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   padding-right: 5px;
 }
 
-#lcxtzsapld .gt_first_grand_summary_row {
+#meitnczqkw .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1562,21 +1484,11 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   border-top-color: #D5D5D5;
 }
 
-#lcxtzsapld .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D5D5D5;
-}
-
-#lcxtzsapld .gt_striped {
+#meitnczqkw .gt_striped {
   background-color: #F4F4F4;
 }
 
-#lcxtzsapld .gt_table_body {
+#meitnczqkw .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D5D5D5;
@@ -1585,7 +1497,7 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   border-bottom-color: #D5D5D5;
 }
 
-#lcxtzsapld .gt_footnotes {
+#meitnczqkw .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1599,16 +1511,16 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   border-right-color: #D3D3D3;
 }
 
-#lcxtzsapld .gt_footnote {
+#meitnczqkw .gt_footnote {
   margin: 0px;
   font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-#lcxtzsapld .gt_sourcenotes {
+#meitnczqkw .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1622,7 +1534,7 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   border-right-color: #D3D3D3;
 }
 
-#lcxtzsapld .gt_sourcenote {
+#meitnczqkw .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1630,70 +1542,71 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula &lt;strong&gt;WH
   padding-right: 5px;
 }
 
-#lcxtzsapld .gt_left {
+#meitnczqkw .gt_left {
   text-align: left;
 }
 
-#lcxtzsapld .gt_center {
+#meitnczqkw .gt_center {
   text-align: center;
 }
 
-#lcxtzsapld .gt_right {
+#meitnczqkw .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#lcxtzsapld .gt_font_normal {
+#meitnczqkw .gt_font_normal {
   font-weight: normal;
 }
 
-#lcxtzsapld .gt_font_bold {
+#meitnczqkw .gt_font_bold {
   font-weight: bold;
 }
 
-#lcxtzsapld .gt_font_italic {
+#meitnczqkw .gt_font_italic {
   font-style: italic;
 }
 
-#lcxtzsapld .gt_super {
+#meitnczqkw .gt_super {
   font-size: 65%;
 }
 
-#lcxtzsapld .gt_footnote_marks {
+#meitnczqkw .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
-  position: initial;
 }
 
-#lcxtzsapld .gt_asterisk {
+#meitnczqkw .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#lcxtzsapld .gt_indent_1 {
+#meitnczqkw .gt_indent_1 {
   text-indent: 5px;
 }
 
-#lcxtzsapld .gt_indent_2 {
+#meitnczqkw .gt_indent_2 {
   text-indent: 10px;
 }
 
-#lcxtzsapld .gt_indent_3 {
+#meitnczqkw .gt_indent_3 {
   text-indent: 15px;
 }
 
-#lcxtzsapld .gt_indent_4 {
+#meitnczqkw .gt_indent_4 {
   text-indent: 20px;
 }
 
-#lcxtzsapld .gt_indent_5 {
+#meitnczqkw .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="OPERADOR">OPERADOR</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="SIGNIFICADO">SIGNIFICADO</th>
     </tr>
@@ -1798,26 +1711,14 @@ FROM tabela
 ### WHERE
 #### **Operadores de comparação:** São usados para analisar valores de uma expressão e retornar um valor booleano.
 
-<div id="rgpmezbvuj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#rgpmezbvuj table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<div id="wfqyxsxbyd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#rgpmezbvuj thead, #rgpmezbvuj tbody, #rgpmezbvuj tfoot, #rgpmezbvuj tr, #rgpmezbvuj td, #rgpmezbvuj th {
-  border-style: none;
-}
-
-#rgpmezbvuj p {
-  margin: 0;
-  padding: 0;
-}
-
-#rgpmezbvuj .gt_table {
+#wfqyxsxbyd .gt_table {
   display: table;
   border-collapse: collapse;
-  line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
@@ -1840,36 +1741,7 @@ FROM tabela
   border-left-color: #D5D5D5;
 }
 
-#rgpmezbvuj .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#rgpmezbvuj .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#rgpmezbvuj .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#rgpmezbvuj .gt_heading {
+#wfqyxsxbyd .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1881,13 +1753,42 @@ FROM tabela
   border-right-color: #D3D3D3;
 }
 
-#rgpmezbvuj .gt_bottom_border {
+#wfqyxsxbyd .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#wfqyxsxbyd .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#wfqyxsxbyd .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#wfqyxsxbyd .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D5D5D5;
 }
 
-#rgpmezbvuj .gt_col_headings {
+#wfqyxsxbyd .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D5D5D5;
@@ -1902,7 +1803,7 @@ FROM tabela
   border-right-color: #D3D3D3;
 }
 
-#rgpmezbvuj .gt_col_heading {
+#wfqyxsxbyd .gt_col_heading {
   color: #FFFFFF;
   background-color: #004D80;
   font-size: 100%;
@@ -1922,7 +1823,7 @@ FROM tabela
   overflow-x: hidden;
 }
 
-#rgpmezbvuj .gt_column_spanner_outer {
+#wfqyxsxbyd .gt_column_spanner_outer {
   color: #FFFFFF;
   background-color: #004D80;
   font-size: 100%;
@@ -1934,15 +1835,15 @@ FROM tabela
   padding-right: 4px;
 }
 
-#rgpmezbvuj .gt_column_spanner_outer:first-child {
+#wfqyxsxbyd .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#rgpmezbvuj .gt_column_spanner_outer:last-child {
+#wfqyxsxbyd .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#rgpmezbvuj .gt_column_spanner {
+#wfqyxsxbyd .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D5D5D5;
@@ -1954,11 +1855,7 @@ FROM tabela
   width: 100%;
 }
 
-#rgpmezbvuj .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#rgpmezbvuj .gt_group_heading {
+#wfqyxsxbyd .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1984,7 +1881,7 @@ FROM tabela
   text-align: left;
 }
 
-#rgpmezbvuj .gt_empty_group_heading {
+#wfqyxsxbyd .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1999,15 +1896,15 @@ FROM tabela
   vertical-align: middle;
 }
 
-#rgpmezbvuj .gt_from_md > :first-child {
+#wfqyxsxbyd .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#rgpmezbvuj .gt_from_md > :last-child {
+#wfqyxsxbyd .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#rgpmezbvuj .gt_row {
+#wfqyxsxbyd .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2026,7 +1923,7 @@ FROM tabela
   overflow-x: hidden;
 }
 
-#rgpmezbvuj .gt_stub {
+#wfqyxsxbyd .gt_stub {
   color: #FFFFFF;
   background-color: #929292;
   font-size: 100%;
@@ -2039,7 +1936,7 @@ FROM tabela
   padding-right: 5px;
 }
 
-#rgpmezbvuj .gt_stub_row_group {
+#wfqyxsxbyd .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2053,15 +1950,11 @@ FROM tabela
   vertical-align: top;
 }
 
-#rgpmezbvuj .gt_row_group_first td {
+#wfqyxsxbyd .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#rgpmezbvuj .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#rgpmezbvuj .gt_summary_row {
+#wfqyxsxbyd .gt_summary_row {
   color: #FFFFFF;
   background-color: #5F5F5F;
   text-transform: inherit;
@@ -2071,16 +1964,16 @@ FROM tabela
   padding-right: 5px;
 }
 
-#rgpmezbvuj .gt_first_summary_row {
+#wfqyxsxbyd .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D5D5D5;
 }
 
-#rgpmezbvuj .gt_first_summary_row.thick {
+#wfqyxsxbyd .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#rgpmezbvuj .gt_last_summary_row {
+#wfqyxsxbyd .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2090,7 +1983,7 @@ FROM tabela
   border-bottom-color: #D5D5D5;
 }
 
-#rgpmezbvuj .gt_grand_summary_row {
+#wfqyxsxbyd .gt_grand_summary_row {
   color: #FFFFFF;
   background-color: #929292;
   text-transform: inherit;
@@ -2100,7 +1993,7 @@ FROM tabela
   padding-right: 5px;
 }
 
-#rgpmezbvuj .gt_first_grand_summary_row {
+#wfqyxsxbyd .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2110,21 +2003,11 @@ FROM tabela
   border-top-color: #D5D5D5;
 }
 
-#rgpmezbvuj .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D5D5D5;
-}
-
-#rgpmezbvuj .gt_striped {
+#wfqyxsxbyd .gt_striped {
   background-color: #F4F4F4;
 }
 
-#rgpmezbvuj .gt_table_body {
+#wfqyxsxbyd .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D5D5D5;
@@ -2133,7 +2016,7 @@ FROM tabela
   border-bottom-color: #D5D5D5;
 }
 
-#rgpmezbvuj .gt_footnotes {
+#wfqyxsxbyd .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2147,16 +2030,16 @@ FROM tabela
   border-right-color: #D3D3D3;
 }
 
-#rgpmezbvuj .gt_footnote {
+#wfqyxsxbyd .gt_footnote {
   margin: 0px;
   font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-#rgpmezbvuj .gt_sourcenotes {
+#wfqyxsxbyd .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2170,7 +2053,7 @@ FROM tabela
   border-right-color: #D3D3D3;
 }
 
-#rgpmezbvuj .gt_sourcenote {
+#wfqyxsxbyd .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2178,70 +2061,71 @@ FROM tabela
   padding-right: 5px;
 }
 
-#rgpmezbvuj .gt_left {
+#wfqyxsxbyd .gt_left {
   text-align: left;
 }
 
-#rgpmezbvuj .gt_center {
+#wfqyxsxbyd .gt_center {
   text-align: center;
 }
 
-#rgpmezbvuj .gt_right {
+#wfqyxsxbyd .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#rgpmezbvuj .gt_font_normal {
+#wfqyxsxbyd .gt_font_normal {
   font-weight: normal;
 }
 
-#rgpmezbvuj .gt_font_bold {
+#wfqyxsxbyd .gt_font_bold {
   font-weight: bold;
 }
 
-#rgpmezbvuj .gt_font_italic {
+#wfqyxsxbyd .gt_font_italic {
   font-style: italic;
 }
 
-#rgpmezbvuj .gt_super {
+#wfqyxsxbyd .gt_super {
   font-size: 65%;
 }
 
-#rgpmezbvuj .gt_footnote_marks {
+#wfqyxsxbyd .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
-  position: initial;
 }
 
-#rgpmezbvuj .gt_asterisk {
+#wfqyxsxbyd .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#rgpmezbvuj .gt_indent_1 {
+#wfqyxsxbyd .gt_indent_1 {
   text-indent: 5px;
 }
 
-#rgpmezbvuj .gt_indent_2 {
+#wfqyxsxbyd .gt_indent_2 {
   text-indent: 10px;
 }
 
-#rgpmezbvuj .gt_indent_3 {
+#wfqyxsxbyd .gt_indent_3 {
   text-indent: 15px;
 }
 
-#rgpmezbvuj .gt_indent_4 {
+#wfqyxsxbyd .gt_indent_4 {
   text-indent: 20px;
 }
 
-#rgpmezbvuj .gt_indent_5 {
+#wfqyxsxbyd .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="OPERADOR">OPERADOR</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="SIGNIFICADO">SIGNIFICADO</th>
     </tr>
@@ -2370,14 +2254,14 @@ WHERE MES_ANO_FOLHA = '01/08/2023' AND NUM_FOLHA NOT IN (1,2,3);
 O operador **NOT IN** retorna todas as linhas cujos valores **não pertencem** a um determinado conjunto.
 ]
 .pull-right[
-&lt;img src="images/FICHAS_FINANCEIRAS17.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/FICHAS_FINANCEIRAS18.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 ---
 ### WHERE
 **Exemplo 17:** Usando **WHERE** com operador de comparação **LIKE**.
 
 ```sql
-SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
+SELECT DISTINCT MES_ANO_FOLHA, COMPLEMENTO  
 FROM ERGON.FICHAS_FINANCEIRAS 
 WHERE MES_ANO_FOLHA = '01/08/2023' AND COMPLEMENTO LIKE 'ADIC%';
 ```
@@ -2392,10 +2276,162 @@ O operador &lt;strong&gt;LIKE&lt;/strong&gt; é usado para buscar um determinado
 &lt;/p&gt;
 ]
 .pull-right[
-&lt;img src="images/FICHAS_FINANCEIRAS17.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/FICHAS_FINANCEIRAS19.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 ---
+### FUNÇÃO DESC
+A função **DESC** fornece a descrição de uma determinada tabela. A consulta retorna os nomes das colunas, se podem ou não assumir o valor null e o tipo de cada coluna. 
+&lt;/br&gt;&lt;/br&gt;
+**Exemplo 18:** Descrição da tabela &lt;strong style="color:red;"&gt;ERGON.FUNCIONARIOS&lt;/strong&gt;.
+
+```sql
+DESC ERGON.FUNCIONARIOS;
+```
+
+&lt;img src="images/DESC_FUNCIONARIOS.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
 ### EXERCÍCIOS
+
+1. Crie uma consulta para recuperar todos os códigos de empresa (**EMP_CODIGO**) únicos para o mês de janeiro de 2023 usando a tabela &lt;strong style="color:red;"&gt;ERGON.FICHAS_FINANCEIRAS&lt;/strong&gt;.
+
+2. Crie uma consulta para recuperar todas as rubricas e seus nomes usando a tabela &lt;strong style="color:red;"&gt;ERGON.RUBRICAS&lt;/strong&gt;.
+
+3. Crie uma consulta para recuperar seu número de funcionário (**NUMERO**) usando a tabela &lt;strong style="color:red;"&gt;ERGON.FUNCIONARIOS&lt;/strong&gt;.
+
+4. Com seu número de funcionário (**NUMFUNC**), crie uma consulta para recuperar sua data de posse (**DTPOSSE**), número do vínculo (**NUMERO**) e tipo de vínculo (**TIPOVINC**) usando a tabela &lt;strong style="color:red;"&gt;ERGON.VINCULOS&lt;/strong&gt;. 
+
+5. Com seu número de funcionário (**NUMFUNC**) e número do vínculo (**NUMVINC**), crie uma consulta para recuperar a Data início (**DTINI**) e quantidade de triênio (**VALOR**) usando a tabela &lt;strong style="color:red;"&gt;ERGON.VANTAGENS&lt;/strong&gt; com o campo **VANTAGEM** igual a "TRIENIO LIMITE-AUTO". 
+&lt;/br&gt;
+&lt;small&gt;*DICA: O triênio mais recente terá data fim (DTFIM) nula*.&lt;/small&gt;
+
+---
+class: inverse, center, middle
+
+# ORDER BY
+
+---
+class: center, middle
+
+# Ordenando os resultados
+
+---
+### ORDER BY
+Em muitas situações práticas pode existir a necessidade de especificar a ordem de exibição dos registros. A cláusula **ORDER BY** pode ser usada no final de um comando **SELECT** para ordenar or resultados.
+
+**Exemplo 19:** Ordenando registros de uma tabela.
+
+```sql
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 55 AND RUBRICA = 996 
+ORDER BY VALOR;
+```
+
+.pull-left[
+Por definição, os resultados retornados após a execução de um comando **SELECT** não são ordenados por nenhum critério (ou seja: nenhuma coluna específica… o SGBD entrega os resultados na ordem que for “mais rápida” de buscá-los). No entanto, é possível especificar que os resultados sejam ordenados por uma ou mais colunas, através do uso da cláusula **ORDER BY**.
+]
+.pull-right[
+&lt;img src="images/FICHAS_FINANCEIRAS20.png" width="80%" style="display: block; margin: auto;" /&gt;
+]
+---
+### ORDER BY
+
+**Exemplo 20:** Ordenando registros de uma tabela usando mais de uma coluna.
+
+```sql
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 55 AND RUBRICA IN (50,53) 
+ORDER BY VALOR, RUBRICA;
+```
+
+.pull-left[
+Ao usar mais de uma coluna com a cláusula **ORDER BY**, o resultado é ordenado de maneira **ascendente** respeitando a ordem das colunas na cláusula (ordena primeiro com base na *COLUNA 1*, depois com base na *COLUNA 2*). Não há limite para o número de colunas a serem
+especificadas na cláusula **ORDER BY**.
+]
+.pull-right[
+&lt;img src="images/FICHAS_FINANCEIRAS21.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+---
+### ORDER BY
+**Exemplo 21:** Ordenação decrescente de registros.
+
+```sql
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 55 AND RUBRICA IN (50,53) 
+ORDER BY VALOR DESC, ASC RUBRICA;
+```
+
+.pull-left[
+Para ordenar registros de maneira **descendente**, usamos a palavra-chave **DESC** após o nome da coluna na cláusula **ORDER BY**. Podemos usar a palavra-chave **ASC** para definir uma ordenação **ascendente**, mas seu uso é opcional.
+]
+.pull-right[
+&lt;img src="images/FICHAS_FINANCEIRAS22.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+---
+### ORDER BY
+**Exemplo 22:** Ordenando registros por posição relativa de um campo.
+
+```sql
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 55 AND RUBRICA IN (50,53) 
+ORDER BY 4, 3;
+```
+
+.pull-left[
+Os SGBDs também permitem utilizar a cláusula ORDER BY para ordernar resultados pela posição relativa em um resultado, onde o primeiro campo do resultado tem a posição relativa 1, o campo seguinte 2, e assim por diante. O Exemplo 22 ordena a consulta pelos campos **VALOR** e **RUBRICA**, respectivamente. O resultado é identico ao resultado do Exemplo 20.
+]
+.pull-right[
+&lt;img src="images/FICHAS_FINANCEIRAS23.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+---
+### ORDER BY
+**Exemplo 23:** Ordenando registros usando campos não selecionados.
+
+```sql
+SELECT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 55 AND RUBRICA IN (50,53)  
+ORDER BY NUMFUNC;
+```
+
+.pull-left[
+É possível ordenar registros usando colunas que não constam na cláusula **SELECT**, mas que fazem parte da tabela. Se a palavra-chave **DISTINCT** for usada na cláusula **SELECT** ou se a consulta contém a uma cláusula **GROUP BY** a coluna de ordenação deve estar na cláusula **SELECT**. Também podemos usar os termos **NULL LAST** e **NULL FIRST** para definir como valores **NULL** são avaliados. Com **NULL LAST**, os termos **NULL** aparecem no final da consulta. Com **NULL FIRST**, aparecem no início.
+]
+.pull-right[
+&lt;img src="images/FICHAS_FINANCEIRAS24.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+---
+### ORDER BY
+#### **Definição 4**: Cláusula **ORDER BY**
+A ordem de exibição dos resultados de uma consulta pode ser especificada pela cláusula **ORDER BY**. Quando esta cláusula for utilizada, ela deverá ser sempre a última da instrução SQL. 
+
+```sql
+SELECT [DISTINCT] * | col 1 [AS apelido 1],..., col n [AS apelido n]
+FROM tabela
+[WHERE condição(ões)]
+[ORDER BY lista de campos];
+```
+
+Na maioria dos SGBDs, os apelidos de colunas podem ser referenciados em uma cláusula **ORDER BY**, mas não podem ser referenciados em uma cláusula **WHERE**. 
+---
+### Exercícios
+
+1. Crie uma consulta pra recuperar os 10 maiores valores da rubrica 999 da folha 1 de janeiro de 2023. 
+&lt;/br&gt;
+&lt;small&gt;*DICA: Podemos restringir o total de linhas usando a palavra chave ROWNUM na cláusula WHERE (Ex.: WHERE ROWNUM &lt;= 5)*.&lt;/small&gt;
+
+2. Modifique o **Exercício 2** sobre a cláusula **WHERE** e ordene o resultado pelo nome de maneira decrescente.
+
+---
+### Referências
+
+* Material do Curso "Bases de Dados" - Prof. Eduardo Corrêa Gonçalves (ENCE/IBGE);
+* Livro Introdução à linguagem SQL - Thomas Nield (O'REILLY);
+* Documentação [SQL Language Reference](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/index.html#Oracle%C2%AE-Database) (ORACLE)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
