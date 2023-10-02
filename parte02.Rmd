@@ -84,6 +84,7 @@ No trabalho com bancos de dados e SQL, a tarefa mais comum é recuperar dados de
 </br> </br>
 Inicialmente, vamos trabalhar com a tabela <strong style="color:red;">FICHAS_FINANCEIRAS</strong>, que armazena os registros de vantagens e descontos da folha de pagamento. 
 
+
 ```{r tabela2, echo=F, warning=F}
 tibble::tibble(
   ATRIBUTO = c(
@@ -165,9 +166,8 @@ tibble::tibble(
   # gt::data_color(columns = TIPO, apply_to = "text",colors =  c("darkgreen","darkblue","black")) |> 
   gt::data_color(columns = `PODE SER NULL*`, apply_to = "text",colors =  c("black","orangered3")) |> 
   gt::tab_options(table.font.size = 15,
-                  container.width = 750,
-                  container.height = 250,
-                  table.align='center') |> 
+                  container.width = 900,
+                  container.height = 250) |> 
   gt::tab_style(style = gt::cell_text(weight = "bold",size = 18), 
                 locations = gt::cells_column_labels()) |> 
   gt::opt_stylize(style = 5, color = "blue", add_row_striping = F)
@@ -226,8 +226,8 @@ SELECT * | col 1, ..., col n
 FROM tabela;
 ```
 
-As instruções SQL não fazem distinção entre letras maiúsculas e minúsculas. Muitas vezes as cláusulas costumam ser colocadas em linhas separadas (como na definição acima e nos exemplos anteriores) com a única finalidade de melhorar a legibilidade (ou seja: não
-há problema em colocar a cláusula FROM na mesma linha da cláusula SELECT).
+As instruções SQL não fazem distinção entre letras maiúsculas e minúsculas. Muitas vezes as cláusulas são colocadas em linhas separadas (como na definição acima e nos exemplos anteriores) com a única finalidade de melhorar a legibilidade (ou seja: não
+há problema em colocar a cláusula **FROM** na mesma linha da cláusula **SELECT**).
 
 .footnote[\* Nesse contexto, a notação "**|**" significa **OU**.]
 
@@ -257,12 +257,12 @@ SELECT DISTINCT NUM_FOLHA, MES_ANO_FOLHA
 FROM ERGON.FICHAS_FINANCEIRAS;
 ```
 .pull-left[
-```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600, fig.cap='SELECT COM DISTINCT'}
+```{r echo=FALSE, out.width="70%", fig.align='center', dpi=600, fig.cap='SELECT COM DISTINCT'}
 knitr::include_graphics("images/FICHAS_FINANCEIRAS4.png")
 ```
 ]
 .pull-right[
-```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600, fig.cap='SELECT SEM DISTINCT'}
+```{r echo=FALSE, out.width="70%", fig.align='center', dpi=600, fig.cap='SELECT SEM DISTINCT'}
 knitr::include_graphics("images/FICHAS_FINANCEIRAS5.png")
 ```
 ]
@@ -279,7 +279,7 @@ Ao exibir o resultado de uma consulta, os nomes das colunas selecionadas são ex
 </p>
 ]
 .pull-right[
-```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+```{r echo=FALSE, out.width="90%", fig.align='center', dpi=600}
 knitr::include_graphics("images/FICHAS_FINANCEIRAS6.png")
 ```
 ]
@@ -320,7 +320,7 @@ WHERE MES_ANO_FOLHA = '01/09/2023';
 No exemplo, a instrução **SELECT** recupera os registros da tabela <strong style="color:red;">FICHAS_FINANCEIRAS</strong> cujo valor da coluna **MES_ANO_FOLHA** seja igual a <strong style="color:red;">01/09/2023</strong>. Para isso, usamos a cláusula **WHERE** após a cláusula **FROM**. 
 ]
 .pull-right[
-```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+```{r echo=FALSE, out.width="90%", fig.align='center', dpi=600}
 knitr::include_graphics("images/FICHAS_FINANCEIRAS7.png")
 ```
 ]
@@ -340,7 +340,7 @@ Caso seja necessário restringir linhas, utiliza-se a cláusula <strong>WHERE</s
 </p>
 ]
 .pull-right[
-```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+```{r echo=FALSE, out.width="80%", fig.align='center', dpi=600}
 knitr::include_graphics("images/FICHAS_FINANCEIRAS8.png")
 ```
 ]
@@ -379,13 +379,13 @@ O operador lógico **AND** retorna as linhas para as quais ambas as condições 
 
 ]
 .pull-right[
-```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+```{r echo=FALSE, out.width="80%", fig.align='center', dpi=600}
 knitr::include_graphics("images/FICHAS_FINANCEIRAS9.png")
 ```
 ]
 ---
 ### WHERE
-**Exemplo 7:** Usando **WHERE** com operador lógico **OR** (OU).  
+**Exemplo 8:** Usando **WHERE** com operador lógico **OR** (OU).  
 
 ```{sql eval = F}
 SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
@@ -398,13 +398,13 @@ O operador lógico **OU** retorna as linhas para as quais uma ou mais condiçõe
 
 ]
 .pull-right[
-```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+```{r echo=FALSE, out.width="90%", fig.align='center', dpi=600}
 knitr::include_graphics("images/FICHAS_FINANCEIRAS10.png")
 ```
 ]
 ---
 ### WHERE
-**Exemplo 8:** Usando **WHERE** com operador lógico **NOT** (NÃO).  
+**Exemplo 9:** Usando **WHERE** com operador lógico **NOT** (NÃO).  
 
 ```{sql eval = F}
 SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
@@ -416,13 +416,13 @@ O operador lógico **NOT** retorna as linhas para as quais a condição é falsa
 
 ]
 .pull-right[
-```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+```{r echo=FALSE, out.width="90%", fig.align='center', dpi=600}
 knitr::include_graphics("images/FICHAS_FINANCEIRAS11.png")
 ```
 ]
 ---
 ### WHERE
-**Exemplo 9:** Usando **WHERE** com operador lógico **NOT** (NÃO) com mais de uma condição.  
+**Exemplo 10:** Usando **WHERE** com operador lógico **NOT** (NÃO) com mais de uma condição.  
 
 ```{sql eval = F}
 SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
@@ -435,14 +435,14 @@ O operador lógico **NOT** retorna as linhas para as quais a condição é falsa
 
 ]
 .pull-right[
-```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+```{r echo=FALSE, out.width="90%", fig.align='center', dpi=600}
 knitr::include_graphics("images/FICHAS_FINANCEIRAS12.png")
 ```
 ]
 ---
 ### WHERE
 #### **Definição 3**: Sintaxe da cláusula **WHERE**
-A cláusula **WHERE** é utilizada para restringir as linhas que serão retornadas ou analisadas por uma consulta, de acordo com um ou mais critérios. Trata-se de uma cláusula opcional, ao contrário de **SELECT** e **FROM**, que são cláusulas obrigatórias. Dentro de um comando SQL, a palavra-chave **WHERE** deve ser colocada logo após a lista de tabelas associadas à cláusula **FROM** (Obs.: a cláusula FROM conterá mais de uma tabela sempre que for necessário realizar uma operação de junção; porém este assunto será abordado apenas nas próximas aulas). Além disso, a palavra-chave **WHERE** deve possuir uma ou mais condições associadas.
+A cláusula **WHERE** é utilizada para restringir as linhas que serão retornadas ou analisadas por uma consulta, de acordo com um ou mais critérios. Trata-se de uma cláusula opcional, ao contrário de **SELECT** e **FROM**, que são cláusulas obrigatórias. Dentro de um comando SQL, a palavra-chave **WHERE** deve ser colocada logo após a lista de tabelas associadas à cláusula **FROM** (Obs.: a cláusula **FROM** conterá mais de uma tabela sempre que for necessário realizar uma operação de junção; porém este assunto será abordado apenas nas próximas aulas). Além disso, a palavra-chave **WHERE** deve possuir uma ou mais condições associadas.
 ```{sql eval = F}
 SELECT [DISTINCT] * | col 1 [AS apelido 1], ..., col n [AS apelido n]
 FROM tabela
@@ -483,7 +483,7 @@ tibble::tibble(
 
 ---
 ### WHERE
-**Exemplo 10:** Usando **WHERE** com operador de comparação **<>** (diferente de...).
+**Exemplo 11:** Usando **WHERE** com operador de comparação **<>** (diferente de...).
 
 ```{sql eval = F}
 SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
@@ -492,16 +492,16 @@ WHERE MES_ANO_FOLHA = '01/08/2023' AND NUM_FOLHA <> 1;
 ```
 
 .pull-left[
-O uso de operadores de comparação nos permite controlar de maneira simples o resultados das consultas. Geralmente, podemos obter o mesmo resultado realizando diferentes consultas. O exemplo acima retorna um resultado igual ao do Exemplo 8.  
+O uso de operadores de comparação nos permite controlar de maneira simples o resultados das consultas. Geralmente, podemos obter o mesmo resultado realizando diferentes consultas. O exemplo acima retorna um resultado igual ao do Exemplo 9.  
 ]
 .pull-right[
-```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+```{r echo=FALSE, out.width="90%", fig.align='center', dpi=600}
 knitr::include_graphics("images/FICHAS_FINANCEIRAS13.png")
 ```
 ]
 ---
 ### WHERE
-**Exemplo 11:** Usando **WHERE** com operador de comparação **>=** (maior ou igual a...).
+**Exemplo 12:** Usando **WHERE** com operador de comparação **>=** (maior ou igual a...).
 
 ```{sql eval = F}
 SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
@@ -509,12 +509,12 @@ FROM ERGON.FICHAS_FINANCEIRAS
 WHERE MES_ANO_FOLHA = '01/08/2023' AND NUM_FOLHA >= 90;
 ```
 
-```{r echo=FALSE, out.width="60%", fig.align='center', dpi=600}
+```{r echo=FALSE, out.width="50%", fig.align='center', dpi=600}
 knitr::include_graphics("images/FICHAS_FINANCEIRAS14.png")
 ```
 ---
 ### WHERE
-**Exemplo 12:** Usando **WHERE** com operador de comparação **BETWEEN** (entre...).
+**Exemplo 13:** Usando **WHERE** com operador de comparação **BETWEEN** (entre...).
 ```{sql eval = F}
 SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
 FROM ERGON.FICHAS_FINANCEIRAS 
@@ -530,7 +530,7 @@ knitr::include_graphics("images/FICHAS_FINANCEIRAS15.png")
 ]
 ---
 ### WHERE
-**Exemplo 13:** Usando **WHERE** com operador de comparação **BETWEEN** (entre...) com dados alfanuméricos.
+**Exemplo 14:** Usando **WHERE** com operador de comparação **BETWEEN** (entre...) com dados alfanuméricos.
 ```{sql eval = F}
 SELECT DISTINCT MES_ANO_FOLHA, COMPLEMENTO  
 FROM ERGON.FICHAS_FINANCEIRAS 
@@ -546,7 +546,7 @@ knitr::include_graphics("images/FICHAS_FINANCEIRAS17.png")
 ]
 ---
 ### WHERE
-**Exemplo 14:** Usando **WHERE** com operador de comparação **IN** (pertence a...).
+**Exemplo 15:** Usando **WHERE** com operador de comparação **IN** (pertence a...).
 ```{sql eval = F}
 SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
 FROM ERGON.FICHAS_FINANCEIRAS 
@@ -558,19 +558,19 @@ ORDER BY 2;
 O operador **IN** retorna todas as linhas cujos valores pertencem a um determinado conjunto, que deve ser especificado entre partênteses. Este operador pode ser utilizado tanto para avaliar campos **alfanuméricos**, como para a avaliação de campos **numéricos** do tipo inteiro.
 ]
 .pull-right[
-```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+```{r echo=FALSE, out.width="90%", fig.align='center', dpi=600}
 knitr::include_graphics("images/FICHAS_FINANCEIRAS16.png")
 ```
 ]
 ---
 ### WHERE
-**Exemplo 15:** Usando **WHERE** com operador de comparação **NOT IN** (não pertence a...).
+**Exemplo 16:** Usando **WHERE** com operador de comparação **NOT IN** (não pertence a...).
 ```{sql eval = F}
 SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
 FROM ERGON.FICHAS_FINANCEIRAS 
 WHERE MES_ANO_FOLHA = '01/08/2023' AND NUM_FOLHA NOT IN (1,2,3);
 ```
-#### ALTERAR IMAGEM
+
 .pull-left[
 O operador **NOT IN** retorna todas as linhas cujos valores **não pertencem** a um determinado conjunto.
 ]
@@ -581,7 +581,7 @@ knitr::include_graphics("images/FICHAS_FINANCEIRAS17.png")
 ]
 ---
 ### WHERE
-**Exemplo 16:** Usando **WHERE** com operador de comparação **LIKE**.
+**Exemplo 17:** Usando **WHERE** com operador de comparação **LIKE**.
 ```{sql eval = F}
 SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA  
 FROM ERGON.FICHAS_FINANCEIRAS 
