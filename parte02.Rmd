@@ -67,6 +67,8 @@ tibble::tibble(
   gt::gt() |> 
   gt::tab_style(style = gt::cell_text(weight = "bold",size = 18), 
                 locations = gt::cells_column_labels()) |> 
+  gt::tab_style(style = gt::cell_text(weight = "bold",size = 22), 
+                locations = gt::cells_body()) |> 
   gt::opt_stylize(style = 5, color = "blue", add_row_striping = F)
 
 ```
@@ -170,6 +172,8 @@ tibble::tibble(
                   container.height = 250) |> 
   gt::tab_style(style = gt::cell_text(weight = "bold",size = 18), 
                 locations = gt::cells_column_labels()) |> 
+  gt::tab_style(style = gt::cell_text(weight = "bold",size = 22), 
+                locations = gt::cells_body()) |> 
   gt::opt_stylize(style = 5, color = "blue", add_row_striping = F)
 
 ```
@@ -360,6 +364,8 @@ tibble::tibble(
   gt::gt() |> 
   gt::tab_style(style = gt::cell_text(weight = "bold",size = 18), 
                 locations = gt::cells_column_labels()) |> 
+  gt::tab_style(style = gt::cell_text(weight = "bold",size = 22), 
+                locations = gt::cells_body()) |> 
   gt::fmt_markdown(columns = 'SIGNIFICADO') |> 
   gt::opt_stylize(style = 5, color = "blue", add_row_striping = F)
 
@@ -441,6 +447,43 @@ knitr::include_graphics("images/FICHAS_FINANCEIRAS12.png")
 ]
 ---
 ### WHERE
+#### Regras de precedência para operadores lógicos
+
+O operador **NOT** tem precedência maior, seguido do operador **AND** e do operador **OR**, respectivamente. Estas regras de precedência podem ser sobrepostas através do uso de parênteses.
+
+
+```{r tabela_p, echo=F}
+tibble::tibble(
+  OPERADOR = c("NOT",
+                "AND",
+                "OR"), 
+  `ORDEM DE AVALIAÇÃO` = 1:3) |> 
+  gt::gt() |> 
+  gt::tab_style(style = gt::cell_text(weight = "bold",size = 18), 
+                locations = gt::cells_column_labels()) |> 
+  gt::tab_style(style = gt::cell_text(weight = "bold",size = 22), 
+                locations = gt::cells_body()) |> 
+  gt::opt_stylize(style = 5, color = "blue", add_row_striping = F)
+
+```
+
+---
+### WHERE
+#### Regras de precedência para operadores lógicos
+
+Suponha que um usuário deseja obter uma lista de rubricas presentes nas folhas 1 dos meses de agosto e setembro. Uma consulta com cláusula **WHERE** igual a *"WHERE MES_ANO_FOLHA = '01/08/2023' OR <mark>MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 1</mark>"* **não atenderia** o desejo do usuário. Como o operador **AND** tem precedência maior do que o operador **OR**, o SGBD testa a condição destacada primeiro. 
+
+.pull-left[
+```{r echo=FALSE, out.width="30%", fig.align='center', dpi=600}
+knitr::include_graphics("images/PROC_OPERADORES.png")
+```
+]
+.pull-right[
+Para obter o resultado correto, o usuário deveria escrever a consulta com a cláusula **WHERE** igual a *"(WHERE MES_ANO_FOLHA = '01/08/2023' OR MES_ANO_FOLHA = '01/09/2023') AND NUM_FOLHA = 1"*, que retorna os registros cujo MES_ANO_FOLHA é igual a '01/08/2023' ou '01/09/2023' e cujo NUM_FOLHA é 1.
+
+]
+---
+### WHERE
 #### **Definição 3**: Sintaxe da cláusula **WHERE**
 A cláusula **WHERE** é utilizada para restringir as linhas que serão retornadas ou analisadas por uma consulta, de acordo com um ou mais critérios. Trata-se de uma cláusula opcional, ao contrário de **SELECT** e **FROM**, que são cláusulas obrigatórias. Dentro de um comando SQL, a palavra-chave **WHERE** deve ser colocada logo após a lista de tabelas associadas à cláusula **FROM** (Obs.: a cláusula **FROM** conterá mais de uma tabela sempre que for necessário realizar uma operação de junção; porém este assunto será abordado apenas nas próximas aulas). Além disso, a palavra-chave **WHERE** deve possuir uma ou mais condições associadas.
 ```{sql eval = F}
@@ -474,8 +517,10 @@ tibble::tibble(
                   'Busca texto (valor alfanumérico) em uma determinada string (sequência de caracteres alfanuméricos)')
 ) |> 
   gt::gt() |> 
-  gt::tab_style(style = gt::cell_text(weight = "bold",size = 18), 
+  gt::tab_style(style = gt::cell_text(weight = "bold",size = 22), 
                 locations = gt::cells_column_labels()) |> 
+  gt::tab_style(style = gt::cell_text(weight = "bold",size = 22), 
+                locations = gt::cells_body()) |> 
   gt::fmt_markdown(columns = 'SIGNIFICADO') |> 
   gt::opt_stylize(style = 5, color = "blue", add_row_striping = F)
 
