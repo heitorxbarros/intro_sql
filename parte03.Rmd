@@ -1,0 +1,56 @@
+---
+title: "Introdução a bases de dados e SQL"
+subtitle: "Parte 3"
+author: "Heitor Barros"
+institute: "FP/SUBGGC/CGRH/CTAP"
+date: ""
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    css: xaringan-themer.css
+---
+class: center, middle
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_accent(
+  base_color = "#004b80", 
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Montserrat", "300", "300i"),
+  code_font_google   = google_font("Fira Mono"),
+)
+```
+
+```{r xaringan-logo, echo=FALSE}
+xaringanExtra::use_logo(
+  image_url = "logo.png",
+  position = xaringanExtra::css_position(top = "1em", right = "1em"),
+  width = "200px"
+)
+
+```
+
+# WHERE
+
+---
+### WHERE
+
+**Exemplo 1:** Operações matemáticas na cláusula **WHERE**.
+```{sql eval = F}
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 55 AND RUBRICA IN (50,53) AND (VALOR * 2) > 100;
+```
+
+.pull-left[
+É possível realizar operações aritméticas sobre as colunas na cláusula **WHERE**. Usamos **"+", "-", "*" e "/"** como operadores de adição, subtração, multiplicação e divisão, respectivamente
+]
+.pull-right[
+```{r echo=FALSE, out.width="90%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS25.png")
+```
+]
