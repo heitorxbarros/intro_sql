@@ -34,23 +34,81 @@ xaringanExtra::use_logo(
 
 ```
 
-# WHERE
+# GROUP BY E FUNÇÕES DE GRUPO
+---
+class: inverse, center, middle
+
+# Agregando conjuntos de dados
 
 ---
-### WHERE
+## GROUP BY
 
-**Exemplo 1:** Operações matemáticas na cláusula **WHERE**.
+A agregação de dados é a criação de algum tipo de total ou resumo a partir de vários registros. Soma, mínimo, máximo, contagem e média são algumas das operações de agregação mais comuns. Podemos realizar essas operações sobre qualquer coluna especificada, o que nos permite controlar facilmente o escopo das agregações.
+
+---
+### FUNÇÕES DE GRUPO
+
+**Exemplo 1:** Contabilizando todos os registros de uma tabela coma função **COUNT**.  
 ```{sql eval = F}
-SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
-FROM ERGON.FICHAS_FINANCEIRAS 
-WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 55 AND RUBRICA IN (50,53) AND (VALOR * 2) > 100;
+SELECT COUNT(*) 
+FROM ERGON.VINCULOS;
 ```
 
 .pull-left[
-É possível realizar operações aritméticas sobre as colunas na cláusula **WHERE**. Usamos **"+", "-", "*" e "/"** como operadores de adição, subtração, multiplicação e divisão, respectivamente
+A função **COUNT** é usada para contabilizar registros em uma consulta. Também pode ser utilizada em consultas que possuem a cláusula **WHERE**.  
 ]
 .pull-right[
 ```{r echo=FALSE, out.width="90%", fig.align='center', dpi=600}
-knitr::include_graphics("images/FICHAS_FINANCEIRAS25.png")
+knitr::include_graphics("images/FUNCOES_DE_GRUPO.png")
 ```
 ]
+
+---
+### FUNÇÕES DE GRUPO
+
+**Exemplo 2:** Contabilizando registros de uma tabela por grupos usando **COUNT** e **GROUP BY**.  
+```{sql eval = F}
+SELECT EMP_CODIGO, COUNT(*) 
+FROM ERGON.VINCULOS 
+GROUP BY EMP_CODIGO 
+ORDER BY 1;
+```
+
+.pull-left[
+A cláusula **GROUP BY** pode ser combinada com a função **COUNT** para recuperar o total de registros agrupados por determinada coluna. O formato resultante é conhecido como *tabulação* e conta a quantidade de valores unicos para cada grupo. A *posição relativa* pode ser usada na cláusula **GROUP BY** da mesma forma que foi utilizada para ordenar os registros na cláusula **ORDER BY**.
+]
+.pull-right[
+```{r echo=FALSE, out.width="80%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FUNCOES_DE_GRUPO2.png")
+```
+]
+
+---
+### FUNÇÕES DE GRUPO
+
+**Exemplo 3:** Contabilizando registros únicos de uma coluna por grupos usando **DISTINCT**.  
+.pull-left[
+```{sql eval = F}
+SELECT 
+  EMP_CODIGO
+  , COUNT(*) AS REGISTROS
+  , COUNT(NUMFUNC) AS TOTAL_FUNCIONARIOS
+  , COUNT(DISTINCT NUMFUNC) FUNCIONARIOS  
+FROM ERGON.VINCULOS 
+GROUP BY EMP_CODIGO 
+ORDER BY 1;
+```
+
+
+Por padrão, o SGBD contabiliza todos os registros não nulos de uma coluna ao usar a função **COUNT**. Se desejamos contabilizar os valores únicos, devemos usar a palavra-chave **DISTINCT** antes do nome da coluna e dentro dos parênteses da função **COUNT**.
+]
+
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FUNCOES_DE_GRUPO3.png")
+```
+]
+
+---
+### FUNÇÕES DE GRUPO
+

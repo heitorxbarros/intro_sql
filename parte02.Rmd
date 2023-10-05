@@ -676,6 +676,61 @@ knitr::include_graphics("images/DESC_FUNCIONARIOS.png")
 <small>*DICA: O triênio mais recente terá data fim (DTFIM) nula (Ex.: WHERE DTFIM IS NULL)*.</small>
 
 ---
+### WHERE
+
+**Exemplo 19:** Operações matemáticas na cláusula **WHERE**.
+```{sql eval = F}
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 55 AND RUBRICA IN (50,53) AND (VALOR * 2) > 100;
+```
+
+.pull-left[
+É possível realizar operações aritméticas sobre as colunas na cláusula **WHERE**. Usamos **"+", "-", "*" e "/"** como operadores de adição, subtração, multiplicação e divisão, respectivamente.
+]
+.pull-right[
+```{r echo=FALSE, out.width="90%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS25.png")
+```
+]
+---
+### SELECT
+
+**Exemplo 20:** Operações matemáticas na cláusula **SELECT**.
+```{sql eval = F}
+SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR, (VALOR * 0.19) AS "VALOR EM DOLARES" 
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 55 AND RUBRICA IN (50,53);
+```
+
+
+```{r echo=FALSE, out.width="50%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FICHAS_FINANCEIRAS26.png")
+```
+---
+### <strong style="color:red;">NULL</strong>
+**Exemplo 21:** Avaliando o valor **NULL**.
+```{sql eval = F}
+SELECT DISTINCT DTINI, DTFIM, VANTAGEM, VALOR, INFO 
+FROM ERGON.VANTAGENS 
+WHERE NUMFUNC = 2114007 AND NUMVINC = 3 AND DTFIM IS NULL AND INFO IS NOT NULL;
+```
+
+.pull-left[
+<p style="font-size:15px">
+O conceito de valor Nulo (ou <strong>NULL</strong>) é utilizado em banco de dados relacionais para representar a ausência de informação sobre um determinado campo. Detalhando melhor, se um campo de uma linha contém valor nulo, isto indica que seu conteúdo é desconhecido, inexistente, ou não-aplicável. 
+É importante entender que nulo não é a mesma coisa que zero. Zero é um número! Considere, por exemplo, uma tabela que armazene os dados de funcionários de uma empresa. Se a coluna “número de filhos” de um funcionário armazena o valor 0, isso indica que este
+não possui filhos (possui 0 filhos). Porém, se a coluna armazena o valor <strong>NULL</strong>, isto significa que não é sabido se o funcionário possui filhos ou não. De maneira análoga, também é importante ressaltar que o valor nulo não é a mesma coisa que espaço em branco, já que um espaço em branco representa um caractere. O operador <strong>IS NULL</strong> deve ser utilizado sempre que se desejar avaliar se um campo é nulo. Não funciona fazer o teste utilizando o operador “=” você precisa usar <strong>IS NULL</strong>.
+</p>
+]
+.pull-right[
+```{r echo=FALSE, out.width="90%", fig.align='center', dpi=600}
+knitr::include_graphics("images/VANTAGENS1.png")
+```
+]
+
+
+---
 class: inverse, center, middle
 
 # ORDER BY
@@ -689,7 +744,7 @@ class: center, middle
 ### ORDER BY
 Em muitas situações práticas pode existir a necessidade de especificar a ordem de exibição dos registros. A cláusula **ORDER BY** pode ser usada no final de um comando **SELECT** para ordenar or resultados.
 
-**Exemplo 19:** Ordenando registros de uma tabela.
+**Exemplo 21:** Ordenando registros de uma tabela.
 ```{sql eval = F}
 SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
 FROM ERGON.FICHAS_FINANCEIRAS 
@@ -708,7 +763,7 @@ knitr::include_graphics("images/FICHAS_FINANCEIRAS20.png")
 ---
 ### ORDER BY
 
-**Exemplo 20:** Ordenando registros de uma tabela usando mais de uma coluna.
+**Exemplo 22:** Ordenando registros de uma tabela usando mais de uma coluna.
 ```{sql eval = F}
 SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
 FROM ERGON.FICHAS_FINANCEIRAS 
@@ -727,7 +782,7 @@ knitr::include_graphics("images/FICHAS_FINANCEIRAS21.png")
 ]
 ---
 ### ORDER BY
-**Exemplo 21:** Ordenação decrescente de registros.
+**Exemplo 23:** Ordenação decrescente de registros.
 ```{sql eval = F}
 SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
 FROM ERGON.FICHAS_FINANCEIRAS 
@@ -745,7 +800,7 @@ knitr::include_graphics("images/FICHAS_FINANCEIRAS22.png")
 ]
 ---
 ### ORDER BY
-**Exemplo 22:** Ordenando registros por posição relativa de um campo.
+**Exemplo 24:** Ordenando registros por posição relativa de um campo.
 ```{sql eval = F}
 SELECT DISTINCT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
 FROM ERGON.FICHAS_FINANCEIRAS 
@@ -763,7 +818,7 @@ knitr::include_graphics("images/FICHAS_FINANCEIRAS23.png")
 ]
 ---
 ### ORDER BY
-**Exemplo 23:** Ordenando registros usando campos não selecionados.
+**Exemplo 25:** Ordenando registros usando campos não selecionados.
 ```{sql eval = F}
 SELECT MES_ANO_FOLHA, NUM_FOLHA, RUBRICA, VALOR 
 FROM ERGON.FICHAS_FINANCEIRAS 
