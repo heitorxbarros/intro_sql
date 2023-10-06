@@ -4,7 +4,7 @@
     <title>Introdução a bases de dados e SQL</title>
     <meta charset="utf-8" />
     <meta name="author" content="Heitor Barros" />
-    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -94,7 +94,8 @@ A função **COUNT** é usada para contabilizar registros em uma consulta. Tamb�
 ---
 ### FUNÇÕES DE GRUPO
 
-**Exemplo 2:** Contabilizando registros de uma tabela por grupos usando **COUNT** e **GROUP BY**.  
+**Exemplo 2:** Contabilizando registros de uma tabela por grupos usando **COUNT** e **GROUP BY**. 
+.pull-left[
 
 ```sql
 SELECT EMP_CODIGO, COUNT(*) 
@@ -103,11 +104,11 @@ GROUP BY EMP_CODIGO
 ORDER BY 1;
 ```
 
-.pull-left[
-A cláusula **GROUP BY** pode ser combinada com a função **COUNT** para recuperar o total de registros agrupados por determinada coluna. O formato resultante é conhecido como *tabulação* e conta a quantidade de valores unicos para cada grupo. A *posição relativa* pode ser usada na cláusula **GROUP BY** da mesma forma que foi utilizada para ordenar os registros na cláusula **ORDER BY**.
+
+A cláusula **GROUP BY** pode ser combinada com a função **COUNT** para recuperar o total de registros agrupados por determinada coluna. O formato resultante é conhecido como *tabulação* e conta a quantidade de valores unicos para cada grupo. 
 ]
 .pull-right[
-&lt;img src="images/FUNCOES_DE_GRUPO2.png" width="80%" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/FUNCOES_DE_GRUPO2.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -139,72 +140,704 @@ Por padrão, o SGBD contabiliza todos os registros não nulos de uma coluna ao u
 ### COMENTANDO O CÓDIGO
 
 **Exemplo 4:** Impedindo a execução de parte do código.  
+.pull-left[
 
 ```sql
 SELECT 
-  EMP_CODIGO  
+  EMP_CODIGO   
   --, COUNT(*) AS REGISTROS
   --, COUNT(NUMFUNC) AS TOTAL_FUNCIONARIOS
-  , COUNT(DISTINCT NUMFUNC) FUNCIONARIOS  -- Conta o total de funcionários únicos
+  , COUNT(DISTINCT NUMFUNC) FUNCIONARIOS  -- Conta o total de funcionários únicos 
 FROM ERGON.VINCULOS 
 GROUP BY EMP_CODIGO 
-ORDER BY 1;
+ORDER BY 1; 
 /* Estas linhas 
 não serão executadas */
 ```
-.pull-left[
-Ao digitar uma consulta, pode ser útil escrever um comentário explicando o código. Podemos, também, estar interessados em que parte do código não seja executado naquele momento. Podemos usar os símbolos **"--"**. Todo código posicionado entre **"--"** e o final da linha serão ignorados (não serão executados). Para comentar múltiplas linhas, usamos os simbolos **"/*"** e **"/*"**. Tudo que estiver contido entre eles será ignorado.
+
+&lt;p style="font-size:16px"&gt;
+Ao digitar uma consulta, pode ser útil escrever um comentário explicando o código. Podemos, também, estar interessados em que parte do código não seja executado naquele momento. Podemos usar os símbolos &lt;strong&gt;"--"&lt;/strong&gt;. Todo código posicionado entre &lt;strong&gt;"--"&lt;/strong&gt; e o final da linha serão ignorados (não serão executados). Para comentar múltiplas linhas, usamos os simbolos &lt;strong&gt;"/*"&lt;/strong&gt; e &lt;strong&gt;"*/"&lt;/strong&gt;. Tudo que estiver contido entre eles será ignorado.
+&lt;/p&gt;
 ]
 .pull-right[
-&lt;img src="images/FUNCOES_DE_GRUPO3.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/FUNCOES_DE_GRUPO4.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
 ### FUNÇÕES DE GRUPO
 **Exemplo 5:** Somando e calculando a média de registros por grupo usando **SUM** e **AVG**.
+.pull-left[
 
 ```sql
-SELECT EMP_CODIGO, SUM(VALOR), AVG(VALOR)
+SELECT EMP_CODIGO, SUM(VALOR), AVG(VALOR) 
 FROM ERGON.FICHAS_FINANCEIRAS 
-WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 1 AND RUBRICA = 996
+WHERE 
+	MES_ANO_FOLHA = '01/09/2023' 
+	AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
+	AND RUBRICA = 996 
 GROUP BY EMP_CODIGO 
 ORDER BY 1;
 ```
-
-
-&lt;img src="images/FUNCOES_DE_GRUPO3.png" width="80%" style="display: block; margin: auto;" /&gt;
+]
+.pull-right[
+&lt;img src="images/FUNCOES_DE_GRUPO5.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
 ---
 ### FUNÇÕES DE GRUPO
 **Exemplo 6:** Calculando valores máximos e mínimos de registros por grupo usando **MAX** e **MIN**.
+.pull-left[
 
 ```sql
 SELECT EMP_CODIGO, MAX(VALOR), MIN(VALOR)
 FROM ERGON.FICHAS_FINANCEIRAS 
-WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 1 AND RUBRICA = 996
+WHERE 
+  MES_ANO_FOLHA = '01/09/2023' 
+  AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
+  AND RUBRICA = 996
 GROUP BY EMP_CODIGO 
 ORDER BY 1;
 ```
-
-
-&lt;img src="images/FUNCOES_DE_GRUPO3.png" width="80%" style="display: block; margin: auto;" /&gt;
+]
+.pull-right[
+&lt;img src="images/FUNCOES_DE_GRUPO6.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
 ---
 ### FUNÇÕES DE GRUPO
 **Exemplo 7:** Usando funções de grupo com mais de uma coluna.
+.pull-left[
 
 ```sql
-SELECT EMP_CODIGO, MES_ANO_FOLHA, MAX(VALOR), MIN(VALOR)
+SELECT 
+  EMP_CODIGO, MES_ANO_FOLHA
+  , MAX(VALOR), MIN(VALOR)
 FROM ERGON.FICHAS_FINANCEIRAS 
-WHERE MES_ANO_FOLHA IN ('01/08/2023', '01/09/2023') AND NUM_FOLHA = 1 AND RUBRICA = 996
-GROUP BY 1, 2 
+WHERE 
+  MES_ANO_FOLHA IN ('01/08/2023', '01/09/2023') 
+  AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
+  AND RUBRICA = 996 
+GROUP BY EMP_CODIGO, MES_ANO_FOLHA 
 ORDER BY 2, 1;
 ```
 
-.pull-left[
+
 Se desejamos grupar usando mais de uma coluna como categoria, podemos simplesmente listar essas colunas na cláusula **GROUP BY**. Isso criará grupos com base nas combinações únicas das colunas listadas. Ao usar funções de grupo, todas as colunas que constam na cláusula **SELECT** e não estão sendo avaliadas dentro de uma função de grupo devem constar na cláusula **GROUP BY**.
 ]
 .pull-right[
-&lt;img src="images/FUNCOES_DE_GRUPO3.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/FUNCOES_DE_GRUPO7.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
+---
+### FUNÇÕES DE GRUPO
+**Exemplo 8:** Usando funções de grupo para restringir conjuntos de dados usando **HAVING**.
+
+
+```sql
+SELECT 
+  EMP_CODIGO, MES_ANO_FOLHA
+  , MAX(VALOR), MIN(VALOR)
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE 
+  MES_ANO_FOLHA IN ('01/08/2023', '01/09/2023') 
+  AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
+  AND RUBRICA = 996 
+GROUP BY EMP_CODIGO, MES_ANO_FOLHA 
+HAVING MIN(VALOR) &gt; 1000
+ORDER BY 2, 1;
+```
+
+Quando queremos restingir registros usando uma função de grupo, nossa intuição inicial pode ser usar a restrição na cláusula **WHERE**. Entretanto, campos agregados &lt;strong style="color:red;"&gt;não podem&lt;/strong&gt; constar na cláusula **WHERE**. O filtro deve ocorrer na cláusula **HAVING**. Isso ocorre por que, por padrão, o SGBD processa registro a registro definindo quais serão mantidos de acordo com a condição **WHERE**. Depois, agrupa os registros em **GROUP BY** e executa as funções de agregação. Portanto, se queremos restringir os dados com base nessa função de agregação, isso deve ocorrer depois do cálculo.
+
+---
+### FUNÇÕES DE GRUPO
+**Exemplo 8:** Usando funções de grupo para restringir conjuntos de dados usando **HAVING**.
+
+
+&lt;img src="images/FUNCOES_DE_GRUPO8.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+### FUNÇÕES DE GRUPO
+**Exemplo 9:** Usando **HAVING** com mais de uma condição.
+
+
+```sql
+SELECT 
+  EMP_CODIGO, MES_ANO_FOLHA
+  , MAX(VALOR) MÁXIMO, MIN(VALOR) MÍNIMO
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE 
+  MES_ANO_FOLHA IN ('01/08/2023', '01/09/2023') 
+  AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
+  AND RUBRICA = 996 
+GROUP BY EMP_CODIGO, MES_ANO_FOLHA 
+HAVING MIN(VALOR) &gt; 1000 AND AVG(VALOR) &gt; 5000 
+ORDER BY 2, 1;
+```
+
+Podemos usar multiplas condições na cláusula **HAVING** usando operadores lógicos (**AND**, **OR**, **NOT**). Não é necessário que as funções usadas na cláusula **HAVING** também constem na cláusula **SELECT**. Também não é possível usar os apelidos das colunas na cláusula **HAVING**.
+
+---
+### FUNÇÕES DE GRUPO
+**Exemplo 9:** Usando **HAVING** com mais de uma condição.
+
+&lt;img src="images/FUNCOES_DE_GRUPO9.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+### Exercícios
+
+1. Crie uma consulta para encontrar a média dos encargos de fiscalização sanitária (**RUBRICA** = 200) em janeiro de 2023, usando a tabela &lt;strong style="color:red;"&gt;ERGON.FICHAS_FINANCEIRAS&lt;/strong&gt;.
+
+2. Usando a tabela &lt;strong style="color:red;"&gt;ERGON.CONS&lt;/strong&gt;, que contém informações sobre as consignações dos servidores municipais, construa uma consulta que retorne os valores (**VALOR**) máximos das parcelas por rubrica (**RUBRICA**) para o mês de setembro (**DTINI** = '01/09/2023').   
+
+3. Modifique a consulta anterior para agrupar também por empresa (**EMP_CODIGO**) e organizar os valores do maior para o menor.
+
+---
+class: center, middle
+
+# SYSTEM TABLES
+
+---
+### SYSTEM TABLES
+As bases de dados Oracle possuem um grupo especial de tabelas que são criadas durante a instalação do banco. Esse grupo inclui tabelas com metadados e configurações da base de dados.
+
+<div id="wvhhphmuum" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:400px;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#wvhhphmuum .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 3px;
+  border-top-color: #D5D5D5;
+  border-right-style: solid;
+  border-right-width: 3px;
+  border-right-color: #D5D5D5;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #D5D5D5;
+  border-left-style: solid;
+  border-left-width: 3px;
+  border-left-color: #D5D5D5;
+}
+
+#wvhhphmuum .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#wvhhphmuum .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#wvhhphmuum .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#wvhhphmuum .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#wvhhphmuum .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D5D5D5;
+}
+
+#wvhhphmuum .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D5D5D5;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D5D5D5;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#wvhhphmuum .gt_col_heading {
+  color: #FFFFFF;
+  background-color: #004D80;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#wvhhphmuum .gt_column_spanner_outer {
+  color: #FFFFFF;
+  background-color: #004D80;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#wvhhphmuum .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#wvhhphmuum .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#wvhhphmuum .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D5D5D5;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#wvhhphmuum .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D5D5D5;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D5D5D5;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#wvhhphmuum .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D5D5D5;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D5D5D5;
+  vertical-align: middle;
+}
+
+#wvhhphmuum .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#wvhhphmuum .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#wvhhphmuum .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D5D5D5;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-left-color: #D5D5D5;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-right-color: #D5D5D5;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#wvhhphmuum .gt_stub {
+  color: #FFFFFF;
+  background-color: #929292;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D5D5D5;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wvhhphmuum .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#wvhhphmuum .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#wvhhphmuum .gt_summary_row {
+  color: #FFFFFF;
+  background-color: #5F5F5F;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wvhhphmuum .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D5D5D5;
+}
+
+#wvhhphmuum .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#wvhhphmuum .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D5D5D5;
+}
+
+#wvhhphmuum .gt_grand_summary_row {
+  color: #FFFFFF;
+  background-color: #929292;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wvhhphmuum .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D5D5D5;
+}
+
+#wvhhphmuum .gt_striped {
+  background-color: #F4F4F4;
+}
+
+#wvhhphmuum .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D5D5D5;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D5D5D5;
+}
+
+#wvhhphmuum .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#wvhhphmuum .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wvhhphmuum .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#wvhhphmuum .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#wvhhphmuum .gt_left {
+  text-align: left;
+}
+
+#wvhhphmuum .gt_center {
+  text-align: center;
+}
+
+#wvhhphmuum .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#wvhhphmuum .gt_font_normal {
+  font-weight: normal;
+}
+
+#wvhhphmuum .gt_font_bold {
+  font-weight: bold;
+}
+
+#wvhhphmuum .gt_font_italic {
+  font-style: italic;
+}
+
+#wvhhphmuum .gt_super {
+  font-size: 65%;
+}
+
+#wvhhphmuum .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#wvhhphmuum .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#wvhhphmuum .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#wvhhphmuum .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#wvhhphmuum .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#wvhhphmuum .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#wvhhphmuum .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="NOME DA TABELA">NOME DA TABELA</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="DESCRIÇÃO">DESCRIÇÃO</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_ARGUMENTS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Argumentos em objeto acessível ao usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_CATALOG</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Todas as tabelas, visualizações, sinônimos, sequências acessíveis ao usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_COL_COMMENTS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Comentários sobre colunas de tabelas e visualizações acessíveis</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_CONSTRAINTS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Definições de restrições em tabelas acessíveis</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_CONS_COLUMNS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Informações sobre colunas acessíveis em definições de restrições</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_DB_LINKS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Links de banco de dados acessíveis ao usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_ERRORS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Erros atuais em objetos armazenados que o usuário pode criar</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_INDEXES</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Descrições de índices em tabelas acessíveis ao usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_IND_COLUMNS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Colunas que compõem índices em tabelas acessíveis</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_LOBS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Descrição de LOBs contidos em tabelas acessíveis ao usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_OBJECTS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Objetos acessíveis ao usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_OBJECT_TABLES</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Descrição de todas as tabelas de objetos acessíveis ao usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_SEQUENCES</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Descrição de sequências acessíveis ao usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_SNAPSHOTS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Snapshots aos quais o usuário pode acessar</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_SOURCE</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Fonte atual em objetos armazenados que o usuário pode criar</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_SYNONYMS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Todos os sinônimos acessíveis ao usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_TABLES</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Descrição de tabelas relacionais acessíveis ao usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_TAB_COLUMNS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Colunas de tabelas, visualizações e clusters do usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_TAB_COL_STATISTICS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Colunas de tabelas, visualizações e clusters do usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_TAB_COMMENTS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Comentários sobre tabelas e visualizações acessíveis ao usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_TRIGGERS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Triggers acessíveis ao usuário atual</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_TRIGGER_COLS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Uso de colunas em triggers do usuário ou em triggers de tabelas do usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_TYPES</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Descrição de tipos acessíveis ao usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_UPDATABLE_COLUMNS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Descrição de todas as colunas atualizáveis</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_USERS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Informações sobre todos os usuários do banco de dados</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ALL_VIEWS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Descrição de visualizações acessíveis ao usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">DATABASE_COMPATIBLE_LEVEL</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Nível de compatibilidade do banco de dados configurado via init.ora</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">DBA_DB_LINKS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Todos os links de banco de dados no banco de dados</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">DBA_ERRORS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Erros atuais em todos os objetos armazenados no banco de dados</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">DBA_OBJECTS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Todos os objetos no banco de dados</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">DBA_ROLES</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Todos os papéis existentes no banco de dados</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">DBA_ROLE_PRIVS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Papéis concedidos a usuários e papéis</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">DBA_SOURCE</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Fonte de todos os objetos armazenados no banco de dados</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">DBA_TABLESPACES</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Descrição de todos os espaços de tabela</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">DBA_TAB_PRIVS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Todas as concessões em objetos no banco de dados</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">DBA_TRIGGERS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Todos os triggers no banco de dados</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">DBA_TS_QUOTAS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Cotas de espaço de tabela para todos os usuários</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">DBA_USERS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Informações sobre todos os usuários do banco de dados</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">DBA_VIEWS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Descrição de todas as visualizações no banco de dados</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">DICTIONARY</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Descrição de tabelas e visualizações de dicionário de dados</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">DICT_COLUMNS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Descrição de colunas em tabelas e visualizações de dicionário de dados</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">GLOBAL_NAME</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Nome global do banco de dados</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">NLS_DATABASE_PARAMETERS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Parâmetros NLS permanentes do banco de dados</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">NLS_INSTANCE_PARAMETERS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Parâmetros NLS da instância</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">NLS_SESSION_PARAMETERS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Parâmetros NLS da sessão do usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">PRODUCT_COMPONENT_VERSION</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Informações de versão e status de produtos componentes</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">ROLE_TAB_PRIVS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Privilégios de tabela concedidos a papéis</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">SESSION_PRIVS</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Privilégios atualmente definidos para o usuário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">SESSION_ROLES</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Papéis que o usuário tem atualmente habilitados</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">SYSTEM_PRIVILEGE_MAP</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Tabela de descrição para códigos de tipo de privilégio. Mapeia números de tipo de privilégio para nomes de tipo</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">TABLE_PRIVILEGES</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Concessões em objetos para as quais o usuário é o concedente, o destinatário, o proprietário ou um papel habilitado ou o PÚBLICO é o destinatário</td></tr>
+    <tr><td headers="NOME DA TABELA" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">TABLE_PRIVILEGE_MAP</td>
+<td headers="DESCRIÇÃO" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Tabela de descrição para códigos de tipo de privilégio (opção de auditoria). Mapeia números de tipo de privilégio (opção de auditoria) para nomes de tipo</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+
+---
+### BUSCANDO TABELAS
+
+
+```sql
+SELECT *
+FROM ALL_TAB_COLUMNS
+-- 
+ORDER BY OWNER, TABLE_NAME;
+```
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
