@@ -187,6 +187,24 @@ ORDER BY 1;
 
 
 &lt;img src="images/FUNCOES_DE_GRUPO3.png" width="80%" style="display: block; margin: auto;" /&gt;
+---
+### FUNÇÕES DE GRUPO
+**Exemplo 7:** Usando funções de grupo com mais de uma coluna.
+
+```sql
+SELECT EMP_CODIGO, MES_ANO_FOLHA, MAX(VALOR), MIN(VALOR)
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA IN ('01/08/2023', '01/09/2023') AND NUM_FOLHA = 1 AND RUBRICA = 996
+GROUP BY 1, 2 
+ORDER BY 2, 1;
+```
+
+.pull-left[
+Se desejamos grupar usando mais de uma coluna como categoria, podemos simplesmente listar essas colunas na cláusula **GROUP BY**. Isso criará grupos com base nas combinações únicas das colunas listadas. Ao usar funções de grupo, todas as colunas que constam na cláusula **SELECT** e não estão sendo avaliadas dentro de uma função de grupo devem constar na cláusula **GROUP BY**.
+]
+.pull-right[
+&lt;img src="images/FUNCOES_DE_GRUPO3.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
