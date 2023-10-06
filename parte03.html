@@ -4,7 +4,7 @@
     <title>Introdução a bases de dados e SQL</title>
     <meta charset="utf-8" />
     <meta name="author" content="Heitor Barros" />
-    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -136,8 +136,57 @@ Por padrão, o SGBD contabiliza todos os registros não nulos de uma coluna ao u
 ]
 
 ---
-### FUNÇÕES DE GRUPO
+### COMENTANDO O CÓDIGO
 
+**Exemplo 4:** Impedindo a execução de parte do código.  
+
+```sql
+SELECT 
+  EMP_CODIGO  
+  --, COUNT(*) AS REGISTROS
+  --, COUNT(NUMFUNC) AS TOTAL_FUNCIONARIOS
+  , COUNT(DISTINCT NUMFUNC) FUNCIONARIOS  -- Conta o total de funcionários únicos
+FROM ERGON.VINCULOS 
+GROUP BY EMP_CODIGO 
+ORDER BY 1;
+/* Estas linhas 
+não serão executadas */
+```
+.pull-left[
+Ao digitar uma consulta, pode ser útil escrever um comentário explicando o código. Podemos, também, estar interessados em que parte do código não seja executado naquele momento. Podemos usar os símbolos **"--"**. Todo código posicionado entre **"--"** e o final da linha serão ignorados (não serão executados). Para comentar múltiplas linhas, usamos os simbolos **"/*"** e **"/*"**. Tudo que estiver contido entre eles será ignorado.
+]
+.pull-right[
+&lt;img src="images/FUNCOES_DE_GRUPO3.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+### FUNÇÕES DE GRUPO
+**Exemplo 5:** Somando e calculando a média de registros por grupo usando **SUM** e **AVG**.
+
+```sql
+SELECT EMP_CODIGO, SUM(VALOR), AVG(VALOR)
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 1 AND RUBRICA = 996
+GROUP BY EMP_CODIGO 
+ORDER BY 1;
+```
+
+
+&lt;img src="images/FUNCOES_DE_GRUPO3.png" width="80%" style="display: block; margin: auto;" /&gt;
+---
+### FUNÇÕES DE GRUPO
+**Exemplo 6:** Calculando valores máximos e mínimos de registros por grupo usando **MAX** e **MIN**.
+
+```sql
+SELECT EMP_CODIGO, MAX(VALOR), MIN(VALOR)
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 1 AND RUBRICA = 996
+GROUP BY EMP_CODIGO 
+ORDER BY 1;
+```
+
+
+&lt;img src="images/FUNCOES_DE_GRUPO3.png" width="80%" style="display: block; margin: auto;" /&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

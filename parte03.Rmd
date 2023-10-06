@@ -110,5 +110,57 @@ knitr::include_graphics("images/FUNCOES_DE_GRUPO3.png")
 ]
 
 ---
-### FUNÇÕES DE GRUPO
+### COMENTANDO O CÓDIGO
 
+**Exemplo 4:** Impedindo a execução de parte do código.  
+```{sql eval = F}
+SELECT 
+  EMP_CODIGO  
+  --, COUNT(*) AS REGISTROS
+  --, COUNT(NUMFUNC) AS TOTAL_FUNCIONARIOS
+  , COUNT(DISTINCT NUMFUNC) FUNCIONARIOS  -- Conta o total de funcionários únicos
+FROM ERGON.VINCULOS 
+GROUP BY EMP_CODIGO 
+ORDER BY 1;
+/* Estas linhas 
+não serão executadas */
+```
+.pull-left[
+Ao digitar uma consulta, pode ser útil escrever um comentário explicando o código. Podemos, também, estar interessados em que parte do código não seja executado naquele momento. Podemos usar os símbolos **"--"**. Todo código posicionado entre **"--"** e o final da linha serão ignorados (não serão executados). Para comentar múltiplas linhas, usamos os simbolos **"/*"** e **"/*"**. Tudo que estiver contido entre eles será ignorado.
+]
+.pull-right[
+```{r echo=FALSE, out.width="60%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FUNCOES_DE_GRUPO3.png")
+```
+]
+
+---
+### FUNÇÕES DE GRUPO
+**Exemplo 5:** Somando e calculando a média de registros por grupo usando **SUM** e **AVG**.
+```{sql eval = F}
+SELECT EMP_CODIGO, SUM(VALOR), AVG(VALOR)
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 1 AND RUBRICA = 996
+GROUP BY EMP_CODIGO 
+ORDER BY 1;
+```
+
+
+```{r echo=FALSE, out.width="80%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FUNCOES_DE_GRUPO3.png")
+```
+---
+### FUNÇÕES DE GRUPO
+**Exemplo 6:** Calculando valores máximos e mínimos de registros por grupo usando **MAX** e **MIN**.
+```{sql eval = F}
+SELECT EMP_CODIGO, MAX(VALOR), MIN(VALOR)
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/09/2023' AND NUM_FOLHA = 1 AND RUBRICA = 996
+GROUP BY EMP_CODIGO 
+ORDER BY 1;
+```
+
+
+```{r echo=FALSE, out.width="80%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FUNCOES_DE_GRUPO3.png")
+```
