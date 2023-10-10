@@ -91,10 +91,10 @@ knitr::include_graphics("images/FUNCOES_DE_GRUPO2.png")
 .pull-left[
 ```{sql eval = F}
 SELECT 
-  EMP_CODIGO
-  , COUNT(*) AS REGISTROS
-  , COUNT(NUMFUNC) AS TOTAL_FUNCIONARIOS
-  , COUNT(DISTINCT NUMFUNC) FUNCIONARIOS  
+    EMP_CODIGO
+    , COUNT(*) AS REGISTROS
+    , COUNT(NUMFUNC) AS TOTAL_FUNCIONARIOS
+    , COUNT(DISTINCT NUMFUNC) FUNCIONARIOS  
 FROM ERGON.VINCULOS 
 GROUP BY EMP_CODIGO 
 ORDER BY 1;
@@ -117,10 +117,10 @@ knitr::include_graphics("images/FUNCOES_DE_GRUPO3.png")
 .pull-left[
 ```{sql eval = F}
 SELECT 
-  EMP_CODIGO   
-  --, COUNT(*) AS REGISTROS
-  --, COUNT(NUMFUNC) AS TOTAL_FUNCIONARIOS
-  , COUNT(DISTINCT NUMFUNC) FUNCIONARIOS  -- Conta o total de funcionários únicos 
+    EMP_CODIGO   
+    --, COUNT(*) AS REGISTROS
+    --, COUNT(NUMFUNC) AS TOTAL_FUNCIONARIOS
+    , COUNT(DISTINCT NUMFUNC) FUNCIONARIOS  -- Conta o total de funcionários únicos 
 FROM ERGON.VINCULOS 
 GROUP BY EMP_CODIGO 
 ORDER BY 1; 
@@ -146,9 +146,9 @@ knitr::include_graphics("images/FUNCOES_DE_GRUPO4.png")
 SELECT EMP_CODIGO, SUM(VALOR), AVG(VALOR) 
 FROM ERGON.FICHAS_FINANCEIRAS 
 WHERE 
-	MES_ANO_FOLHA = '01/09/2023' 
-	AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
-	AND RUBRICA = 996 
+  MES_ANO_FOLHA = '01/09/2023' 
+  AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
+  AND RUBRICA = 996 
 GROUP BY EMP_CODIGO 
 ORDER BY 1;
 ```
@@ -166,9 +166,9 @@ knitr::include_graphics("images/FUNCOES_DE_GRUPO5.png")
 SELECT EMP_CODIGO, MAX(VALOR), MIN(VALOR)
 FROM ERGON.FICHAS_FINANCEIRAS 
 WHERE 
-  MES_ANO_FOLHA = '01/09/2023' 
-  AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
-  AND RUBRICA = 996
+    MES_ANO_FOLHA = '01/09/2023' 
+    AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
+    AND RUBRICA = 996
 GROUP BY EMP_CODIGO 
 ORDER BY 1;
 ```
@@ -184,13 +184,13 @@ knitr::include_graphics("images/FUNCOES_DE_GRUPO6.png")
 .pull-left[
 ```{sql eval = F}
 SELECT 
-  EMP_CODIGO, MES_ANO_FOLHA
-  , MAX(VALOR), MIN(VALOR)
+    EMP_CODIGO, MES_ANO_FOLHA
+    , MAX(VALOR), MIN(VALOR)
 FROM ERGON.FICHAS_FINANCEIRAS 
 WHERE 
-  MES_ANO_FOLHA IN ('01/08/2023', '01/09/2023') 
-  AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
-  AND RUBRICA = 996 
+    MES_ANO_FOLHA IN ('01/08/2023', '01/09/2023') 
+    AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
+    AND RUBRICA = 996 
 GROUP BY EMP_CODIGO, MES_ANO_FOLHA 
 ORDER BY 2, 1;
 ```
@@ -209,13 +209,13 @@ knitr::include_graphics("images/FUNCOES_DE_GRUPO7.png")
 
 ```{sql eval = F}
 SELECT 
-  EMP_CODIGO, MES_ANO_FOLHA
-  , MAX(VALOR), MIN(VALOR)
+    EMP_CODIGO, MES_ANO_FOLHA
+    , MAX(VALOR), MIN(VALOR)
 FROM ERGON.FICHAS_FINANCEIRAS 
 WHERE 
-  MES_ANO_FOLHA IN ('01/08/2023', '01/09/2023') 
-  AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
-  AND RUBRICA = 996 
+    MES_ANO_FOLHA IN ('01/08/2023', '01/09/2023') 
+    AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
+    AND RUBRICA = 996 
 GROUP BY EMP_CODIGO, MES_ANO_FOLHA 
 HAVING MIN(VALOR) > 1000
 ORDER BY 2, 1;
@@ -238,13 +238,13 @@ knitr::include_graphics("images/FUNCOES_DE_GRUPO8.png")
 
 ```{sql eval = F}
 SELECT 
-  EMP_CODIGO, MES_ANO_FOLHA
-  , MAX(VALOR) MÁXIMO, MIN(VALOR) MÍNIMO
+    EMP_CODIGO, MES_ANO_FOLHA
+    , MAX(VALOR) MÁXIMO, MIN(VALOR) MÍNIMO
 FROM ERGON.FICHAS_FINANCEIRAS 
 WHERE 
-  MES_ANO_FOLHA IN ('01/08/2023', '01/09/2023') 
-  AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
-  AND RUBRICA = 996 
+    MES_ANO_FOLHA IN ('01/08/2023', '01/09/2023') 
+    AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
+    AND RUBRICA = 996 
 GROUP BY EMP_CODIGO, MES_ANO_FOLHA 
 HAVING MIN(VALOR) > 1000 AND AVG(VALOR) > 5000 
 ORDER BY 2, 1;
@@ -276,7 +276,7 @@ class: center, middle
 
 ---
 ### SYSTEM TABLES
-As bases de dados Oracle possuem um grupo especial de tabelas que são criadas durante a instalação do banco. Esse grupo inclui tabelas com metadados e configurações da base de dados.
+As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas do sistema de gerenciamento de banco de dados Oracle. Elas são usadas para armazenar informações essenciais sobre o próprio sistema, como detalhes sobre objetos do banco de dados, permissões de acesso, configurações do sistema e muito mais. 
 
 ```{r echo=F, warning=F}
 # Lista traduzida
@@ -348,9 +348,62 @@ tibble::tribble(
 ---
 ### BUSCANDO TABELAS
 
+**Exemplo 9:** Usando a tabela <strong style="color:red;">ALL_TAB_COLUMNS</strong> para listar todas as tabelas do <strong style="color:red;">ERGON</strong>.
+.pull-left[
 ```{sql eval = F}
-SELECT *
+SELECT DISTINCT TABLE_NAME
 FROM ALL_TAB_COLUMNS
--- 
-ORDER BY OWNER, TABLE_NAME;
+WHERE OWNER = 'ERGON'
+ORDER BY TABLE_NAME;
 ```
+
+Podemos usar a coluna **OWNER** para especificar o grupo/esquema e listar todas as tabelas pertencentes a esse esquema. No exemplo, podemos encontrar todas as tabelas no esquema <strong style="color:red;">ERGON</strong>.
+
+]
+
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FUNCOES_DE_GRUPO7.png")
+```
+]
+---
+### BUSCANDO TABELAS
+
+**Exemplo 10:** Usando a tabela <strong style="color:red;">ALL_TAB_COLUMNS</strong> para listar todas as tabelas que contém uma determinada coluna.
+.pull-left[
+```{sql eval = F}
+SELECT DISTINCT TABLE_NAME
+FROM ALL_TAB_COLUMNS
+WHERE 
+    OWNER = 'ERGON'
+    AND COLUMN_NAME = 'NUMFUNC'
+ORDER BY TABLE_NAME;
+```
+
+
+Usando a coluna **COLUMN_NAME**, podemos encontrar tabelas com colunas em comum. Isso será muito útil para unir tabelas usando **JOIN**, que será visto na parte 4 do curso.
+]
+
+.pull-right[
+```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
+knitr::include_graphics("images/FUNCOES_DE_GRUPO7.png")
+```
+]
+
+---
+### Referências
+
+* Material do Curso "Bases de Dados" - Prof. Eduardo Corrêa Gonçalves (ENCE/IBGE);
+* Livro Introdução à linguagem SQL - Thomas Nield (O'REILLY);
+* Documentação [SQL Language Reference](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/index.html#Oracle%C2%AE-Database) (ORACLE)
+* Lista de [SYSTEM TABLES](https://www.techonthenet.com/oracle/sys_tables/index.php)
+
+---
+class: inverse, center, middle
+
+# Exercícios Extras
+
+---
+### Exercícios Extras
+
+1. 

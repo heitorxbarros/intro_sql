@@ -4,7 +4,7 @@
     <title>Introdução a bases de dados e SQL</title>
     <meta charset="utf-8" />
     <meta name="author" content="Heitor Barros" />
-    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -119,10 +119,10 @@ A cláusula **GROUP BY** pode ser combinada com a função **COUNT** para recupe
 
 ```sql
 SELECT 
-  EMP_CODIGO
-  , COUNT(*) AS REGISTROS
-  , COUNT(NUMFUNC) AS TOTAL_FUNCIONARIOS
-  , COUNT(DISTINCT NUMFUNC) FUNCIONARIOS  
+    EMP_CODIGO
+    , COUNT(*) AS REGISTROS
+    , COUNT(NUMFUNC) AS TOTAL_FUNCIONARIOS
+    , COUNT(DISTINCT NUMFUNC) FUNCIONARIOS  
 FROM ERGON.VINCULOS 
 GROUP BY EMP_CODIGO 
 ORDER BY 1;
@@ -144,10 +144,10 @@ Por padrão, o SGBD contabiliza todos os registros não nulos de uma coluna ao u
 
 ```sql
 SELECT 
-  EMP_CODIGO   
-  --, COUNT(*) AS REGISTROS
-  --, COUNT(NUMFUNC) AS TOTAL_FUNCIONARIOS
-  , COUNT(DISTINCT NUMFUNC) FUNCIONARIOS  -- Conta o total de funcionários únicos 
+    EMP_CODIGO   
+    --, COUNT(*) AS REGISTROS
+    --, COUNT(NUMFUNC) AS TOTAL_FUNCIONARIOS
+    , COUNT(DISTINCT NUMFUNC) FUNCIONARIOS  -- Conta o total de funcionários únicos 
 FROM ERGON.VINCULOS 
 GROUP BY EMP_CODIGO 
 ORDER BY 1; 
@@ -172,9 +172,9 @@ Ao digitar uma consulta, pode ser útil escrever um comentário explicando o có
 SELECT EMP_CODIGO, SUM(VALOR), AVG(VALOR) 
 FROM ERGON.FICHAS_FINANCEIRAS 
 WHERE 
-	MES_ANO_FOLHA = '01/09/2023' 
-	AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
-	AND RUBRICA = 996 
+  MES_ANO_FOLHA = '01/09/2023' 
+  AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
+  AND RUBRICA = 996 
 GROUP BY EMP_CODIGO 
 ORDER BY 1;
 ```
@@ -191,9 +191,9 @@ ORDER BY 1;
 SELECT EMP_CODIGO, MAX(VALOR), MIN(VALOR)
 FROM ERGON.FICHAS_FINANCEIRAS 
 WHERE 
-  MES_ANO_FOLHA = '01/09/2023' 
-  AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
-  AND RUBRICA = 996
+    MES_ANO_FOLHA = '01/09/2023' 
+    AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
+    AND RUBRICA = 996
 GROUP BY EMP_CODIGO 
 ORDER BY 1;
 ```
@@ -208,13 +208,13 @@ ORDER BY 1;
 
 ```sql
 SELECT 
-  EMP_CODIGO, MES_ANO_FOLHA
-  , MAX(VALOR), MIN(VALOR)
+    EMP_CODIGO, MES_ANO_FOLHA
+    , MAX(VALOR), MIN(VALOR)
 FROM ERGON.FICHAS_FINANCEIRAS 
 WHERE 
-  MES_ANO_FOLHA IN ('01/08/2023', '01/09/2023') 
-  AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
-  AND RUBRICA = 996 
+    MES_ANO_FOLHA IN ('01/08/2023', '01/09/2023') 
+    AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
+    AND RUBRICA = 996 
 GROUP BY EMP_CODIGO, MES_ANO_FOLHA 
 ORDER BY 2, 1;
 ```
@@ -232,13 +232,13 @@ Se desejamos grupar usando mais de uma coluna como categoria, podemos simplesmen
 
 ```sql
 SELECT 
-  EMP_CODIGO, MES_ANO_FOLHA
-  , MAX(VALOR), MIN(VALOR)
+    EMP_CODIGO, MES_ANO_FOLHA
+    , MAX(VALOR), MIN(VALOR)
 FROM ERGON.FICHAS_FINANCEIRAS 
 WHERE 
-  MES_ANO_FOLHA IN ('01/08/2023', '01/09/2023') 
-  AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
-  AND RUBRICA = 996 
+    MES_ANO_FOLHA IN ('01/08/2023', '01/09/2023') 
+    AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
+    AND RUBRICA = 996 
 GROUP BY EMP_CODIGO, MES_ANO_FOLHA 
 HAVING MIN(VALOR) &gt; 1000
 ORDER BY 2, 1;
@@ -260,13 +260,13 @@ Quando queremos restingir registros usando uma função de grupo, nossa intuiç�
 
 ```sql
 SELECT 
-  EMP_CODIGO, MES_ANO_FOLHA
-  , MAX(VALOR) MÁXIMO, MIN(VALOR) MÍNIMO
+    EMP_CODIGO, MES_ANO_FOLHA
+    , MAX(VALOR) MÁXIMO, MIN(VALOR) MÍNIMO
 FROM ERGON.FICHAS_FINANCEIRAS 
 WHERE 
-  MES_ANO_FOLHA IN ('01/08/2023', '01/09/2023') 
-  AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
-  AND RUBRICA = 996 
+    MES_ANO_FOLHA IN ('01/08/2023', '01/09/2023') 
+    AND NUM_FOLHA IN (1,11,41,51,65,70,73,81) 
+    AND RUBRICA = 996 
 GROUP BY EMP_CODIGO, MES_ANO_FOLHA 
 HAVING MIN(VALOR) &gt; 1000 AND AVG(VALOR) &gt; 5000 
 ORDER BY 2, 1;
@@ -296,16 +296,28 @@ class: center, middle
 
 ---
 ### SYSTEM TABLES
-As bases de dados Oracle possuem um grupo especial de tabelas que são criadas durante a instalação do banco. Esse grupo inclui tabelas com metadados e configurações da base de dados.
+As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas do sistema de gerenciamento de banco de dados Oracle. Elas são usadas para armazenar informações essenciais sobre o próprio sistema, como detalhes sobre objetos do banco de dados, permissões de acesso, configurações do sistema e muito mais. 
 
-<div id="wvhhphmuum" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:400px;">
-<style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+<div id="xtmlkkkoeu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:400px;">
+<style>#xtmlkkkoeu table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-#wvhhphmuum .gt_table {
+#xtmlkkkoeu thead, #xtmlkkkoeu tbody, #xtmlkkkoeu tfoot, #xtmlkkkoeu tr, #xtmlkkkoeu td, #xtmlkkkoeu th {
+  border-style: none;
+}
+
+#xtmlkkkoeu p {
+  margin: 0;
+  padding: 0;
+}
+
+#xtmlkkkoeu .gt_table {
   display: table;
   border-collapse: collapse;
+  line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
@@ -328,24 +340,12 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   border-left-color: #D5D5D5;
 }
 
-#wvhhphmuum .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#wvhhphmuum .gt_caption {
+#xtmlkkkoeu .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#wvhhphmuum .gt_title {
+#xtmlkkkoeu .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -357,25 +357,37 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   border-bottom-width: 0;
 }
 
-#wvhhphmuum .gt_subtitle {
+#xtmlkkkoeu .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
-  padding-top: 0;
-  padding-bottom: 6px;
+  padding-top: 3px;
+  padding-bottom: 5px;
   padding-left: 5px;
   padding-right: 5px;
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
 
-#wvhhphmuum .gt_bottom_border {
+#xtmlkkkoeu .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#xtmlkkkoeu .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D5D5D5;
 }
 
-#wvhhphmuum .gt_col_headings {
+#xtmlkkkoeu .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D5D5D5;
@@ -390,7 +402,7 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   border-right-color: #D3D3D3;
 }
 
-#wvhhphmuum .gt_col_heading {
+#xtmlkkkoeu .gt_col_heading {
   color: #FFFFFF;
   background-color: #004D80;
   font-size: 100%;
@@ -410,7 +422,7 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   overflow-x: hidden;
 }
 
-#wvhhphmuum .gt_column_spanner_outer {
+#xtmlkkkoeu .gt_column_spanner_outer {
   color: #FFFFFF;
   background-color: #004D80;
   font-size: 100%;
@@ -422,15 +434,15 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   padding-right: 4px;
 }
 
-#wvhhphmuum .gt_column_spanner_outer:first-child {
+#xtmlkkkoeu .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#wvhhphmuum .gt_column_spanner_outer:last-child {
+#xtmlkkkoeu .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#wvhhphmuum .gt_column_spanner {
+#xtmlkkkoeu .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D5D5D5;
@@ -442,7 +454,11 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   width: 100%;
 }
 
-#wvhhphmuum .gt_group_heading {
+#xtmlkkkoeu .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#xtmlkkkoeu .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -468,7 +484,7 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   text-align: left;
 }
 
-#wvhhphmuum .gt_empty_group_heading {
+#xtmlkkkoeu .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -483,15 +499,15 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   vertical-align: middle;
 }
 
-#wvhhphmuum .gt_from_md > :first-child {
+#xtmlkkkoeu .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#wvhhphmuum .gt_from_md > :last-child {
+#xtmlkkkoeu .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#wvhhphmuum .gt_row {
+#xtmlkkkoeu .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -510,7 +526,7 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   overflow-x: hidden;
 }
 
-#wvhhphmuum .gt_stub {
+#xtmlkkkoeu .gt_stub {
   color: #FFFFFF;
   background-color: #929292;
   font-size: 100%;
@@ -523,7 +539,7 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   padding-right: 5px;
 }
 
-#wvhhphmuum .gt_stub_row_group {
+#xtmlkkkoeu .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -537,11 +553,15 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   vertical-align: top;
 }
 
-#wvhhphmuum .gt_row_group_first td {
+#xtmlkkkoeu .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#wvhhphmuum .gt_summary_row {
+#xtmlkkkoeu .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#xtmlkkkoeu .gt_summary_row {
   color: #FFFFFF;
   background-color: #5F5F5F;
   text-transform: inherit;
@@ -551,16 +571,16 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   padding-right: 5px;
 }
 
-#wvhhphmuum .gt_first_summary_row {
+#xtmlkkkoeu .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D5D5D5;
 }
 
-#wvhhphmuum .gt_first_summary_row.thick {
+#xtmlkkkoeu .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#wvhhphmuum .gt_last_summary_row {
+#xtmlkkkoeu .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -570,7 +590,7 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   border-bottom-color: #D5D5D5;
 }
 
-#wvhhphmuum .gt_grand_summary_row {
+#xtmlkkkoeu .gt_grand_summary_row {
   color: #FFFFFF;
   background-color: #929292;
   text-transform: inherit;
@@ -580,7 +600,7 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   padding-right: 5px;
 }
 
-#wvhhphmuum .gt_first_grand_summary_row {
+#xtmlkkkoeu .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -590,11 +610,21 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   border-top-color: #D5D5D5;
 }
 
-#wvhhphmuum .gt_striped {
+#xtmlkkkoeu .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D5D5D5;
+}
+
+#xtmlkkkoeu .gt_striped {
   background-color: #F4F4F4;
 }
 
-#wvhhphmuum .gt_table_body {
+#xtmlkkkoeu .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D5D5D5;
@@ -603,7 +633,7 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   border-bottom-color: #D5D5D5;
 }
 
-#wvhhphmuum .gt_footnotes {
+#xtmlkkkoeu .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -617,30 +647,8 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   border-right-color: #D3D3D3;
 }
 
-#wvhhphmuum .gt_footnote {
+#xtmlkkkoeu .gt_footnote {
   margin: 0px;
-  font-size: 90%;
-  padding-left: 4px;
-  padding-right: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#wvhhphmuum .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#wvhhphmuum .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -648,71 +656,92 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
   padding-right: 5px;
 }
 
-#wvhhphmuum .gt_left {
+#xtmlkkkoeu .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#xtmlkkkoeu .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xtmlkkkoeu .gt_left {
   text-align: left;
 }
 
-#wvhhphmuum .gt_center {
+#xtmlkkkoeu .gt_center {
   text-align: center;
 }
 
-#wvhhphmuum .gt_right {
+#xtmlkkkoeu .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#wvhhphmuum .gt_font_normal {
+#xtmlkkkoeu .gt_font_normal {
   font-weight: normal;
 }
 
-#wvhhphmuum .gt_font_bold {
+#xtmlkkkoeu .gt_font_bold {
   font-weight: bold;
 }
 
-#wvhhphmuum .gt_font_italic {
+#xtmlkkkoeu .gt_font_italic {
   font-style: italic;
 }
 
-#wvhhphmuum .gt_super {
+#xtmlkkkoeu .gt_super {
   font-size: 65%;
 }
 
-#wvhhphmuum .gt_footnote_marks {
-  font-style: italic;
-  font-weight: normal;
+#xtmlkkkoeu .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
+  position: initial;
 }
 
-#wvhhphmuum .gt_asterisk {
+#xtmlkkkoeu .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#wvhhphmuum .gt_indent_1 {
+#xtmlkkkoeu .gt_indent_1 {
   text-indent: 5px;
 }
 
-#wvhhphmuum .gt_indent_2 {
+#xtmlkkkoeu .gt_indent_2 {
   text-indent: 10px;
 }
 
-#wvhhphmuum .gt_indent_3 {
+#xtmlkkkoeu .gt_indent_3 {
   text-indent: 15px;
 }
 
-#wvhhphmuum .gt_indent_4 {
+#xtmlkkkoeu .gt_indent_4 {
   text-indent: 20px;
 }
 
-#wvhhphmuum .gt_indent_5 {
+#xtmlkkkoeu .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table">
-  
-  <thead class="gt_col_headings">
-    <tr>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="NOME DA TABELA">NOME DA TABELA</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="DESCRIÇÃO">DESCRIÇÃO</th>
     </tr>
@@ -831,13 +860,63 @@ As bases de dados Oracle possuem um grupo especial de tabelas que são criadas d
 ---
 ### BUSCANDO TABELAS
 
+**Exemplo 9:** Usando a tabela &lt;strong style="color:red;"&gt;ALL_TAB_COLUMNS&lt;/strong&gt; para listar todas as tabelas do &lt;strong style="color:red;"&gt;ERGON&lt;/strong&gt;.
+.pull-left[
 
 ```sql
-SELECT *
+SELECT DISTINCT TABLE_NAME
 FROM ALL_TAB_COLUMNS
--- 
-ORDER BY OWNER, TABLE_NAME;
+WHERE OWNER = 'ERGON'
+ORDER BY TABLE_NAME;
 ```
+
+Podemos usar a coluna **OWNER** para especificar o grupo/esquema e listar todas as tabelas pertencentes a esse esquema. No exemplo, podemos encontrar todas as tabelas no esquema &lt;strong style="color:red;"&gt;ERGON&lt;/strong&gt;.
+
+]
+
+.pull-right[
+&lt;img src="images/FUNCOES_DE_GRUPO7.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+---
+### BUSCANDO TABELAS
+
+**Exemplo 10:** Usando a tabela &lt;strong style="color:red;"&gt;ALL_TAB_COLUMNS&lt;/strong&gt; para listar todas as tabelas que contém uma determinada coluna.
+.pull-left[
+
+```sql
+SELECT DISTINCT TABLE_NAME
+FROM ALL_TAB_COLUMNS
+WHERE 
+    OWNER = 'ERGON'
+    AND COLUMN_NAME = 'NUMFUNC'
+ORDER BY TABLE_NAME;
+```
+
+
+Usando a coluna **COLUMN_NAME**, podemos encontrar tabelas com colunas em comum. Isso será muito útil para unir tabelas usando **JOIN**, que será visto na parte 4 do curso.
+]
+
+.pull-right[
+&lt;img src="images/FUNCOES_DE_GRUPO7.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+### Referências
+
+* Material do Curso "Bases de Dados" - Prof. Eduardo Corrêa Gonçalves (ENCE/IBGE);
+* Livro Introdução à linguagem SQL - Thomas Nield (O'REILLY);
+* Documentação [SQL Language Reference](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/index.html#Oracle%C2%AE-Database) (ORACLE)
+* Lista de [SYSTEM TABLES](https://www.techonthenet.com/oracle/sys_tables/index.php)
+
+---
+class: inverse, center, middle
+
+# Exercícios Extras
+
+---
+### Exercícios Extras
+
+1. 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
