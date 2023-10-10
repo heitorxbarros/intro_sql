@@ -4,7 +4,7 @@
     <title>Introdução a bases de dados e SQL</title>
     <meta charset="utf-8" />
     <meta name="author" content="Heitor Barros" />
-    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -135,8 +135,16 @@ WHERE
     F.MES_ANO_FOLHA = '01/09/2023' 
     AND F.NUM_FOLHA = 1 
     AND F.RUBRICA = 996
-ORDER BY 1;
+ORDER BY 2 DESC;
 ```
+
+.pull-left[
+A junção interna (**INNER JOIN**) combina uma linha de uma tabela A com uma linha de uma tabela B apenas quando há coincidência nos valores das colunas especificadas na condição de junção. No exemplo, iniciamos definimos as colunas e seus apelidos e o tipo de junção a ser realizado. Depois, usando a palavra-chave **ON**, especificamos quais atributos ligam as duas tabelas. 
+]
+
+.pull-right[
+&lt;img src="images/JOIN1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

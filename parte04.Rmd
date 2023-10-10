@@ -105,5 +105,15 @@ WHERE
     F.MES_ANO_FOLHA = '01/09/2023' 
     AND F.NUM_FOLHA = 1 
     AND F.RUBRICA = 996
-ORDER BY 1;
+ORDER BY 2 DESC;
 ```
+
+.pull-left[
+A junção interna (**INNER JOIN**) combina uma linha de uma tabela A com uma linha de uma tabela B apenas quando há coincidência nos valores das colunas especificadas na condição de junção. No exemplo, iniciamos definimos as colunas e seus apelidos e o tipo de junção a ser realizado. Depois, usando a palavra-chave **ON**, especificamos quais atributos ligam as duas tabelas. 
+]
+
+.pull-right[
+```{r echo=FALSE, out.width="60%", fig.align='center', dpi=600}
+knitr::include_graphics("images/JOIN1.png")
+```
+]
