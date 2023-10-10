@@ -4,7 +4,7 @@
     <title>Introdução a bases de dados e SQL</title>
     <meta charset="utf-8" />
     <meta name="author" content="Heitor Barros" />
-    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -73,16 +73,27 @@ class: inverse, center, middle
 
 As junções são utilizadas em instruções **SELECT** para recuperar dados de duas tabelas e “juntá-los” com o objetivo de produzir uma saída combinada. As tabelas envolvidas em uma junção precisam compartilhar dados em comum através de um ou mais atributos. Na maioria
 das vezes (embora não necessariamente) estes atributos que “conectam” as tabelas estarão vinculados através de uma ligação Chave Primária-Chave Estrangeira.
-
-
+&lt;/br&gt;&lt;/br&gt;
+Definimos **chave primária** como o atributo ou conjunto de atributos em uma tabela que identifica de forma exclusiva cada registro nessa tabela. Uma chave primária deve ser única, ou seja, não pode haver dois registros com o mesmo valor na coluna ou conjunto de colunas que compõem a chave primária. A chave primária também deve ser *não nula*, o que significa que cada registro deve ter um valor válido na chave primária.
+&lt;/br&gt;
+Ex.: Atributo **NUMERO** na tabela &lt;strong style="color:red;"&gt;FUNCIONARIOS&lt;/strong&gt;.
+&lt;/br&gt;&lt;/br&gt;
+Definimos **chave estrangeira** como o atributo ou conjunto de atributos em uma tabela estabelece uma relação entre essa tabela e outra tabela, geralmente por meio da chave primária da outra tabela.
+&lt;/br&gt;
+Ex.: Atributo **NUMFUNC** na tabela &lt;strong style="color:red;"&gt;FICHAS_FINANCEIRAS&lt;/strong&gt;
 ---
 ### JOIN
 
 **Exemplo 1:** Recuperando dados de duas tabelas com **NATURAL JOIN**.  
 
+
 ```sql
-SELECT DISTINCT ERGON.VINCULOS.MATRIC, ERGON.FICHAS_FINANCEIRAS.VALOR
-FROM ERGON.VINCULOS NATURAL JOIN ERGON.FICHAS_FINANCEIRAS
+SELECT DISTINCT 
+  ERGON.VINCULOS.MATRIC
+  , ERGON.FICHAS_FINANCEIRAS.VALOR
+FROM 
+  ERGON.VINCULOS
+  NATURAL JOIN ERGON.FICHAS_FINANCEIRAS
 WHERE 
     ERGON.FICHAS_FINANCEIRAS.MES_ANO_FOLHA = '01/09/2023' 
     AND ERGON.FICHAS_FINANCEIRAS.NUM_FOLHA = 1 
@@ -90,15 +101,18 @@ WHERE
 ORDER BY 1;
 ```
 
-.pull-left[
-&lt;p style='font-size:15px'&gt;
+
+&lt;p style='font-size:20px'&gt;
 Junções entre tabelas são sempre realizadas aos pares e seguindo ordem especificada na cláusula &lt;strong&gt;FROM&lt;/strong&gt;. Internamente, o SGBD realiza a &lt;em&gt;junção natural&lt;/em&gt; das tabelas, gerando um resultado intermediário (uma relação temporária na memória de trabalho do SGBD). Neste resultado intermediário, teremos um conjunto contendo todas os registros da tabela &lt;strong style="color:red;"&gt;VINCULOS&lt;/strong&gt; corretamente “casados” com os registros de &lt;strong style="color:red;"&gt;FICHAS_FINANCEIRAS&lt;/strong&gt;. Conceitualmente, a operação de junção não descarta nenhum atributo do par de tabelas envolvidas. Por isso, o resultado intermediário contém todos os atributos de
 &lt;strong style="color:red;"&gt;VINCULOS&lt;/strong&gt; e todos os de &lt;strong style="color:red;"&gt;FICHAS_FINANCEIRAS&lt;/strong&gt; (só uma versão de cada de &lt;strong&gt;NUMFUNC&lt;/strong&gt; e &lt;strong&gt;NUMVINC&lt;/strong&gt; são mantidos, pois esses atributos são comuns a ambas as tabelas).
 &lt;/p&gt;
-]
-.pull-right[
-&lt;img src="images/JOIN1.png" width="60%" style="display: block; margin: auto;" /&gt;
-]
+
+---
+### JOIN
+**Exemplo 1:** Recuperando dados de duas tabelas com **NATURAL JOIN**.  
+
+&lt;img src="images/JOIN1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
 
 ---
 ### JOIN
@@ -107,7 +121,7 @@ Junções entre tabelas são sempre realizadas aos pares e seguindo ordem especi
 
 ```sql
 SELECT DISTINCT V.MATRIC, F.VALOR
-FROM ERGON.VINCULOS v NATURAL JOIN ERGON.FICHAS_FINANCEIRAS F
+FROM ERGON.VINCULOS V NATURAL JOIN ERGON.FICHAS_FINANCEIRAS F
 WHERE 
     F.MES_ANO_FOLHA = '01/09/2023' 
     AND F.NUM_FOLHA = 1 
@@ -117,12 +131,13 @@ ORDER BY 1;
 
 O **NATURAL JOIN** é o modo mais simples de juntar tabelas, pois não é necessário explicitar com quais colunas estamos realizando o **JOIN**. O SGBD detecta automaticamente as colunas com mesmo nome nas duas tabelas. 
 &lt;/br&gt;&lt;/br&gt;
-Para evitar a repetição de nomes longos, podemos podemos criar rótulos para as tabelas. Geralmente, adotamos uma ou duas letras para representar as tabelas. Os rótulos das tabelas podem ser usados em todas as cláusulas da consulta.
+Para evitar a repetição de nomes longos, podemos podemos criar rótulos para as tabelas. Geralmente, adotamos uma ou duas letras para representar as tabelas. Os rótulos das tabelas podem ser usados em todas as cláusulas da consulta e são obrigatórios apenas para **remover ambiguidade**.
 
 ---
 ### JOIN
 
 **Exemplo 2:** Junção interna com **INNER JOIN**. 
+
 
 ```sql
 SELECT DISTINCT V.MATRIC, F.VALOR
@@ -135,16 +150,47 @@ WHERE
     F.MES_ANO_FOLHA = '01/09/2023' 
     AND F.NUM_FOLHA = 1 
     AND F.RUBRICA = 996
-ORDER BY 2 DESC;
+ORDER BY 1;
 ```
 
+
+A junção interna (**INNER JOIN**) combina uma linha de uma tabela A com uma linha de uma tabela B *apenas quando há coincidência* nos valores das colunas especificadas na condição de junção. No exemplo, iniciamos definimos as colunas e seus apelidos e o tipo de junção a ser realizado. Depois, usando a palavra-chave **ON**, especificamos quais atributos ligam as duas tabelas. A ordem dos atributos após a palavra-chave **ON** é indiferente (*"ON V.NUMFUNC = F.NUMFUNC"* equivale a *"ON F.NUMFUNC = V.NUMFUNC"*). Podemos usar diversas duplas de colunas para realizar o **JOIN** usando o operador **AND**. 
+
+---
+### JOIN
+
+**Exemplo 2:** Junção interna com **INNER JOIN**. 
 .pull-left[
-A junção interna (**INNER JOIN**) combina uma linha de uma tabela A com uma linha de uma tabela B apenas quando há coincidência nos valores das colunas especificadas na condição de junção. No exemplo, iniciamos definimos as colunas e seus apelidos e o tipo de junção a ser realizado. Depois, usando a palavra-chave **ON**, especificamos quais atributos ligam as duas tabelas. 
+A partir do exemplo apresentado, é possível concluir que o **INNER JOIN** possui o mesmo propósito do **NATURAL JOIN**, oferecendo porém a vantagem de não exigir que a coluna de ligação possua o mesmo nome nas duas tabelas. Por essa razão, o **INNER JOIN** é muito mais utilizado na prática. No exemplo usando **NATURAL JOIN**, a junção foi realizada usando apenas a coluna **NUMFUNC**, que possui o mesmo nome em ambas as tabelas. 
+
+&lt;img src="parte04_files/figure-html/conjuntos-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="images/JOIN1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/JOIN2.png" width="90%" style="display: block; margin: auto;" /&gt;
 ]
+
+---
+### JOIN
+
+**Exemplo 3:** Sintaxe alternativa do **INNER JOIN**. 
+
+
+```sql
+SELECT DISTINCT V.MATRIC, F.VALOR
+FROM 
+  ERGON.VINCULOS V 
+  , ERGON.FICHAS_FINANCEIRAS F
+WHERE 
+    V.NUMFUNC = F.NUMFUNC
+    AND V.NUMERO = F.NUMVINC
+    AND F.MES_ANO_FOLHA = '01/09/2023' 
+    AND F.NUM_FOLHA = 1 
+    AND F.RUBRICA = 996
+ORDER BY 1;
+```
+
+Nesta sintaxe, chamada de *forma implicita*, as tabelas são listadas separadas por vírgulas na cláusula **FROM** e especificamos as colunas usadas na junção na cláusula **WHERE**. 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

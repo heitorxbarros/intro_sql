@@ -290,21 +290,6 @@ p4 <- ggplot() +
             panel.background = element_rect(fill = "#fff2d7", size = 0.5, linetype = "solid"),
             plot.margin = unit(c(.25,.25,.25,.25), "cm"))
 
-p4 <- ggplot() +
-      geom_polygon(data = df, aes(x=x2,y=y2), fill = "darkgreen") +
-      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
-      # geom_point(aes(x= 1.5,  y = 1+sqrt(.75^2-.5^2)), color ="red") +
-      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
-      # geom_text(aes(x = 0.25, y = 2, label = "u"), size = 10) +
-      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
-      annotate("text",x = 1.5, y = 2, label = TeX("$A\\cap B$",bold = T, output="character"), 
-               size = 8, parse=TRUE, color = "darkred") +
-      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
-      theme_void() + 
-      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
-            panel.background = element_rect(fill = "#fff2d7", size = 0.5, linetype = "solid"),
-            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
-
 p5 <- ggplot() +
       geom_circle(aes(x0 = c(1),y0 = c(1), r = rep(.75,1)), size = 2, fill = "darkgreen") +
       geom_circle(aes(x0 = c(2),y0 = c(1), r = rep(.75,1)), size = 2, fill = "#fff2d7") +
