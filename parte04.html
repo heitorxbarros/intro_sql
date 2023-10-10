@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introdução a bases de dados e SQL</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Heitor Barros" />
+    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Introdução a bases de dados e SQL
+]
+.subtitle[
+## Parte 4
+]
+.author[
+### Heitor Barros
+]
+.institute[
+### FP/SUBGGC/CGRH/CTAP
+]
+
+---
+
+class: center, middle
+
+
+<div>
+<style type="text/css">.xaringan-extra-logo {
+width: 200px;
+height: 128px;
+z-index: 0;
+background-image: url(logo.png);
+background-size: contain;
+background-repeat: no-repeat;
+position: absolute;
+top:1em;right:1em;
+}
+</style>
+<script>(function () {
+  let tries = 0
+  function addLogo () {
+    if (typeof slideshow === 'undefined') {
+      tries += 1
+      if (tries < 10) {
+        setTimeout(addLogo, 100)
+      }
+    } else {
+      document.querySelectorAll('.remark-slide-content:not(.title-slide):not(.inverse):not(.hide_logo)')
+        .forEach(function (slide) {
+          const logo = document.createElement('div')
+          logo.classList = 'xaringan-extra-logo'
+          logo.href = null
+          slide.appendChild(logo)
+        })
+    }
+  }
+  document.addEventListener('DOMContentLoaded', addLogo)
+})()</script>
+</div>
+# JOIN
+---
+class: inverse, center, middle
+
+# JUNÇÕES DE TABELAS
+
+---
+### JOIN
+
+As junções são utilizadas em instruções **SELECT** para recuperar dados de duas tabelas e “juntá-los” com o objetivo de produzir uma saída combinada. As tabelas envolvidas em uma junção precisam compartilhar dados em comum através de um ou mais atributos. Na maioria
+das vezes (embora não necessariamente) estes atributos que “conectam” as tabelas estarão vinculados através de uma ligação Chave Primária-Chave Estrangeira.
+
+
+---
+### JOIN
+
+**Exemplo 1:** Recuperando dados de duas tabelas com **NATURAL JOIN**.  
+
+```sql
+SELECT DISTINCT ERGON.VINCULOS.MATRIC, ERGON.FICHAS_FINANCEIRAS.VALOR
+FROM ERGON.VINCULOS NATURAL JOIN ERGON.FICHAS_FINANCEIRAS
+WHERE 
+    ERGON.FICHAS_FINANCEIRAS.MES_ANO_FOLHA = '01/09/2023' 
+    AND ERGON.FICHAS_FINANCEIRAS.NUM_FOLHA = 1 
+    AND ERGON.FICHAS_FINANCEIRAS.RUBRICA = 996
+ORDER BY 1;
+```
+
+.pull-left[
+&lt;p style='font-size:15px'&gt;
+Junções entre tabelas são sempre realizadas aos pares e seguindo ordem especificada na cláusula &lt;strong&gt;FROM&lt;/strong&gt;. Internamente, o SGBD realiza a &lt;em&gt;junção natural&lt;/em&gt; das tabelas, gerando um resultado intermediário (uma relação temporária na memória de trabalho do SGBD). Neste resultado intermediário, teremos um conjunto contendo todas os registros da tabela &lt;strong style="color:red;"&gt;VINCULOS&lt;/strong&gt; corretamente “casados” com os registros de &lt;strong style="color:red;"&gt;FICHAS_FINANCEIRAS&lt;/strong&gt;. Conceitualmente, a operação de junção não descarta nenhum atributo do par de tabelas envolvidas. Por isso, o resultado intermediário contém todos os atributos de
+&lt;strong style="color:red;"&gt;VINCULOS&lt;/strong&gt; e todos os de &lt;strong style="color:red;"&gt;FICHAS_FINANCEIRAS&lt;/strong&gt; (só uma versão de cada de &lt;strong&gt;NUMFUNC&lt;/strong&gt; e &lt;strong&gt;NUMVINC&lt;/strong&gt; são mantidos, pois esses atributos são comuns a ambas as tabelas).
+&lt;/p&gt;
+]
+.pull-right[
+&lt;img src="images/JOIN1.png" width="60%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+### JOIN
+
+**Exemplo 1:** Recuperando dados de duas tabelas com **NATURAL JOIN**.  
+
+```sql
+SELECT DISTINCT V.MATRIC, F.VALOR
+FROM ERGON.VINCULOS v NATURAL JOIN ERGON.FICHAS_FINANCEIRAS F
+WHERE 
+    F.MES_ANO_FOLHA = '01/09/2023' 
+    AND F.NUM_FOLHA = 1 
+    AND F.RUBRICA = 996
+ORDER BY 1;
+```
+
+O **NATURAL JOIN** é o modo mais simples de juntar tabelas, pois não é necessário explicitar com quais colunas estamos realizando o **JOIN**. O SGBD detecta automaticamente as colunas com mesmo nome nas duas tabelas. 
+&lt;/br&gt;&lt;/br&gt;
+Para evitar a repetição de nomes longos, podemos podemos criar rótulos para as tabelas. Geralmente, adotamos uma ou duas letras para representar as tabelas. Os rótulos das tabelas podem ser usados em todas as cláusulas da consulta.
+
+---
+### JOIN
+
+**Exemplo 2:** Junção interna com **INNER JOIN**. 
+
+```sql
+SELECT DISTINCT V.MATRIC, F.VALOR
+FROM 
+  ERGON.VINCULOS V 
+  INNER JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE 
+    F.MES_ANO_FOLHA = '01/09/2023' 
+    AND F.NUM_FOLHA = 1 
+    AND F.RUBRICA = 996
+ORDER BY 1;
+```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
