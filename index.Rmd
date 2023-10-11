@@ -21,4 +21,4 @@ output:
 #### Parte 5: Subconsultas
 #### Parte 6: Funções condicionais (IF, ELSE, CASE)
 #### Parte 7: Funções de janela (OVER, PARTITION BY, RANK, ROW_NUMBER, ...)
-#### Exercícios Extras
+#### [Exercícios Extras](https://heitorxbarros.github.io/intro_sql/exercicios_extras)

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introdução a bases de dados e SQL</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Heitor Barros" />
+    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Introdução a bases de dados e SQL
+]
+.subtitle[
+## Exercícios Extras
+]
+.author[
+### Heitor Barros
+]
+.institute[
+### FP/SUBGGC/CGRH/CTAP
+]
+
+---
+
+class: center, middle
+
+
+<div>
+<style type="text/css">.xaringan-extra-logo {
+width: 200px;
+height: 128px;
+z-index: 0;
+background-image: url(logo.png);
+background-size: contain;
+background-repeat: no-repeat;
+position: absolute;
+top:1em;right:1em;
+}
+</style>
+<script>(function () {
+  let tries = 0
+  function addLogo () {
+    if (typeof slideshow === 'undefined') {
+      tries += 1
+      if (tries < 10) {
+        setTimeout(addLogo, 100)
+      }
+    } else {
+      document.querySelectorAll('.remark-slide-content:not(.title-slide):not(.inverse):not(.hide_logo)')
+        .forEach(function (slide) {
+          const logo = document.createElement('div')
+          logo.classList = 'xaringan-extra-logo'
+          logo.href = null
+          slide.appendChild(logo)
+        })
+    }
+  }
+  document.addEventListener('DOMContentLoaded', addLogo)
+})()</script>
+</div>
+
+# EXERCÍCIOS EXTRAS
+---
+### EXERCÍCIOS EXTRAS
+
+1. Crie uma consulta para encontrar todas as matrículas da GEO-RIO (**EMP_CODIGO** = 5) usando a tabela 
+&lt;strong style="color:red;"&gt;ERGON.VINCULOS&lt;/strong&gt;.
+
+2. A tabela &lt;strong style="color:red;"&gt;ERGON.VANTAGENS&lt;/strong&gt; contém registros de vantagens como férias, encargos e triênios. A tabela possui campos de datas para controle de pagamento. Crie uma consulta para encontrar os atributos **NUMFUNC**, **NUMVINC**, **DTINI**, **VALOR** e **INFO** ainda ativos para a vantagem *'ALTERA MARGEM CONSIG'*.
+&lt;small&gt;*DICA: Registros de vantagens ativas devem ter o campo DTFIM maior ou igual a data atual ou valor nulo*.&lt;/small&gt;
+
+3. Crie uma consulta para recuperar contar a quantidade de cargos por categoria usando a tabela &lt;strong style="color:red;"&gt;ERGON.CARGOS_&lt;/strong&gt;.
+
+4. Crie uma consulta para recuperar o código do setor (&lt;strong&gt;SETOR&lt;/strong&gt;) e o nome (&lt;strong&gt;NOMESETOR&lt;/strong&gt;) dos setores localizados no &lt;em&gt;ALTO DA BOA VISTA&lt;/em&gt;. Use a tabela &lt;strong style="color:red;"&gt;ERGON.HSETOR_&lt;/strong&gt;. 
+
+5. Crie uma consulta para recuperar a soma de valores por rubrica de vantagem (&lt;strong&gt;DESC_VANT = 1&lt;/strong&gt;) cujo mes de pagamento (&lt;strong&gt;MES_ANO_FOLHA&lt;/strong&gt;) seja diferente da competência (&lt;strong&gt;MES_ANO_DIREITO&lt;/strong&gt;) em janeiro de 2023, na folha 1. Use a tabela &lt;strong style="color:red;"&gt;ERGON.FICHAS_FINANCEIRAS&lt;/strong&gt; e o total de modo decrescente.
+
+6. Crie uma consulta para recuperar o nome das pessoas que nasceram no mesmo dia que você. Use a tabela &lt;strong style="color:red;"&gt;ERGON.FUNCIONARIOS&lt;/strong&gt;.
+
+---
+### EXERCÍCIOS EXTRAS
+
+&lt;ol start="7"&gt;
+
+&lt;li&gt; Modifique a consulta do exercício 5 para recuperar apenas registros cujo resultado da soma seja maior do que R$ 1000000.00.
+
+&lt;li&gt; Crie uma consulta 
+
+&lt;/ol&gt;
+
+---
+class: inverse, center, middle
+
+# SOLUÇÕES
+
+---
+### SOLUÇÕES
+&lt;ol&gt;
+&lt;li&gt; Crie uma consulta para encontrar todas as matrículas da GEO-RIO (&lt;strong&gt;EMP_CODIGO&lt;/strong&gt; = 5) usando a tabela 
+&lt;strong style="color:red;"&gt;ERGON.VINCULOS&lt;/strong&gt;
+&lt;/ol&gt;
+
+```sql
+SELECT MATRIC 
+FROM ERGON.VINCULOS
+WHERE ;
+```
+
+&lt;/br&gt;
+&lt;ol start="2"&gt;
+&lt;li&gt; A tabela &lt;strong style="color:red;"&gt;ERGON.VANTAGENS&lt;/strong&gt; contém registros de vantagens como férias, encargos e triênios. A tabela possui campos de datas para controle de pagamento. Crie uma consulta para encontrar os atributos &lt;strong&gt;NUMFUNC, NUMVINC, DTINI, VALOR e INFO&lt;/strong&gt; ainda ativos para a vantagem &lt;em&gt;'ALTERA MARGEM CONSIG'&lt;/em&gt;.
+&lt;/ol&gt;
+
+```sql
+SELECT DISTINCT 
+  NUMFUNC
+  , NUMVINC
+  , DTINI
+  , VALOR
+  , INFO
+FROM ERGON.VANTAGENS
+WHERE VANTAGEM = 'ALTERA MARGEM CONSIG' 
+AND (DTFIM IS NULL OR DTFIM &gt;= '11/10/2023');
+```
+
+---
+### SOLUÇÕES
+&lt;ol start="3"&gt;
+&lt;li&gt;Crie uma consulta para recuperar contar a quantidade de cargos por categoria usando a tabela &lt;strong style="color:red;"&gt;ERGON.CARGOS_&lt;/strong&gt;.
+&lt;/ol&gt;
+
+
+```sql
+SELECT DISTINCT 
+  CATEGORIA 
+  , COUNT(DISTINCT CARGO) QTD
+FROM ERGON.CARGOS_ 
+GROUP BY CATEGORIA; 
+```
+
+&lt;/br&gt;
+&lt;ol start="4"&gt;
+&lt;li&gt; Crie uma consulta para recuperar o código do setor (&lt;strong&gt;SETOR&lt;/strong&gt;) e o nome (&lt;strong&gt;NOMESETOR&lt;/strong&gt;) dos setores localizados no bairro &lt;em&gt;ALTO DA BOA VISTA&lt;/em&gt;. Use a tabela &lt;strong style="color:red;"&gt;ERGON.HSETOR_&lt;/strong&gt;. 
+&lt;/ol&gt;
+
+
+```sql
+SELECT DISTINCT SETOR, NOMESETOR 
+FROM ERGON.HSETOR_ 
+WHERE BAIRRO = 'ALTO DA BOA VISTA';
+```
+
+---
+### SOLUÇÕES
+&lt;ol start="5"&gt;
+&lt;li&gt;Crie uma consulta para recuperar a soma de valores por rubrica de vantagem (&lt;strong&gt;DESC_VANT = 1&lt;/strong&gt;) cujo mes de pagamento (&lt;strong&gt;MES_ANO_FOLHA&lt;/strong&gt;) seja diferente da competência (&lt;strong&gt;MES_ANO_DIREITO&lt;/strong&gt;) em janeiro de 2023, na folha 1. Use a tabela &lt;strong style="color:red;"&gt;ERGON.FICHAS_FINANCEIRAS&lt;/strong&gt; e o total de modo decrescente.
+&lt;/ol&gt;
+
+
+```sql
+SELECT 
+  RUBRICA
+  , SUM(VALOR) VALOR_TOTAL
+FROM ERGON.FICHAS_FINANCEIRAS
+WHERE
+  MES_ANO_FOLHA = '01/01/2023'
+  AND MES_ANO_FOLHA &lt;&gt; MES_ANO_DIREITO
+  AND NUM_FOLHA = 1
+  AND DESC_VANT = 1
+GROUP BY RUBRICA
+ORDER BY SUM(VALOR) DESC; 
+```
+
+
+---
+### SOLUÇÕES
+&lt;ol start="6"&gt;
+&lt;li&gt;Crie uma consulta para recuperar o nome das pessoas que nasceram no mesmo dia que você. Use a tabela &lt;strong style="color:red;"&gt;ERGON.FUNCIONARIOS&lt;/strong&gt;.
+&lt;/ol&gt;
+
+
+```sql
+SELECT NOME
+FROM ERGON.FUNCIONARIOS
+WHERE DTNASC = '11/04/1995'; -- USE SUA DATA DE NASCIMENTO 
+```
+
+---
+### SOLUÇÕES
+&lt;ol start="7"&gt;
+&lt;li&gt; Modifique a consulta do exercício 5 para recuperar apenas registros cujo resultado da soma seja maior do que R$ 1000000.00.
+&lt;/ol&gt;
+
+
+```sql
+SELECT 
+  RUBRICA
+  , SUM(VALOR) VALOR_TOTAL
+FROM ERGON.FICHAS_FINANCEIRAS
+WHERE
+  MES_ANO_FOLHA = '01/01/2023'
+  AND MES_ANO_FOLHA &lt;&gt; MES_ANO_DIREITO
+  AND NUM_FOLHA = 1
+  AND DESC_VANT = 1
+GROUP BY RUBRICA
+HAVING SUM(VALOR) &gt; 1000000
+ORDER BY SUM(VALOR) DESC; 
+```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -4,7 +4,7 @@
     <title>Introdução a bases de dados e SQL</title>
     <meta charset="utf-8" />
     <meta name="author" content="Heitor Barros" />
-    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -315,26 +315,14 @@ class: center, middle
 ### SYSTEM TABLES
 As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas do sistema de gerenciamento de banco de dados Oracle. Elas são usadas para armazenar informações essenciais sobre o próprio sistema, como detalhes sobre objetos do banco de dados, permissões de acesso, configurações do sistema e muito mais. 
 
-<div id="jifqfjqehl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:400px;">
-<style>#jifqfjqehl table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<div id="fqmxvvefzq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:400px;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#jifqfjqehl thead, #jifqfjqehl tbody, #jifqfjqehl tfoot, #jifqfjqehl tr, #jifqfjqehl td, #jifqfjqehl th {
-  border-style: none;
-}
-
-#jifqfjqehl p {
-  margin: 0;
-  padding: 0;
-}
-
-#jifqfjqehl .gt_table {
+#fqmxvvefzq .gt_table {
   display: table;
   border-collapse: collapse;
-  line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
@@ -357,36 +345,7 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   border-left-color: #D5D5D5;
 }
 
-#jifqfjqehl .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#jifqfjqehl .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#jifqfjqehl .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#jifqfjqehl .gt_heading {
+#fqmxvvefzq .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -398,13 +357,42 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   border-right-color: #D3D3D3;
 }
 
-#jifqfjqehl .gt_bottom_border {
+#fqmxvvefzq .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#fqmxvvefzq .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#fqmxvvefzq .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#fqmxvvefzq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D5D5D5;
 }
 
-#jifqfjqehl .gt_col_headings {
+#fqmxvvefzq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D5D5D5;
@@ -419,7 +407,7 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   border-right-color: #D3D3D3;
 }
 
-#jifqfjqehl .gt_col_heading {
+#fqmxvvefzq .gt_col_heading {
   color: #FFFFFF;
   background-color: #004D80;
   font-size: 100%;
@@ -439,7 +427,7 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   overflow-x: hidden;
 }
 
-#jifqfjqehl .gt_column_spanner_outer {
+#fqmxvvefzq .gt_column_spanner_outer {
   color: #FFFFFF;
   background-color: #004D80;
   font-size: 100%;
@@ -451,15 +439,15 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   padding-right: 4px;
 }
 
-#jifqfjqehl .gt_column_spanner_outer:first-child {
+#fqmxvvefzq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#jifqfjqehl .gt_column_spanner_outer:last-child {
+#fqmxvvefzq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#jifqfjqehl .gt_column_spanner {
+#fqmxvvefzq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D5D5D5;
@@ -471,11 +459,7 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   width: 100%;
 }
 
-#jifqfjqehl .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#jifqfjqehl .gt_group_heading {
+#fqmxvvefzq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -501,7 +485,7 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   text-align: left;
 }
 
-#jifqfjqehl .gt_empty_group_heading {
+#fqmxvvefzq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -516,15 +500,15 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   vertical-align: middle;
 }
 
-#jifqfjqehl .gt_from_md > :first-child {
+#fqmxvvefzq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#jifqfjqehl .gt_from_md > :last-child {
+#fqmxvvefzq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#jifqfjqehl .gt_row {
+#fqmxvvefzq .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -543,7 +527,7 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   overflow-x: hidden;
 }
 
-#jifqfjqehl .gt_stub {
+#fqmxvvefzq .gt_stub {
   color: #FFFFFF;
   background-color: #929292;
   font-size: 100%;
@@ -556,7 +540,7 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   padding-right: 5px;
 }
 
-#jifqfjqehl .gt_stub_row_group {
+#fqmxvvefzq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -570,15 +554,11 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   vertical-align: top;
 }
 
-#jifqfjqehl .gt_row_group_first td {
+#fqmxvvefzq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#jifqfjqehl .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#jifqfjqehl .gt_summary_row {
+#fqmxvvefzq .gt_summary_row {
   color: #FFFFFF;
   background-color: #5F5F5F;
   text-transform: inherit;
@@ -588,16 +568,16 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   padding-right: 5px;
 }
 
-#jifqfjqehl .gt_first_summary_row {
+#fqmxvvefzq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D5D5D5;
 }
 
-#jifqfjqehl .gt_first_summary_row.thick {
+#fqmxvvefzq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#jifqfjqehl .gt_last_summary_row {
+#fqmxvvefzq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -607,7 +587,7 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   border-bottom-color: #D5D5D5;
 }
 
-#jifqfjqehl .gt_grand_summary_row {
+#fqmxvvefzq .gt_grand_summary_row {
   color: #FFFFFF;
   background-color: #929292;
   text-transform: inherit;
@@ -617,7 +597,7 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   padding-right: 5px;
 }
 
-#jifqfjqehl .gt_first_grand_summary_row {
+#fqmxvvefzq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -627,21 +607,11 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   border-top-color: #D5D5D5;
 }
 
-#jifqfjqehl .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D5D5D5;
-}
-
-#jifqfjqehl .gt_striped {
+#fqmxvvefzq .gt_striped {
   background-color: #F4F4F4;
 }
 
-#jifqfjqehl .gt_table_body {
+#fqmxvvefzq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D5D5D5;
@@ -650,7 +620,7 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   border-bottom-color: #D5D5D5;
 }
 
-#jifqfjqehl .gt_footnotes {
+#fqmxvvefzq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -664,16 +634,16 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   border-right-color: #D3D3D3;
 }
 
-#jifqfjqehl .gt_footnote {
+#fqmxvvefzq .gt_footnote {
   margin: 0px;
   font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-#jifqfjqehl .gt_sourcenotes {
+#fqmxvvefzq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -687,7 +657,7 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   border-right-color: #D3D3D3;
 }
 
-#jifqfjqehl .gt_sourcenote {
+#fqmxvvefzq .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -695,70 +665,71 @@ As System Tables, ou "tabelas do sistema", são um conjunto de tabelas internas 
   padding-right: 5px;
 }
 
-#jifqfjqehl .gt_left {
+#fqmxvvefzq .gt_left {
   text-align: left;
 }
 
-#jifqfjqehl .gt_center {
+#fqmxvvefzq .gt_center {
   text-align: center;
 }
 
-#jifqfjqehl .gt_right {
+#fqmxvvefzq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#jifqfjqehl .gt_font_normal {
+#fqmxvvefzq .gt_font_normal {
   font-weight: normal;
 }
 
-#jifqfjqehl .gt_font_bold {
+#fqmxvvefzq .gt_font_bold {
   font-weight: bold;
 }
 
-#jifqfjqehl .gt_font_italic {
+#fqmxvvefzq .gt_font_italic {
   font-style: italic;
 }
 
-#jifqfjqehl .gt_super {
+#fqmxvvefzq .gt_super {
   font-size: 65%;
 }
 
-#jifqfjqehl .gt_footnote_marks {
+#fqmxvvefzq .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
-  position: initial;
 }
 
-#jifqfjqehl .gt_asterisk {
+#fqmxvvefzq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#jifqfjqehl .gt_indent_1 {
+#fqmxvvefzq .gt_indent_1 {
   text-indent: 5px;
 }
 
-#jifqfjqehl .gt_indent_2 {
+#fqmxvvefzq .gt_indent_2 {
   text-indent: 10px;
 }
 
-#jifqfjqehl .gt_indent_3 {
+#fqmxvvefzq .gt_indent_3 {
   text-indent: 15px;
 }
 
-#jifqfjqehl .gt_indent_4 {
+#fqmxvvefzq .gt_indent_4 {
   text-indent: 20px;
 }
 
-#jifqfjqehl .gt_indent_5 {
+#fqmxvvefzq .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="NOME DA TABELA">NOME DA TABELA</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="DESCRIÇÃO">DESCRIÇÃO</th>
     </tr>
@@ -892,7 +863,7 @@ Podemos usar a coluna **OWNER** para especificar o grupo/esquema e listar todas 
 ]
 
 .pull-right[
-&lt;img src="images/FUNCOES_DE_GRUPO7.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/SYS_TABLE.PNG" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 ---
 ### BUSCANDO TABELAS
@@ -914,7 +885,7 @@ Usando a coluna **COLUMN_NAME**, podemos encontrar tabelas com colunas em comum.
 ]
 
 .pull-right[
-&lt;img src="images/FUNCOES_DE_GRUPO7.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/SYS_TABLE1.PNG" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---

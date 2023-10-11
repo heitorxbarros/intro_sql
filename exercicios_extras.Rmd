@@ -1,0 +1,176 @@
+---
+title: "Introdução a bases de dados e SQL"
+subtitle: "Exercícios Extras"
+author: "Heitor Barros"
+institute: "FP/SUBGGC/CGRH/CTAP"
+date: ""
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    css: xaringan-themer.css
+---
+class: center, middle
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_accent(
+  base_color = "#004b80", 
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Montserrat", "300", "300i"),
+  code_font_google   = google_font("Fira Mono"),
+)
+```
+
+```{r xaringan-logo, echo=FALSE}
+xaringanExtra::use_logo(
+  image_url = "logo.png",
+  position = xaringanExtra::css_position(top = "1em", right = "1em"),
+  width = "200px"
+)
+
+```
+
+# EXERCÍCIOS EXTRAS
+---
+### EXERCÍCIOS EXTRAS
+
+1. Crie uma consulta para encontrar todas as matrículas da GEO-RIO (**EMP_CODIGO** = 5) usando a tabela 
+<strong style="color:red;">ERGON.VINCULOS</strong>.
+
+2. A tabela <strong style="color:red;">ERGON.VANTAGENS</strong> contém registros de vantagens como férias, encargos e triênios. A tabela possui campos de datas para controle de pagamento. Crie uma consulta para encontrar os atributos **NUMFUNC**, **NUMVINC**, **DTINI**, **VALOR** e **INFO** ainda ativos para a vantagem *'ALTERA MARGEM CONSIG'*.
+<small>*DICA: Registros de vantagens ativas devem ter o campo DTFIM maior ou igual a data atual ou valor nulo*.</small>
+
+3. Crie uma consulta para recuperar contar a quantidade de cargos por categoria usando a tabela <strong style="color:red;">ERGON.CARGOS_</strong>.
+
+4. Crie uma consulta para recuperar o código do setor (<strong>SETOR</strong>) e o nome (<strong>NOMESETOR</strong>) dos setores localizados no <em>ALTO DA BOA VISTA</em>. Use a tabela <strong style="color:red;">ERGON.HSETOR_</strong>. 
+
+5. Crie uma consulta para recuperar a soma de valores por rubrica de vantagem (<strong>DESC_VANT = 1</strong>) cujo mes de pagamento (<strong>MES_ANO_FOLHA</strong>) seja diferente da competência (<strong>MES_ANO_DIREITO</strong>) em janeiro de 2023, na folha 1. Use a tabela <strong style="color:red;">ERGON.FICHAS_FINANCEIRAS</strong> e o total de modo decrescente.
+
+6. Crie uma consulta para recuperar o nome das pessoas que nasceram no mesmo dia que você. Use a tabela <strong style="color:red;">ERGON.FUNCIONARIOS</strong>.
+
+---
+### EXERCÍCIOS EXTRAS
+
+<ol start="7">
+
+<li> Modifique a consulta do exercício 5 para recuperar apenas registros cujo resultado da soma seja maior do que R$ 1000000.00.
+
+<li> Crie uma consulta 
+
+</ol>
+
+---
+class: inverse, center, middle
+
+# SOLUÇÕES
+
+---
+### SOLUÇÕES
+<ol>
+<li> Crie uma consulta para encontrar todas as matrículas da GEO-RIO (<strong>EMP_CODIGO</strong> = 5) usando a tabela 
+<strong style="color:red;">ERGON.VINCULOS</strong>
+</ol>
+```{sql eval = F}
+SELECT MATRIC 
+FROM ERGON.VINCULOS
+WHERE ;
+```
+
+</br>
+<ol start="2">
+<li> A tabela <strong style="color:red;">ERGON.VANTAGENS</strong> contém registros de vantagens como férias, encargos e triênios. A tabela possui campos de datas para controle de pagamento. Crie uma consulta para encontrar os atributos <strong>NUMFUNC, NUMVINC, DTINI, VALOR e INFO</strong> ainda ativos para a vantagem <em>'ALTERA MARGEM CONSIG'</em>.
+</ol>
+```{sql eval = F}
+SELECT DISTINCT 
+  NUMFUNC
+  , NUMVINC
+  , DTINI
+  , VALOR
+  , INFO
+FROM ERGON.VANTAGENS
+WHERE VANTAGEM = 'ALTERA MARGEM CONSIG' 
+AND (DTFIM IS NULL OR DTFIM >= '11/10/2023');
+```
+
+---
+### SOLUÇÕES
+<ol start="3">
+<li>Crie uma consulta para recuperar contar a quantidade de cargos por categoria usando a tabela <strong style="color:red;">ERGON.CARGOS_</strong>.
+</ol>
+
+```{sql eval = F}
+SELECT DISTINCT 
+  CATEGORIA 
+  , COUNT(DISTINCT CARGO) QTD
+FROM ERGON.CARGOS_ 
+GROUP BY CATEGORIA; 
+```
+
+</br>
+<ol start="4">
+<li> Crie uma consulta para recuperar o código do setor (<strong>SETOR</strong>) e o nome (<strong>NOMESETOR</strong>) dos setores localizados no bairro <em>ALTO DA BOA VISTA</em>. Use a tabela <strong style="color:red;">ERGON.HSETOR_</strong>. 
+</ol>
+
+```{sql eval = F}
+SELECT DISTINCT SETOR, NOMESETOR 
+FROM ERGON.HSETOR_ 
+WHERE BAIRRO = 'ALTO DA BOA VISTA';
+```
+
+---
+### SOLUÇÕES
+<ol start="5">
+<li>Crie uma consulta para recuperar a soma de valores por rubrica de vantagem (<strong>DESC_VANT = 1</strong>) cujo mes de pagamento (<strong>MES_ANO_FOLHA</strong>) seja diferente da competência (<strong>MES_ANO_DIREITO</strong>) em janeiro de 2023, na folha 1. Use a tabela <strong style="color:red;">ERGON.FICHAS_FINANCEIRAS</strong> e o total de modo decrescente.
+</ol>
+
+```{sql eval = F}
+SELECT 
+  RUBRICA
+  , SUM(VALOR) VALOR_TOTAL
+FROM ERGON.FICHAS_FINANCEIRAS
+WHERE
+  MES_ANO_FOLHA = '01/01/2023'
+  AND MES_ANO_FOLHA <> MES_ANO_DIREITO
+  AND NUM_FOLHA = 1
+  AND DESC_VANT = 1
+GROUP BY RUBRICA
+ORDER BY SUM(VALOR) DESC; 
+```
+
+
+---
+### SOLUÇÕES
+<ol start="6">
+<li>Crie uma consulta para recuperar o nome das pessoas que nasceram no mesmo dia que você. Use a tabela <strong style="color:red;">ERGON.FUNCIONARIOS</strong>.
+</ol>
+
+```{sql eval = F}
+SELECT NOME
+FROM ERGON.FUNCIONARIOS
+WHERE DTNASC = '11/04/1995'; -- USE SUA DATA DE NASCIMENTO 
+```
+
+---
+### SOLUÇÕES
+<ol start="7">
+<li> Modifique a consulta do exercício 5 para recuperar apenas registros cujo resultado da soma seja maior do que R$ 1000000.00.
+</ol>
+
+```{sql eval = F}
+SELECT 
+  RUBRICA
+  , SUM(VALOR) VALOR_TOTAL
+FROM ERGON.FICHAS_FINANCEIRAS
+WHERE
+  MES_ANO_FOLHA = '01/01/2023'
+  AND MES_ANO_FOLHA <> MES_ANO_DIREITO
+  AND NUM_FOLHA = 1
+  AND DESC_VANT = 1
+GROUP BY RUBRICA
+HAVING SUM(VALOR) > 1000000
+ORDER BY SUM(VALOR) DESC; 
+```

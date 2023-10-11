@@ -379,7 +379,7 @@ Podemos usar a coluna **OWNER** para especificar o grupo/esquema e listar todas 
 
 .pull-right[
 ```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
-knitr::include_graphics("images/FUNCOES_DE_GRUPO7.png")
+knitr::include_graphics("images/SYS_TABLE.PNG")
 ```
 ]
 ---
@@ -402,7 +402,7 @@ Usando a coluna **COLUMN_NAME**, podemos encontrar tabelas com colunas em comum.
 
 .pull-right[
 ```{r echo=FALSE, out.width="100%", fig.align='center', dpi=600}
-knitr::include_graphics("images/FUNCOES_DE_GRUPO7.png")
+knitr::include_graphics("images/SYS_TABLE1.PNG")
 ```
 ]
 

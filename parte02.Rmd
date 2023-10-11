@@ -853,7 +853,7 @@ Na maioria dos SGBDs, os apelidos de colunas podem ser referenciados em uma clá
 </br>
 <small>*DICA: Podemos restringir o total de linhas usando a palavra chave ROWNUM na cláusula WHERE (Ex.: WHERE ROWNUM <= 5)*.</small>
 
-2. Modifique o **Exercício 2** sobre a cláusula **WHERE** e ordene o resultado pelo nome de maneira decrescente.
+2. Modifique o **Exercício 2** sobre a cláusula **WHERE** e ordene o resultado pelo complemento de maneira decrescente.
 
 ---
 ### Referências
