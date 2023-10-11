@@ -4,7 +4,7 @@
     <title>Introdução a bases de dados e SQL</title>
     <meta charset="utf-8" />
     <meta name="author" content="Heitor Barros" />
-    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -161,9 +161,9 @@ A junção interna (**INNER JOIN**) combina uma linha de uma tabela A com uma li
 
 **Exemplo 2:** Junção interna com **INNER JOIN**. 
 .pull-left[
-A partir do exemplo apresentado, é possível concluir que o **INNER JOIN** possui o mesmo propósito do **NATURAL JOIN**, oferecendo porém a vantagem de não exigir que a coluna de ligação possua o mesmo nome nas duas tabelas. Por essa razão, o **INNER JOIN** é muito mais utilizado na prática. No exemplo usando **NATURAL JOIN**, a junção foi realizada usando apenas a coluna **NUMFUNC**, que possui o mesmo nome em ambas as tabelas. 
+A partir do exemplo apresentado, é possível concluir que o **INNER JOIN** possui o mesmo propósito do **NATURAL JOIN**, oferecendo porém a vantagem de não exigir que a coluna de ligação possua o mesmo nome nas duas tabelas. Por essa razão, o **INNER JOIN** é muito mais utilizado na prática. No exemplo usando **NATURAL JOIN**, a junção foi realizada usando apenas a coluna **NUMFUNC**, que possui o mesmo nome em ambas as tabelas. Comparando com operações de conjuntos, realizar uma junção usando **INNER JOIN** equivale a *interseção* de duas tabelas.
 
-&lt;img src="parte04_files/figure-html/conjuntos-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="parte04_files/figure-html/conjuntos-1.png" width="40%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -191,6 +191,38 @@ ORDER BY 1;
 ```
 
 Nesta sintaxe, chamada de *forma implicita*, as tabelas são listadas separadas por vírgulas na cláusula **FROM** e especificamos as colunas usadas na junção na cláusula **WHERE**. 
+
+---
+### JOIN
+
+**Exemplo 4:** Junção interna com mais de duas tabelas com **INNER JOIN**. 
+
+
+```sql
+SELECT DISTINCT V.MATRIC, FU.NOME, F.VALOR
+FROM 
+  ERGON.VINCULOS V 
+  INNER JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+  INNER JOIN ERGON.FUNCIONARIOS FU
+  ON V.NUMFUNC = FU.NUMERO
+WHERE 
+    F.MES_ANO_FOLHA = '01/09/2023' 
+    AND F.NUM_FOLHA = 1 
+    AND F.RUBRICA = 996
+ORDER BY 1;
+```
+
+As junções ocorrem sempre em pares (resolvendo duas relações de cada vez), respeitando a ordem em que estes pares são especificados. No exemplo, o SGBD realiza a junção das tabelas &lt;strong style="color:red;"&gt;FICHAS_FINANCEIRAS&lt;/strong&gt; e &lt;strong style="color:red;"&gt;FICHAS_FINANCEIRAS&lt;/strong&gt;, gerando uma tabela intermediária (relação temporária). Depois, o SGBD realiza a junção entre a tabela intermediária e a tabela &lt;strong style="color:red;"&gt;FUNCIONARIOS&lt;/strong&gt;.
+---
+### Exercícios
+
+1. Crie uma consulta para recuperar nomes e matrículas dos servidores da empresa 1 (**EMP_CODIGO** = 1) usando as tabelas &lt;strong style="color:red;"&gt;ERGON.FUNCIONARIOS&lt;/strong&gt; e &lt;strong style="color:red;"&gt;ERGON.VINCULOS&lt;/strong&gt;.
+
+2. Crie uma consulta para recuperar as rubricas pagas na folha 55 de setembro e o nome dessas rubricas usando as tabelas &lt;strong style="color:red;"&gt;ERGON.FICHAS_FINANCEIRAS&lt;/strong&gt; e &lt;strong style="color:red;"&gt;ERGON.RUBRICAS&lt;/strong&gt;.
+
+3. Crie uma consulta para recuperar os nomes do setores em que você já esteve lotado(a), usando as tabelas &lt;strong style="color:red;"&gt;ERGON.PROVIMENTOS_EV&lt;/strong&gt; e &lt;strong style="color:red;"&gt;ERGON.HSETOR&lt;/strong&gt;. Use o seu código **NUMFUNC** ou faça um **JOIN** com a tabela &lt;strong style="color:red;"&gt;ERGON.FUNCIONARIOS&lt;/strong&gt;.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

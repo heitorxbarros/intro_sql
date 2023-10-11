@@ -131,9 +131,9 @@ A junção interna (**INNER JOIN**) combina uma linha de uma tabela A com uma li
 
 **Exemplo 2:** Junção interna com **INNER JOIN**. 
 .pull-left[
-A partir do exemplo apresentado, é possível concluir que o **INNER JOIN** possui o mesmo propósito do **NATURAL JOIN**, oferecendo porém a vantagem de não exigir que a coluna de ligação possua o mesmo nome nas duas tabelas. Por essa razão, o **INNER JOIN** é muito mais utilizado na prática. No exemplo usando **NATURAL JOIN**, a junção foi realizada usando apenas a coluna **NUMFUNC**, que possui o mesmo nome em ambas as tabelas. 
+A partir do exemplo apresentado, é possível concluir que o **INNER JOIN** possui o mesmo propósito do **NATURAL JOIN**, oferecendo porém a vantagem de não exigir que a coluna de ligação possua o mesmo nome nas duas tabelas. Por essa razão, o **INNER JOIN** é muito mais utilizado na prática. No exemplo usando **NATURAL JOIN**, a junção foi realizada usando apenas a coluna **NUMFUNC**, que possui o mesmo nome em ambas as tabelas. Comparando com operações de conjuntos, realizar uma junção usando **INNER JOIN** equivale a *interseção* de duas tabelas.
 
-```{r conjuntos, echo=FALSE, message=F, warning=F,out.width="50%", fig.align='center', dpi=600}
+```{r conjuntos, echo=FALSE, message=F, warning=F,out.width="40%", fig.align='center', dpi=600}
 library(ggplot2)
 library(patchwork)
 library(ggforce)
@@ -195,3 +195,34 @@ ORDER BY 1;
 ```
 
 Nesta sintaxe, chamada de *forma implicita*, as tabelas são listadas separadas por vírgulas na cláusula **FROM** e especificamos as colunas usadas na junção na cláusula **WHERE**. 
+
+---
+### JOIN
+
+**Exemplo 4:** Junção interna com mais de duas tabelas com **INNER JOIN**. 
+
+```{sql eval = F}
+SELECT DISTINCT V.MATRIC, FU.NOME, F.VALOR
+FROM 
+  ERGON.VINCULOS V 
+  INNER JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+  INNER JOIN ERGON.FUNCIONARIOS FU
+  ON V.NUMFUNC = FU.NUMERO
+WHERE 
+    F.MES_ANO_FOLHA = '01/09/2023' 
+    AND F.NUM_FOLHA = 1 
+    AND F.RUBRICA = 996
+ORDER BY 1;
+```
+
+As junções ocorrem sempre em pares (resolvendo duas relações de cada vez), respeitando a ordem em que estes pares são especificados. No exemplo, o SGBD realiza a junção das tabelas <strong style="color:red;">FICHAS_FINANCEIRAS</strong> e <strong style="color:red;">FICHAS_FINANCEIRAS</strong>, gerando uma tabela intermediária (relação temporária). Depois, o SGBD realiza a junção entre a tabela intermediária e a tabela <strong style="color:red;">FUNCIONARIOS</strong>.
+---
+### Exercícios
+
+1. Crie uma consulta para recuperar nomes e matrículas dos servidores da empresa 1 (**EMP_CODIGO** = 1) usando as tabelas <strong style="color:red;">ERGON.FUNCIONARIOS</strong> e <strong style="color:red;">ERGON.VINCULOS</strong>.
+
+2. Crie uma consulta para recuperar as rubricas pagas na folha 55 de setembro e o nome dessas rubricas usando as tabelas <strong style="color:red;">ERGON.FICHAS_FINANCEIRAS</strong> e <strong style="color:red;">ERGON.RUBRICAS</strong>.
+
+3. Crie uma consulta para recuperar os nomes do setores em que você já esteve lotado(a), usando as tabelas <strong style="color:red;">ERGON.PROVIMENTOS_EV</strong> e <strong style="color:red;">ERGON.HSETOR</strong>. Use o seu código **NUMFUNC** ou faça um **JOIN** com a tabela <strong style="color:red;">ERGON.FUNCIONARIOS</strong>.
