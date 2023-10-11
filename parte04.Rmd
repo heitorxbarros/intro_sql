@@ -226,3 +226,11 @@ As junções ocorrem sempre em pares (resolvendo duas relações de cada vez), r
 2. Crie uma consulta para recuperar as rubricas pagas na folha 55 de setembro e o nome dessas rubricas usando as tabelas <strong style="color:red;">ERGON.FICHAS_FINANCEIRAS</strong> e <strong style="color:red;">ERGON.RUBRICAS</strong>.
 
 3. Crie uma consulta para recuperar os nomes do setores em que você já esteve lotado(a), usando as tabelas <strong style="color:red;">ERGON.PROVIMENTOS_EV</strong> e <strong style="color:red;">ERGON.HSETOR</strong>. Use o seu código **NUMFUNC** ou faça um **JOIN** com a tabela <strong style="color:red;">ERGON.FUNCIONARIOS</strong>.
+
+---
+### Referências
+
+* Material do Curso "Bases de Dados" - Prof. Eduardo Corrêa Gonçalves (ENCE/IBGE);
+* Livro Introdução à linguagem SQL - Thomas Nield (O'REILLY);
+* Documentação [SQL Language Reference](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/index.html#Oracle%C2%AE-Database) (ORACLE)
+* Lista de [SYSTEM TABLES](https://www.techonthenet.com/oracle/sys_tables/index.php)

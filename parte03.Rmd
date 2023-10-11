@@ -261,6 +261,22 @@ knitr::include_graphics("images/FUNCOES_DE_GRUPO9.png")
 ```
 
 ---
+### FUNÇÕES DE GRUPO
+#### **Definição 4**: Cláusula **GROUP BY**
+O agrupamento de atributos de uma tabela pode ser realizado usando a cláusula **GROUP BY** e uma ou mais funções de grupo. Podemos, também, restringir o resultado de uma consulta usando a palavra-chave **HAVING** com uma ou mais funções de grupo.
+```{sql eval = F}
+SELECT [DISTINCT] col 1 [AS apelido 1],..., col n [AS apelido n] , [{SUM | MAX | MIN | AVG} (col x)], 
+FROM tabela
+[WHERE condição(ões)]
+[GROUP BY col 1 ,..., col n ]
+[HAVING condição(ões)]
+[ORDER BY lista de campos];
+```
+
+Nos bancos de dados ORACLE não é possível usar apelidos de colunas nas cláusulas **GROUP BY** e **HAVING**, devido a ordem de avaliação interna do SGBD. 
+
+---
+
 ### Exercícios
 
 1. Crie uma consulta para encontrar a média dos encargos de fiscalização sanitária (**RUBRICA** = 200) em janeiro de 2023, usando a tabela <strong style="color:red;">ERGON.FICHAS_FINANCEIRAS</strong>.
@@ -397,13 +413,3 @@ knitr::include_graphics("images/FUNCOES_DE_GRUPO7.png")
 * Livro Introdução à linguagem SQL - Thomas Nield (O'REILLY);
 * Documentação [SQL Language Reference](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/index.html#Oracle%C2%AE-Database) (ORACLE)
 * Lista de [SYSTEM TABLES](https://www.techonthenet.com/oracle/sys_tables/index.php)
-
----
-class: inverse, center, middle
-
-# Exercícios Extras
-
----
-### Exercícios Extras
-
-1. 
