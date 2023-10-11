@@ -218,6 +218,17 @@ ORDER BY 1;
 ```
 
 As junções ocorrem sempre em pares (resolvendo duas relações de cada vez), respeitando a ordem em que estes pares são especificados. No exemplo, o SGBD realiza a junção das tabelas <strong style="color:red;">FICHAS_FINANCEIRAS</strong> e <strong style="color:red;">FICHAS_FINANCEIRAS</strong>, gerando uma tabela intermediária (relação temporária). Depois, o SGBD realiza a junção entre a tabela intermediária e a tabela <strong style="color:red;">FUNCIONARIOS</strong>.
+
+---
+### JOIN
+
+**Exemplo 4:** Junção interna com mais de duas tabelas com **INNER JOIN**. 
+
+```{r echo=FALSE, out.width="60%", fig.align='center', dpi=600}
+knitr::include_graphics("images/JOIN3.png")
+```
+
+
 ---
 ### Exercícios
 

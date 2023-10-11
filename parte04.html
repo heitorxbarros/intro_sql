@@ -4,7 +4,7 @@
     <title>Introdução a bases de dados e SQL</title>
     <meta charset="utf-8" />
     <meta name="author" content="Heitor Barros" />
-    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -215,6 +215,15 @@ ORDER BY 1;
 ```
 
 As junções ocorrem sempre em pares (resolvendo duas relações de cada vez), respeitando a ordem em que estes pares são especificados. No exemplo, o SGBD realiza a junção das tabelas &lt;strong style="color:red;"&gt;FICHAS_FINANCEIRAS&lt;/strong&gt; e &lt;strong style="color:red;"&gt;FICHAS_FINANCEIRAS&lt;/strong&gt;, gerando uma tabela intermediária (relação temporária). Depois, o SGBD realiza a junção entre a tabela intermediária e a tabela &lt;strong style="color:red;"&gt;FUNCIONARIOS&lt;/strong&gt;.
+
+---
+### JOIN
+
+**Exemplo 4:** Junção interna com mais de duas tabelas com **INNER JOIN**. 
+
+&lt;img src="images/JOIN3.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
 ---
 ### Exercícios
 
