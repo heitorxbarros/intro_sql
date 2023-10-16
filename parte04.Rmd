@@ -31,7 +31,6 @@ xaringanExtra::use_logo(
   position = xaringanExtra::css_position(top = "1em", right = "1em"),
   width = "200px"
 )
-
 ```
 # JOIN
 ---
@@ -125,6 +124,8 @@ ORDER BY 1;
 
 
 A junção interna (**INNER JOIN**) combina uma linha de uma tabela A com uma linha de uma tabela B *apenas quando há coincidência* nos valores das colunas especificadas na condição de junção. No exemplo, iniciamos definimos as colunas e seus apelidos e o tipo de junção a ser realizado. Depois, usando a palavra-chave **ON**, especificamos quais atributos ligam as duas tabelas. A ordem dos atributos após a palavra-chave **ON** é indiferente (*"ON V.NUMFUNC = F.NUMFUNC"* equivale a *"ON F.NUMFUNC = V.NUMFUNC"*). Podemos usar diversas duplas de colunas para realizar o **JOIN** usando o operador **AND**. 
+</br></br>
+O uso da palavra-chave **INNER** é opcional, pois o padrão ao usar **JOIN** é o **INNER JOIN**.
 
 ---
 ### JOIN
@@ -224,7 +225,7 @@ As junções ocorrem sempre em pares (resolvendo duas relações de cada vez), r
 
 **Exemplo 4:** Junção interna com mais de duas tabelas com **INNER JOIN**. 
 
-```{r echo=FALSE, out.width="60%", fig.align='center', dpi=600}
+```{r echo=FALSE, out.width="40%", fig.align='center', dpi=600}
 knitr::include_graphics("images/JOIN3.png")
 ```
 
@@ -237,6 +238,129 @@ knitr::include_graphics("images/JOIN3.png")
 2. Crie uma consulta para recuperar as rubricas pagas na folha 55 de setembro e o nome dessas rubricas usando as tabelas <strong style="color:red;">ERGON.FICHAS_FINANCEIRAS</strong> e <strong style="color:red;">ERGON.RUBRICAS</strong>.
 
 3. Crie uma consulta para recuperar os nomes do setores em que você já esteve lotado(a), usando as tabelas <strong style="color:red;">ERGON.PROVIMENTOS_EV</strong> e <strong style="color:red;">ERGON.HSETOR</strong>. Use o seu código **NUMFUNC** ou faça um **JOIN** com a tabela <strong style="color:red;">ERGON.FUNCIONARIOS</strong>.
+
+---
+### JOIN
+
+**Exemplo 5:** Junção externa com **LEFT OUTER JOIN**.
+```{sql eval = F}
+SELECT DISTINCT V.MATRIC, F.VALOR
+FROM 
+  ERGON.VINCULOS V 
+  LEFT OUTER JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE 
+    F.MES_ANO_FOLHA = '01/09/2023' 
+    AND F.NUM_FOLHA = 1 
+    AND F.RUBRICA = 996
+    AND V.EMP_CODIGO = 1
+ORDER BY 1 NULLS FIRST;
+```
+
+As junções externas conectam linhas de duas tabelas de uma forma mais inclusiva: elas produzem os mesmos resultados do **INNER JOIN** acrescidos de linhas “não-casadas” de uma ou ambas as tabelas. A seguir, falaremos sobre os três tipos de junção externa:
+**LEFT JOIN** (a mais usada), **RIGHT JOIN** e **FULL JOIN**.
+</br></br>
+A operação de **LEFT JOIN** (ou **LEFT OUTER JOIN**) retorna todas as linhas da tabela especificada à esquerda da junção, mesmo que não exista casamento (valor equivalente) na tabela à direita. A consulta do Exemplo 5 retorna todas as matrículas da cujo **EMP_CODIGO** é 1 mesmo que não existam valores registrados para o **MES_ANO_FOLHA**, a **NUM_FOLHA** e a **RUBRICA** solicitados.
+---
+### JOIN
+
+**Exemplo 5:** Junção externa com **LEFT OUTER JOIN**.
+.pull-left[
+Para realizar a **LEFT JOIN** entre duas tabelas em SQL, a receita é quase idêntica à utilizada para implementar um **INNER JOIN**. O único detalhe a ser observado é que, na cláusula **FROM**, a tabela a qual desejamos todas as linhas no resultado final deve ser especificada à esquerda na definição da junção. 
+
+```{r conjuntos2, echo=FALSE, message=F, warning=F,out.width="50%", fig.align='center', dpi=600}
+library(ggplot2)
+library(patchwork)
+library(ggforce)
+library(dplyr)
+library(latex2exp)
+
+y=seq(-.75,.75, by=.001) 
+x=sqrt(.75^2-y^2)
+x2=x+1
+y2=y+1
+x3=-x+2
+df=data.frame(x2,y2) |> 
+    filter(y2<1+sqrt(.75^2-.5^2) & y2 > 1-sqrt(.75^2-.5^2)) |> 
+    rbind(data.frame(x2=x3,y2=y2) |> 
+    filter(y2<1+sqrt(.75^2-.5^2) & y2 > 1-sqrt(.75^2-.5^2)))
+
+
+
+p1 <- ggplot() +
+      geom_circle(aes(x0 = c(1),y0 = c(1), r = rep(.75,1)), size = 2, fill = "darkgreen") +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
+      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A$",bold = T, output="character"),
+               size = 8, parse=TRUE, color = "darkred") +
+      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
+      theme_void() + 
+      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
+            panel.background = element_rect(fill = "#fff2d7", size = 0.5, linetype = "solid"),
+            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
+
+p1
+```
+
+]
+
+.pull-right[
+```{r echo=FALSE, out.width="90%", fig.align='center', dpi=600}
+knitr::include_graphics("images/JOIN3.png")
+```
+]
+---
+### JOIN
+**Exemplo 6:** Junção externa com **RIGHT OUTER JOIN**.
+```{sql eval = F}
+SELECT DISTINCT V.MATRIC, F.VALOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS F
+  RIGHT JOIN ERGON.VINCULOS V 
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE 
+    F.MES_ANO_FOLHA = '01/09/2023' 
+    AND F.NUM_FOLHA = 1 
+    AND F.RUBRICA = 996
+    AND V.EMP_CODIGO = 1
+ORDER BY 1 NULLS FIRST;
+```
+
+A junção do tipo **RIGHT JOIN** (ou **RIGHT OUTER JOIN**) retorna todas as linhas da tabela à direita, mesmo que não exista casamento (valor equivalente) na tabela à esquerda.
+Como o **LEFT JOIN** e o **RIGHT JOIN** funcionam da mesma maneira (a única diferença é que no primeiro caso iremos especificar a tabela a qual desejamos todas as linhas no resultado à esquerda e no segundo caso ela ficará à direita), na prática o **LEFT JOIN**
+acabou se tornando mais adotado pelos programadores.
+
+---
+### JOIN
+**Exemplo 6:** Junção externa com **OUTER RIGHT JOIN**.
+.pull-right[
+```{r echo=FALSE, out.width="40%", fig.align='center', dpi=600}
+knitr::include_graphics("images/JOIN3.png")
+```
+[]
+---
+### JOIN
+**Exemplo 7:** Junção externa com **FULL OUTER JOIN**.
+```{sql eval = F}
+SELECT DISTINCT V.MATRIC, F.VALOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS F
+  RIGHT JOIN ERGON.VINCULOS V 
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE 
+    F.MES_ANO_FOLHA = '01/09/2023' 
+    AND F.NUM_FOLHA = 1 
+    AND F.RUBRICA = 996
+    AND V.EMP_CODIGO = 1
+ORDER BY 1 NULLS FIRST;
+```
+
+A junção do tipo **FULL JOIN** (ou **FULL OUTER JOIN**) junta em uma única operação os resultados do **LEFT JOIN** e do **RIGHT JOIN**. Ela retorna todas as linhas da tabela à esquerda e todas as linhas da tabela a direita devidamente combinadas, de acordo com a
+especificação da condição de junção. Caso existam linhas na tabela esquerda que não casem com qualquer linha da tabela direita, elas serão levadas para o resultado final. E caso existam linhas na tabela direita que não casem com qualquer linha da tabela esquerda, elas também serão levadas para o resultado final.
 
 ---
 ### Referências

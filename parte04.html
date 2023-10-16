@@ -4,7 +4,7 @@
     <title>Introdução a bases de dados e SQL</title>
     <meta charset="utf-8" />
     <meta name="author" content="Heitor Barros" />
-    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -155,6 +155,8 @@ ORDER BY 1;
 
 
 A junção interna (**INNER JOIN**) combina uma linha de uma tabela A com uma linha de uma tabela B *apenas quando há coincidência* nos valores das colunas especificadas na condição de junção. No exemplo, iniciamos definimos as colunas e seus apelidos e o tipo de junção a ser realizado. Depois, usando a palavra-chave **ON**, especificamos quais atributos ligam as duas tabelas. A ordem dos atributos após a palavra-chave **ON** é indiferente (*"ON V.NUMFUNC = F.NUMFUNC"* equivale a *"ON F.NUMFUNC = V.NUMFUNC"*). Podemos usar diversas duplas de colunas para realizar o **JOIN** usando o operador **AND**. 
+&lt;/br&gt;&lt;/br&gt;
+O uso da palavra-chave **INNER** é opcional, pois o padrão ao usar **JOIN** é o **INNER JOIN**.
 
 ---
 ### JOIN
@@ -221,7 +223,7 @@ As junções ocorrem sempre em pares (resolvendo duas relações de cada vez), r
 
 **Exemplo 4:** Junção interna com mais de duas tabelas com **INNER JOIN**. 
 
-&lt;img src="images/JOIN3.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="images/JOIN3.png" width="40%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -232,6 +234,95 @@ As junções ocorrem sempre em pares (resolvendo duas relações de cada vez), r
 2. Crie uma consulta para recuperar as rubricas pagas na folha 55 de setembro e o nome dessas rubricas usando as tabelas &lt;strong style="color:red;"&gt;ERGON.FICHAS_FINANCEIRAS&lt;/strong&gt; e &lt;strong style="color:red;"&gt;ERGON.RUBRICAS&lt;/strong&gt;.
 
 3. Crie uma consulta para recuperar os nomes do setores em que você já esteve lotado(a), usando as tabelas &lt;strong style="color:red;"&gt;ERGON.PROVIMENTOS_EV&lt;/strong&gt; e &lt;strong style="color:red;"&gt;ERGON.HSETOR&lt;/strong&gt;. Use o seu código **NUMFUNC** ou faça um **JOIN** com a tabela &lt;strong style="color:red;"&gt;ERGON.FUNCIONARIOS&lt;/strong&gt;.
+
+---
+### JOIN
+
+**Exemplo 5:** Junção externa com **LEFT OUTER JOIN**.
+
+```sql
+SELECT DISTINCT V.MATRIC, F.VALOR
+FROM 
+  ERGON.VINCULOS V 
+  LEFT OUTER JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE 
+    F.MES_ANO_FOLHA = '01/09/2023' 
+    AND F.NUM_FOLHA = 1 
+    AND F.RUBRICA = 996
+    AND V.EMP_CODIGO = 1
+ORDER BY 1 NULLS FIRST;
+```
+
+As junções externas conectam linhas de duas tabelas de uma forma mais inclusiva: elas produzem os mesmos resultados do **INNER JOIN** acrescidos de linhas “não-casadas” de uma ou ambas as tabelas. A seguir, falaremos sobre os três tipos de junção externa:
+**LEFT JOIN** (a mais usada), **RIGHT JOIN** e **FULL JOIN**.
+&lt;/br&gt;&lt;/br&gt;
+A operação de **LEFT JOIN** (ou **LEFT OUTER JOIN**) retorna todas as linhas da tabela especificada à esquerda da junção, mesmo que não exista casamento (valor equivalente) na tabela à direita. A consulta do Exemplo 5 retorna todas as matrículas da cujo **EMP_CODIGO** é 1 mesmo que não existam valores registrados para o **MES_ANO_FOLHA**, a **NUM_FOLHA** e a **RUBRICA** solicitados.
+---
+### JOIN
+
+**Exemplo 5:** Junção externa com **LEFT OUTER JOIN**.
+.pull-left[
+Para realizar a **LEFT JOIN** entre duas tabelas em SQL, a receita é quase idêntica à utilizada para implementar um **INNER JOIN**. O único detalhe a ser observado é que, na cláusula **FROM**, a tabela a qual desejamos todas as linhas no resultado final deve ser especificada à esquerda na definição da junção. 
+
+&lt;img src="parte04_files/figure-html/conjuntos2-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+]
+
+.pull-right[
+&lt;img src="images/JOIN3.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+---
+### JOIN
+**Exemplo 6:** Junção externa com **RIGHT OUTER JOIN**.
+
+```sql
+SELECT DISTINCT V.MATRIC, F.VALOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS F
+  RIGHT JOIN ERGON.VINCULOS V 
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE 
+    F.MES_ANO_FOLHA = '01/09/2023' 
+    AND F.NUM_FOLHA = 1 
+    AND F.RUBRICA = 996
+    AND V.EMP_CODIGO = 1
+ORDER BY 1 NULLS FIRST;
+```
+
+A junção do tipo **RIGHT JOIN** (ou **RIGHT OUTER JOIN**) retorna todas as linhas da tabela à direita, mesmo que não exista casamento (valor equivalente) na tabela à esquerda.
+Como o **LEFT JOIN** e o **RIGHT JOIN** funcionam da mesma maneira (a única diferença é que no primeiro caso iremos especificar a tabela a qual desejamos todas as linhas no resultado à esquerda e no segundo caso ela ficará à direita), na prática o **LEFT JOIN**
+acabou se tornando mais adotado pelos programadores.
+
+---
+### JOIN
+**Exemplo 6:** Junção externa com **OUTER RIGHT JOIN**.
+.pull-right[
+&lt;img src="images/JOIN3.png" width="40%" style="display: block; margin: auto;" /&gt;
+[]
+---
+### JOIN
+**Exemplo 7:** Junção externa com **FULL OUTER JOIN**.
+
+```sql
+SELECT DISTINCT V.MATRIC, F.VALOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS F
+  RIGHT JOIN ERGON.VINCULOS V 
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE 
+    F.MES_ANO_FOLHA = '01/09/2023' 
+    AND F.NUM_FOLHA = 1 
+    AND F.RUBRICA = 996
+    AND V.EMP_CODIGO = 1
+ORDER BY 1 NULLS FIRST;
+```
+
+A junção do tipo **FULL JOIN** (ou **FULL OUTER JOIN**) junta em uma única operação os resultados do **LEFT JOIN** e do **RIGHT JOIN**. Ela retorna todas as linhas da tabela à esquerda e todas as linhas da tabela a direita devidamente combinadas, de acordo com a
+especificação da condição de junção. Caso existam linhas na tabela esquerda que não casem com qualquer linha da tabela direita, elas serão levadas para o resultado final. E caso existam linhas na tabela direita que não casem com qualquer linha da tabela esquerda, elas também serão levadas para o resultado final.
 
 ---
 ### Referências
