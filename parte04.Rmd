@@ -437,20 +437,25 @@ knitr::include_graphics("images/JOIN7.png")
 ---
 ### Exercícios
 
+1. Modifique o *Exemplo 5* para exibir o nome da função usando a tabela <strong style="color:red;">ERGON.FUNCOES_EV_</strong>.
+
+2. Crie uma consulta para recuperar
+
+---
+### Exercícios
+
 ```{r xaringan-editable, echo=FALSE}
 xaringanExtra::use_editable()
 ```
 
 .can-edit[
 ```{sql eval = F}
-SELECT DISTINCT
-     D.FUNCAO
-    , C.ORGAO
+SELECT DISTINCT V.MATRIC, D.FUNCAO                 
 FROM 
-    ERGON.DESIGNACOES_EV D
-    FULL JOIN ERGON.CESSOES C
-    ON D.NUMFUNC = C.NUMFUNC
-    AND D.NUMVINC = C.NUMVINC;
+    ERGON.VINCULOS V
+    LEFT OUTER JOIN ERGON.DESIGNACOES_EV  D
+    ON V.NUMFUNC = D.NUMFUNC
+    AND V.NUMERO = D.NUMVINC;
 ```
 ]
 

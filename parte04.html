@@ -4,8 +4,8 @@
     <title>Introdução a bases de dados e SQL</title>
     <meta charset="utf-8" />
     <meta name="author" content="Heitor Barros" />
-    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
-    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"a3beeac0bf494976bad39de8b4a450d1","expires":14}</script>
+    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x4ec9755efa44c1fae6f81eb4be3462f","expires":14}</script>
     <script src="libs/himalaya-1.1.0/himalaya.js"></script>
     <script src="libs/js-cookie-3.0.0/js.cookie.js"></script>
     <link href="libs/editable-0.2.6/editable.css" rel="stylesheet" />
@@ -337,19 +337,24 @@ A junção do tipo &lt;strong&gt;FULL JOIN&lt;/strong&gt; (ou &lt;strong&gt;FULL
 ---
 ### Exercícios
 
+1. Modifique o *Exemplo 5* para exibir o nome da função usando a tabela &lt;strong style="color:red;"&gt;ERGON.FUNCOES_EV_&lt;/strong&gt;.
+
+2. Crie uma consulta para recuperar
+
+---
+### Exercícios
+
 
 
 .can-edit[
 
 ```sql
-SELECT DISTINCT
-     D.FUNCAO
-    , C.ORGAO
+SELECT DISTINCT V.MATRIC, D.FUNCAO                 
 FROM 
-    ERGON.DESIGNACOES_EV D
-    FULL JOIN ERGON.CESSOES C
-    ON D.NUMFUNC = C.NUMFUNC
-    AND D.NUMVINC = C.NUMVINC;
+    ERGON.VINCULOS V
+    LEFT OUTER JOIN ERGON.DESIGNACOES_EV  D
+    ON V.NUMFUNC = D.NUMFUNC
+    AND V.NUMERO = D.NUMVINC;
 ```
 ]
 
