@@ -87,8 +87,14 @@ top:1em;right:1em;
 &lt;ol start="7"&gt;
 
 &lt;li&gt; Modifique a consulta do exercício 5 para recuperar apenas registros cujo resultado da soma seja maior do que R$ 1000000.00.
+&lt;/ol&gt;
 
+&lt;ol start="8"&gt;
+&lt;li&gt; A tabela &lt;strong style="color:red;"&gt;ERGON.FATORES_RUBRICA_GERAL&lt;/strong&gt; contém registros de grupos de rubricas usados em determinados cálculos da folha de pagamentos. As rubricas do fator &lt;em&gt;'BASE IR'&lt;/em&gt; , por exemplo, são usadas no cálculo do Imposto de Renda. Use essa tabela em conjunto com a tabela &lt;strong style="color:red;"&gt;ERGON.RUBRICAS&lt;/strong&gt; para encontrar os nomes e códigos das rubricas do fator &lt;em&gt;'CHEFIAS'&lt;/em&gt;. Obs.: Uma rubrica não é considerada no cálculo se fizer parte do fator, mas seu valor da coluna &lt;strong&gt;DTFIM&lt;/strong&gt; for nulo.
+&lt;/ol&gt;
 
+&lt;ol start="9"&gt;
+&lt;li&gt; Crie uma consulta para recuperar a matrícula, o nome e o cargo (código e nome)  dos funcionários lotados no seu setor. Use as tabelas &lt;strong style="color:red;"&gt;ERGON.VINCULOS&lt;/strong&gt;, &lt;strong style="color:red;"&gt;ERGON.FUNCIONARIOS&lt;/strong&gt;, &lt;strong style="color:red;"&gt;ERGON.PROVIMENTOS_EV&lt;/strong&gt;, &lt;strong style="color:red;"&gt;ERGON.CARGOS_&lt;/strong&gt;, &lt;strong style="color:red;"&gt;ERGON.HSETOR_&lt;/strong&gt;.
 &lt;/ol&gt;
 
 ---
@@ -208,6 +214,56 @@ WHERE
 GROUP BY RUBRICA
 HAVING SUM(VALOR) &gt; 1000000
 ORDER BY SUM(VALOR) DESC; 
+```
+
+---
+### SOLUÇÕES
+
+&lt;ol start="8"&gt;
+&lt;li&gt; A tabela &lt;strong style="color:red;"&gt;ERGON.FATORES_RUBRICA_GERAL&lt;/strong&gt; contém registros de grupos de rubricas usados em determinados cálculos da folha de pagamentos. As rubricas do fator &lt;em&gt;'BASE IR'&lt;/em&gt; , por exemplo, são usadas no cálculo do Imposto de Renda. Use essa tabela em conjunto com a tabela &lt;strong style="color:red;"&gt;ERGON.RUBRICAS&lt;/strong&gt; para encontrar os nomes e códigos das rubricas do fator &lt;em&gt;'CHEFIAS'&lt;/em&gt;. Obs.: Uma rubrica não é considerada no cálculo se fizer parte do fator, mas seu valor da coluna &lt;strong&gt;DTFIM&lt;/strong&gt; for nulo.
+&lt;/ol&gt;
+
+
+```sql
+SELECT DISTINCT R.RUBRICA, R.NOME
+FROM
+  ERGON.FATORES_RUBRICA_GERAL FR
+  INNER JOIN ERGON.RUBRICAS R
+  ON FR.RUBRICA = R.RUBRICA
+WHERE
+  FR.FATOR = 'CHEFIAS'
+  AND FR.DTFIM IS NULL;
+```
+
+---
+### SOLUÇÕES
+
+&lt;ol start="9"&gt;
+&lt;li&gt; Crie uma consulta para recuperar a matrícula, o nome e o cargo (código e nome)  dos funcionários lotados no seu setor. Use as tabelas &lt;strong style="color:red;"&gt;ERGON.VINCULOS&lt;/strong&gt;, &lt;strong style="color:red;"&gt;ERGON.FUNCIONARIOS&lt;/strong&gt;, &lt;strong style="color:red;"&gt;ERGON.PROVIMENTOS_EV&lt;/strong&gt;, &lt;strong style="color:red;"&gt;ERGON.CARGOS_&lt;/strong&gt;, &lt;strong style="color:red;"&gt;ERGON.HSETOR_&lt;/strong&gt;.
+&lt;/ol&gt;
+
+
+```sql
+SELECT DISTINCT
+    F.NOME
+    , V.MATRIC
+    , C.CARGO
+    , C.NOME
+    , H.NOMESETOR
+FROM 
+    ERGON.VINCULOS V
+    JOIN ERGON.FUNCIONARIOS F
+    ON V.NUMFUNC = F.NUMERO
+    JOIN ERGON.PROVIMENTOS_EV P
+    ON V.NUMFUNC = P.NUMFUNC
+    AND V.NUMERO = P.NUMVINC
+    JOIN ERGON.CARGOS_ C
+    ON P.CARGO = C.CARGO
+    JOIN ERGON.HSETOR_ H
+    ON H.SETOR = P.SETOR
+WHERE
+    P.DTFIM IS NULL
+    AND H.NOMESETOR LIKE '%PROJEÇÕES%'; -- USE O NOME DO SEU SETOR
 ```
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
