@@ -76,7 +76,7 @@ class: inverse, center, middle
 ```{sql eval = F}
 SELECT MATRIC 
 FROM ERGON.VINCULOS
-WHERE ;
+WHERE EMP_CODIGO = 5;
 ```
 
 </br>
