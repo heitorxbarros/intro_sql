@@ -249,7 +249,7 @@ knitr::include_graphics("images/JOIN3.png")
 
 2. Crie uma consulta para recuperar as rubricas pagas na folha número 55 de setembro e o nome dessas rubricas usando as tabelas <strong style="color:red;">ERGON.FICHAS_FINANCEIRAS</strong> e <strong style="color:red;">ERGON.RUBRICAS</strong>.
 
-3. Crie uma consulta para recuperar os nomes do setores em que você já esteve lotado(a), usando as tabelas <strong style="color:red;">ERGON.PROVIMENTOS_EV</strong> e <strong style="color:red;">ERGON.HSETOR</strong>. Use o seu código **NUMFUNC** ou faça um **JOIN** com a tabela <strong style="color:red;">ERGON.FUNCIONARIOS</strong>.
+3. Crie uma consulta para recuperar os nomes do setores em que você já esteve lotado(a), usando as tabelas <strong style="color:red;">ERGON.PROVIMENTOS_EV</strong> e <strong style="color:red;">ERGON.HSETOR_</strong>. Use o seu código **NUMFUNC** ou faça um **JOIN** com a tabela <strong style="color:red;">ERGON.FUNCIONARIOS</strong>.
 
 ---
 ### JOIN
