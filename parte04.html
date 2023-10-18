@@ -4,8 +4,8 @@
     <title>Introdução a bases de dados e SQL</title>
     <meta charset="utf-8" />
     <meta name="author" content="Heitor Barros" />
-    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
-    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"xed5f15a46ae49678648c0fd70e20fe2","expires":14}</script>
+    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x8d702310ba140d197b5c79dee5ad84f","expires":14}</script>
     <script src="libs/himalaya-1.1.0/himalaya.js"></script>
     <script src="libs/js-cookie-3.0.0/js.cookie.js"></script>
     <link href="libs/editable-0.2.6/editable.css" rel="stylesheet" />
@@ -83,7 +83,7 @@ Definimos **chave primária** como o atributo ou conjunto de atributos em uma ta
 &lt;/br&gt;
 Ex.: Atributo **NUMERO** na tabela &lt;strong style="color:red;"&gt;FUNCIONARIOS&lt;/strong&gt;.
 &lt;/br&gt;&lt;/br&gt;
-Definimos **chave estrangeira** como o atributo ou conjunto de atributos em uma tabela estabelece uma relação entre essa tabela e outra tabela, geralmente por meio da chave primária da outra tabela.
+Definimos **chave estrangeira** como o atributo ou conjunto de atributos em uma tabela que estabelece uma relação entre essa e outra tabela, geralmente por meio da chave primária da outra tabela.
 &lt;/br&gt;
 Ex.: Atributo **NUMFUNC** na tabela &lt;strong style="color:red;"&gt;FICHAS_FINANCEIRAS&lt;/strong&gt;
 ---
@@ -125,8 +125,12 @@ Junções entre tabelas são sempre realizadas aos pares e seguindo ordem especi
 **Exemplo 1:** Recuperando dados de duas tabelas com **NATURAL JOIN**.  
 
 ```sql
-SELECT DISTINCT V.MATRIC, F.VALOR
-FROM ERGON.VINCULOS V NATURAL JOIN ERGON.FICHAS_FINANCEIRAS F
+SELECT DISTINCT 
+  V.MATRIC
+  , F.VALOR
+FROM 
+  ERGON.VINCULOS V 
+  NATURAL JOIN ERGON.FICHAS_FINANCEIRAS F
 WHERE 
     F.MES_ANO_FOLHA = '01/09/2023' 
     AND F.NUM_FOLHA = 1 
@@ -227,7 +231,7 @@ WHERE
 ORDER BY 1;
 ```
 
-As junções ocorrem sempre em pares (resolvendo duas relações de cada vez), respeitando a ordem em que estes pares são especificados. No exemplo, o SGBD realiza a junção das tabelas &lt;strong style="color:red;"&gt;FICHAS_FINANCEIRAS&lt;/strong&gt; e &lt;strong style="color:red;"&gt;FICHAS_FINANCEIRAS&lt;/strong&gt;, gerando uma tabela intermediária (relação temporária). Depois, o SGBD realiza a junção entre a tabela intermediária e a tabela &lt;strong style="color:red;"&gt;FUNCIONARIOS&lt;/strong&gt;.
+As junções ocorrem sempre em pares (resolvendo duas relações de cada vez), respeitando a ordem em que estes pares são especificados. No exemplo, o SGBD realiza a junção das tabelas &lt;strong style="color:red;"&gt;VINCULOS&lt;/strong&gt; e &lt;strong style="color:red;"&gt;FICHAS_FINANCEIRAS&lt;/strong&gt;, gerando uma tabela intermediária (relação temporária). Depois, o SGBD realiza a junção entre a tabela intermediária e a tabela &lt;strong style="color:red;"&gt;FUNCIONARIOS&lt;/strong&gt;.
 
 ---
 ### JOIN
@@ -242,7 +246,7 @@ As junções ocorrem sempre em pares (resolvendo duas relações de cada vez), r
 
 1. Crie uma consulta para recuperar nomes e matrículas dos servidores da empresa 1 (**EMP_CODIGO** = 1) usando as tabelas &lt;strong style="color:red;"&gt;ERGON.FUNCIONARIOS&lt;/strong&gt; e &lt;strong style="color:red;"&gt;ERGON.VINCULOS&lt;/strong&gt;.
 
-2. Crie uma consulta para recuperar as rubricas pagas na folha 55 de setembro e o nome dessas rubricas usando as tabelas &lt;strong style="color:red;"&gt;ERGON.FICHAS_FINANCEIRAS&lt;/strong&gt; e &lt;strong style="color:red;"&gt;ERGON.RUBRICAS&lt;/strong&gt;.
+2. Crie uma consulta para recuperar as rubricas pagas na folha número 55 de setembro e o nome dessas rubricas usando as tabelas &lt;strong style="color:red;"&gt;ERGON.FICHAS_FINANCEIRAS&lt;/strong&gt; e &lt;strong style="color:red;"&gt;ERGON.RUBRICAS&lt;/strong&gt;.
 
 3. Crie uma consulta para recuperar os nomes do setores em que você já esteve lotado(a), usando as tabelas &lt;strong style="color:red;"&gt;ERGON.PROVIMENTOS_EV&lt;/strong&gt; e &lt;strong style="color:red;"&gt;ERGON.HSETOR&lt;/strong&gt;. Use o seu código **NUMFUNC** ou faça um **JOIN** com a tabela &lt;strong style="color:red;"&gt;ERGON.FUNCIONARIOS&lt;/strong&gt;.
 
@@ -336,23 +340,25 @@ A junção do tipo &lt;strong&gt;FULL JOIN&lt;/strong&gt; (ou &lt;strong&gt;FULL
 ]
 ---
 ### JOIN
-**Exemplo 8:** Sintaxe alternativa do **OUTER JOIN**.
+**Exemplo 8:** Sintaxe alternativa do **LEFT OUTER JOIN**.
 
 ```sql
 SELECT DISTINCT V.MATRIC, D.FUNCAO                 
 FROM 
     ERGON.VINCULOS V
-    LEFT OUTER JOIN ERGON.DESIGNACOES_EV  D
-    ON V.NUMFUNC = D.NUMFUNC
-    AND V.NUMERO = D.NUMVINC;
+    , ERGON.DESIGNACOES_EV D
+WHERE 
+  V.NUMFUNC = D.NUMFUNC (+)
+  AND V.NUMERO = D.NUMVINC (+);
 ```
 
+Para criar uma consulta com **OUTER JOIN** usando a *forma implicita* devemos usar o sinal '+' na cláusula **WHERE**. O sinal dentro de parênteses deve aparecer após a coluna da tabela contrária ao tipo de **OUTER JOIN** que estamos realizando. 
 ---
 ### Exercícios
 
 1. Modifique o ***Exemplo 5*** para exibir o nome da função usando a tabela &lt;strong style="color:red;"&gt;ERGON.FUNCOES\_EV_&lt;/strong&gt;.
 
-2. Crie uma consulta para recuperar 
+2. Crie uma consulta para recuperar a matrícula, o cargo e o nome do setor dos servidores lotados no setor 1. Use as tabelas &lt;strong style="color:red;"&gt;ERGON.VINCULOS&lt;/strong&gt;, &lt;strong style="color:red;"&gt;ERGON.PROVIMENTOS\_EV&lt;/strong&gt;, &lt;strong style="color:red;"&gt;ERGON.CARGOS_&lt;/strong&gt; e &lt;strong style="color:red;"&gt;ERGON.HSETOR_&lt;/strong&gt;.
 
 ---
 

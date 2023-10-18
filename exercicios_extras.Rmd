@@ -59,7 +59,6 @@ xaringanExtra::use_logo(
 
 <li> Modifique a consulta do exercício 5 para recuperar apenas registros cujo resultado da soma seja maior do que R$ 1000000.00.
 
-<li> Crie uma consulta 
 
 </ol>
 
