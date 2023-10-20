@@ -68,6 +68,10 @@ xaringanExtra::use_logo(
 <li> Crie uma consulta para recuperar a matrícula, o nome e o cargo (código e nome)  dos funcionários lotados no seu setor. Use as tabelas <strong style="color:red;">ERGON.VINCULOS</strong>, <strong style="color:red;">ERGON.FUNCIONARIOS</strong>, <strong style="color:red;">ERGON.PROVIMENTOS_EV</strong>, <strong style="color:red;">ERGON.CARGOS_</strong>, <strong style="color:red;">ERGON.HSETOR_</strong>.
 </ol>
 
+<ol start="10">
+<li> Crie uma consulta para recuperar 
+</ol>
+
 ---
 class: inverse, center, middle
 

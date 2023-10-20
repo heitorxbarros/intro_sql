@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introdução a bases de dados e SQL</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Heitor Barros" />
+    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"c78639297b34410cb8ab887d94601245","expires":14}</script>
+    <script src="libs/himalaya-1.1.0/himalaya.js"></script>
+    <script src="libs/js-cookie-3.0.0/js.cookie.js"></script>
+    <link href="libs/editable-0.2.6/editable.css" rel="stylesheet" />
+    <script src="libs/editable-0.2.6/editable.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Introdução a bases de dados e SQL
+]
+.subtitle[
+## Parte 5
+]
+.author[
+### Heitor Barros
+]
+.institute[
+### FP/SUBGGC/CGRH/CTAP
+]
+
+---
+
+class: center, middle
+
+
+<div>
+<style type="text/css">.xaringan-extra-logo {
+width: 200px;
+height: 128px;
+z-index: 0;
+background-image: url(logo.png);
+background-size: contain;
+background-repeat: no-repeat;
+position: absolute;
+top:1em;right:1em;
+}
+</style>
+<script>(function () {
+  let tries = 0
+  function addLogo () {
+    if (typeof slideshow === 'undefined') {
+      tries += 1
+      if (tries < 10) {
+        setTimeout(addLogo, 100)
+      }
+    } else {
+      document.querySelectorAll('.remark-slide-content:not(.title-slide):not(.inverse):not(.hide_logo)')
+        .forEach(function (slide) {
+          const logo = document.createElement('div')
+          logo.classList = 'xaringan-extra-logo'
+          logo.href = null
+          slide.appendChild(logo)
+        })
+    }
+  }
+  document.addEventListener('DOMContentLoaded', addLogo)
+})()</script>
+</div>
+# OPERAÇÕES DE CONJUNTO
+---
+## OPERAÇÕES DE CONJUNTO
+
+Operações de conjuntos são operações entre dois ou mais conjuntos de entrada (**SELECT**), ou seja, uma seleção para juntar ou comparar esses conjuntos (tabelas ou campos). Abordaremos a utilização dos operadores de UNIÃO, INTERSEÇÃO e DIFERENÇA na linguagem SQL.
+
+&lt;img src="parte05_files/figure-html/conjuntos1-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+### OPERAÇÕES DE CONJUNTO
+
+**Exemplo 1:** Operador **UNION**.
+
+```sql
+SELECT 
+  NUMFUNC, RUBRICA, VALOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS
+WHERE 
+  MES_ANO_FOLHA = '01/09/2023'
+  AND NUM_FOLHA = 1
+  AND EMP_CODIGO = 1
+UNION
+SELECT 
+  NUMFUNC, RUBRICA, VALOR
+FROM 
+  ERGON.CONS
+WHERE 
+  DTINI = '01/09/2023'
+  AND EMP_CODIGO = 1
+ORDER BY 1;
+```
+
+O operador **UNION** combina o resultado de duas ou mais consultas em um resultado único, retornando todas as linhas pertencentes a todas as consultas envolvidas na execução. Para utilizar o **UNION**, é necessário que a quantidade de colunas e suas ordens sejam identicas e que os tipos de dados sejam compatíveis. 
+
+---
+### OPERAÇÕES DE CONJUNTO
+**Exemplo 1:** Operador **UNION**.
+.pull-left[
+Conforme podemos observar no ***Exemplo 1***, podemos utilizar cláusulas **WHERE** e **ORDER BY** em consultas que contém o operador **UNION**. Para isso, a cláusula **WHERE** deve ser utilizada em cada consulta e a cláusula **ORDER BY**, apenas uma vez, como última linha do comando. Não é necessário que as colunas das consultas utilizadas tenham o mesmo nome, apenas que tenham o mesmo tipo. O SGBD utiliza o nome das colunas da última consulta.
+É possível utilizar o operador **UNION** diversas vezes em uma mesma consulta. 
+&lt;img src="parte05_files/figure-html/conjuntos-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+
+]
+
+.pull-right[
+&lt;img src="images/UNION1.png" width="80%" style="display: block; margin: auto;" /&gt;
+]
+---
+### OPERAÇÕES DE CONJUNTO
+**Exemplo 2:** Operador **UNION ALL**.
+
+```sql
+SELECT 
+  NUMFUNC, RUBRICA, VALOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS
+WHERE 
+  MES_ANO_FOLHA = '01/09/2023'
+  AND NUMFUNC = 2936895
+  AND RUBRICA = 904
+UNION ALL
+SELECT 
+  NUMFUNC, RUBRICA, VALOR
+FROM 
+  ERGON.CONS
+WHERE 
+  DTINI = '01/09/2023'
+  AND NUMFUNC = 2936895
+  AND RUBRICA = 904
+ORDER BY 1;
+```
+
+Por padrão o operador **UNION** remove linhas duplicadas. Se queremos que o resultado exiba todos os registros de todas as consultas usadas, devemos usar o operador **UNION ALL**.
+
+---
+### OPERAÇÕES DE CONJUNTO
+**Exemplo 2:** Operador **UNION ALL**.
+.pull-left[
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="images/UNION2.png" alt="Usando UNION ALL" width="70%" /&gt;
+&lt;p class="caption"&gt;Usando UNION ALL&lt;/p&gt;
+&lt;/div&gt;
+]
+
+.pull-right[
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="images/UNION3.png" alt="Usando UNION" width="70%" /&gt;
+&lt;p class="caption"&gt;Usando UNION&lt;/p&gt;
+&lt;/div&gt;
+]
+---
+### OPERAÇÕES DE CONJUNTO
+**Exemplo 3:** Operador **INTERSECT**.
+
+```sql
+SELECT 
+  NUMFUNC, RUBRICA, VALOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS
+WHERE 
+  MES_ANO_FOLHA = '01/09/2023'
+  AND NUM_FOLHA = 1
+  AND EMP_CODIGO = 1
+INTERSECT 
+SELECT 
+  NUMFUNC, RUBRICA, VALOR
+FROM 
+  ERGON.CONS
+WHERE 
+  DTINI = '01/09/2023'
+  AND EMP_CODIGO = 1
+ORDER BY 1;
+```
+
+O operador **INTERSECT** retorna a interseção de dois ou mais conjuntos de resultados. Assim como na união, cada conjunto de resultados é definido por um comando **SELECT**. Se um registro existe em ambos os conjuntos ele será incluído no resultado final.
+
+
+---
+### OPERAÇÕES DE CONJUNTO
+**Exemplo 3:** Operador **INTERSECT**.
+.pull-left[
+O uso do operador **INTERSECT** é similar ao uso do operador **UNION**. Logo, as colunas selecionadas nas consultas devem ser do mesmo tipo. Também devemos usar cláusulas **WHERE** separadas para cada consulta e uma única cláusula **ORDER BY**. 
+
+&lt;img src="parte05_files/figure-html/conjuntos2-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="images/UNION4.png" width="80%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+### OPERAÇÕES DE CONJUNTO
+**Exemplo 4:** Operador **MINUS**.
+
+```sql
+SELECT 
+  NUMFUNC, RUBRICA, VALOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS
+WHERE 
+  MES_ANO_FOLHA = '01/09/2023'
+  AND NUM_FOLHA = 1
+  AND EMP_CODIGO = 1
+MINUS
+SELECT 
+  NUMFUNC, RUBRICA, VALOR
+FROM 
+  ERGON.CONS
+WHERE 
+  DTINI = '01/09/2023'
+  AND EMP_CODIGO = 1
+ORDER BY 1;
+```
+
+O operador **MINUS** é utilizado para retornar todas as linhas do primeiro conjunto de resultados (definido pelo primeiro **SELECT**) e então remover deste resultado todas as linhas do segundo conjunto de resultados (definido pelo segundo **SELECT**). Em alguns SGBDs, o operador é chamado de **EXCEPT**. 
+
+---
+### OPERAÇÕES DE CONJUNTO
+**Exemplo 4:** Operador **MINUS**.
+.pull-left[
+O operador **MINUS** não é comutativo. Uma operação *A MINUS B* tem um resultado diferente de uma operação *B MINUS A*.
+
+&lt;img src="parte05_files/figure-html/conjuntos3-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+]
+.pull-right[
+&lt;img src="images/UNION5.png" width="80%" style="display: block; margin: auto;" /&gt;
+]
+---
+
+
+### Exercícios
+
+1. A consulta a seguir retorna todos os valores por matrícula da rubrica 999 da folha 1 de setembro de 2023. Adicione uma consulta que retorne os valores da rubrica 996 do mesmo mês usando o operador **UNION**. Organize o resultado final por matrículas.
+
+.can-edit[
+
+```sql
+-- FORMA EXPLICITA
+SELECT DISTINCT
+    V.MATRIC
+    , F.RUBRICA
+    , F.VALOR
+FROM 
+    ERGON.VINCULOS V
+    JOIN ERGON.FICHAS_FINANCEIRAS F
+    ON V.NUMFUNC = F.NUMFUNC
+    AND V.NUMERO = F.NUMVINC
+WHERE
+    F.MES_ANO_FOLHA = '01/09/2023'
+    AND F.NUM_FOLHA = 1
+    AND F.RUBRICA = 999;
+```
+]
+
+---
+
+
+### Exercícios
+
+1. A consulta a seguir retorna todos os valores por matrícula da rubrica 999 da folha 1 de setembro de 2023. Adicione uma consulta que retorne os valores da rubrica 996 do mesmo mês usando o operador **UNION**. Organize o resultado final por matrículas.
+
+.can-edit[
+
+```sql
+-- FORMA IMPLICITA 
+SELECT DISTINCT
+    V.MATRIC
+    , F.RUBRICA
+    , F.VALOR
+FROM 
+    ERGON.VINCULOS V
+    , ERGON.FICHAS_FINANCEIRAS F
+WHERE
+    V.NUMFUNC = F.NUMFUNC
+    AND V.NUMERO = F.NUMVINC
+    AND F.MES_ANO_FOLHA = '01/09/2023'
+    AND F.NUM_FOLHA = 1
+    AND F.RUBRICA = 999;
+```
+]
+
+
+---
+
+
+### Exercícios
+&lt;ol start="2"&gt;
+&lt;li&gt; A consulta abaixo retorna o nome, a matricula e o cargo de professores com matrículas ativas lotados no CIEP Procópio Ferreira (SETOR = 11859). Adicione uma consulta para remover os registros dos Professores Adjuntos de Educação Infantil usando o operador **MINUS**.
+&lt;/ol&gt;
+.can-edit[
+
+```sql
+-- FORMA EXPLICITA
+COL NOME FOR A50 
+SELECT DISTINCT
+  V.MATRIC
+  , F.NOME
+  , C.NOME CARGO
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.FUNCIONARIOS F
+  ON V.NUMFUNC = F.NUMERO
+  JOIN ERGON.PROVIMENTOS_EV P
+  ON V.NUMFUNC = P.NUMFUNC
+  AND V.NUMERO = P.NUMVINC
+  JOIN ERGON.CARGOS_ C
+  ON P.CARGO = C.CARGO
+WHERE
+  V.DTVAC IS NULL -- REMOVE MATRÍCULAS COM DATA DE VACÂNCIA
+  AND P.SETOR = '11859' -- CAMPO COM CÓDIGO DO SETOR
+  AND C.NOME LIKE 'PROF%'; 
+```
+]
+---
+
+
+### Exercícios
+&lt;ol start="2"&gt;
+&lt;li&gt; A consulta abaixo retorna o nome, a matricula e o cargo de professores com matrículas ativas lotados no CIEP Procópio Ferreira (SETOR = 11859). Adicione uma consulta para remover os registros dos Professores Adjuntos de Educação Infantil usando o operador **MINUS**.
+&lt;/ol&gt;
+.can-edit[
+
+```sql
+-- FORMA IMPLÍCITA
+COL NOME FOR A50 
+SELECT DISTINCT
+  V.MATRIC
+  , F.NOME
+  , C.NOME CARGO
+FROM 
+  ERGON.VINCULOS V
+  , ERGON.FUNCIONARIOS F
+  , ERGON.PROVIMENTOS_EV P
+  , ERGON.CARGOS_ C
+WHERE
+  V.NUMFUNC = F.NUMERO
+  AND V.NUMFUNC = P.NUMERO
+  AND V.NUMERO = P.NUMVINC
+  AND P.CARGO = C.CARGO
+  AND V.DTVAC IS NULL -- REMOVE MATRÍCULAS COM DATA DE VACÂNCIA
+  AND P.SETOR = '11859' -- CAMPO COM CÓDIGO DO SETOR
+  AND C.NOME LIKE 'PROF%';
+```
+]
+---
+class: center, middle
+
+# SUBCONSULTAS
+
+---
+### SUBCONSULTAS
+
+Uma subconsulta (subquery) consiste em um comando **SELECT** que existe dentro de um outro comando SQL. O comando externo é chamado de comando “pai” da subconsulta.
+O uso mais comum para as subconsultas é dentro de outra instrução **SELECT**, com o objetivo de retornar resultados que, de alguma forma, serão utilizados pela consulta pai. No entanto, as subqueries também são aceitas em comandos **INSERT**, **UPDATE**, **DELETE** e no **CREATE TABLE**. No uso de subconsultas na cláusula **SELECT**, o chamado *“SELECT dentro de SELECT”*, as subconsultas podem ser de diferentes tipos:
+
+&lt;ul style="font-size:18px"&gt;
+&lt;li&gt; &lt;strong&gt;Subconsulta de única linha (single-row):&lt;/strong&gt; retornará sempre uma única linha em seu resultado (independente do número de colunas).
+&lt;li&gt; &lt;strong&gt;Subconsulta de múltiplas linhas (multiple-row):&lt;/strong&gt; pode retornar zero, uma ou mais linhas em seu resultado (independente do número de colunas). Não é garantido que muitas linhas serão retornadas, mas como isto pode acontecer, a consulta pai deverá estar estruturada para receber muitas linhas. 
+&lt;li&gt; &lt;strong&gt;Subconsulta de única coluna (single-column):&lt;/strong&gt; retornará sempre uma única coluna no resultado (independente do número de linhas).
+&lt;li&gt; &lt;strong&gt;Subconsulta de múltiplas colunas (multiple-column):&lt;/strong&gt; pode retornar uma ou mais colunas em seu resultado (independente do número de linhas).
+&lt;li&gt; &lt;strong&gt;Subconsulta escalar:&lt;/strong&gt; retornará sempre um resultado contendo uma linha e uma única coluna (ou seja, um único valor). Desta forma, uma subconsulta escalar corresponde a uma subconsulta single-row, single-column.
+&lt;li&gt; &lt;strong&gt;Subconsulta correlacionada (correlated subquery):&lt;/strong&gt; este tipo de subconsulta contém uma referência para uma ou mais colunas da tabela pai dentro de sua própria definição. Normalmente, uma condição especificada no &lt;strong&gt;WHERE&lt;/strong&gt; da subconsulta envolverá a comparação de uma coluna da consulta pai com uma coluna da subconsulta, permitindo assim, a efetivação de associações entre uma linha da
+tabela pai com uma linha gerada pela subconsulta. 
+&lt;/ul&gt;
+
+---
+### SUBCONSULTAS
+
+**Exemplo 1:** Subconsultas escalares na cláusula **WHERE**.
+&lt;/br&gt;&lt;/br&gt;
+Suponha que queiramos obter uma lista de servidores que tiveram um salário bruto maior do que a média salarial da prefeitura em um determinado mês. Para isso, poderíamos realizar duas consultas separadas para chegar ao resultado procurado.
+
+
+```sql
+-- Consulta 1: retorna a média salarial
+SELECT 
+  AVG(F.VALOR) MEDIA
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE
+  V.EMP_CODIGO = 1
+  AND F.MES_ANO_FOLHA = '01/09/2023'
+  AND F.RUBRICA = 996; 
+```
+
+---
+### SUBCONSULTAS
+
+**Exemplo 1:** Subconsultas escalares na cláusula **WHERE**.
+&lt;/br&gt;&lt;/br&gt;
+Suponha que queiramos obter uma lista de servidores que tiveram um salário bruto maior do que a média salarial da prefeitura em um determinado mês. Para isso, poderíamos realizar duas consultas separadas para chegar ao resultado procurado.
+
+
+```sql
+-- Consulta 2: retorna os servidores com salário bruto maior do que a média salarial
+SELECT 
+  V.MATRIC
+  , F.VALOR
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE
+  V.EMP_CODIGO = 1
+  AND F.MES_ANO_FOLHA = '01/09/2023'
+  AND F.RUBRICA = 996
+  AND F.VALOR &gt; 6874.67
+ORDER BY 2; 
+```
+
+---
+### SUBCONSULTAS
+
+**Exemplo 1:** Subconsultas escalares na cláusula **WHERE**.
+&lt;/br&gt;&lt;/br&gt;
+Logo, a primeira consulta retornou o valor da média salarial da prefeitura em setembro, que foi de 6874,67, um valor escalar. Em seguida, elaboramos um segundo **SELECT** onde esse valor escalar foi utilizado na cláusula **WHERE**, mais especificamente na condição F.VALOR &gt; 6874.67. 
+&lt;/br&gt;
+Entretanto, a linguagem SQL nos permite combinar esses dois **SELECTs** em um único comando, bastando para isso transformar o primeiro **SELECT** em uma subconsulta que retornará um valor escalar para o primeiro **SELECT**.
+
+---
+### SUBCONSULTAS
+
+**Exemplo 1:** Subconsultas escalares na cláusula **WHERE**.
+.small-code[
+
+```sql
+SELECT 
+  V.MATRIC 
+  , F.VALOR
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE
+  V.EMP_CODIGO = 1
+  AND F.MES_ANO_FOLHA = '01/09/2023'
+  AND F.RUBRICA = 996
+  AND F.VALOR &gt; (
+*   SELECT
+*     AVG(F.VALOR) MEDIA
+*   FROM
+*     ERGON.VINCULOS V
+*     JOIN ERGON.FICHAS_FINANCEIRAS F
+*     ON V.NUMFUNC = F.NUMFUNC
+*     AND V.NUMERO = F.NUMVINC
+*   WHERE
+*     V.EMP_CODIGO = 1
+*     AND F.MES_ANO_FOLHA = '01/09/2023'
+*     AND F.RUBRICA = 996
+  )
+ORDER BY 2; 
+```
+]
+---
+### SUBCONSULTAS
+
+**Exemplo 1:** Subconsultas escalares na cláusula **WHERE**.
+&lt;/br&gt;&lt;/br&gt;
+A consulta interna (subconsulta) é executada primeiro pelo SGBD (por isso mesmo, ela é está especificada entre parênteses). O resultado de sua execução corresponde a uma relação contendo uma linha e uma coluna (valor escalar), que armazena o valor
+médio. Tendo sido determinado, este valor médio é então utilizado no **WHERE** da consulta externa. 
+&lt;/br&gt;&lt;/br&gt;
+O valor retornado pela subconsulta foi utilizado em um teste do tipo “maior que” (operador **“ &gt; ”**). Este tipo de teste pode ser utilizado apenas para avaliar um valor escalar. Caso a subquery não fosse do tipo escalar (retornasse mais de uma linha ou
+mais de uma coluna), o teste com **“ &gt; ”** ficaria sem sentido e ocorreria um erro de execução do comando SQL. Apenas as subqueries do tipo escalar podem ser utilizadas em testes que envolvam os operadores **=, &lt;&gt;, &lt;, &gt;, &gt;= e &lt;=**. 
+&lt;/br&gt;&lt;/br&gt;
+As subconsultas podem ser utilizadas normalmente em qualquer tipo de **SELECT**, incluindo os que possuem **JOIN**, **GROUP BY** e funções de grupo.
+
+---
+### SUBCONSULTAS
+
+**Exemplo 2:** Subconsultas escalares na cláusula **WHERE**.
+
+.small-code[
+
+```sql
+-- Maior salário bruto em setembro
+SELECT 
+  V.MATRIC , F.VALOR
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE
+  V.EMP_CODIGO = 1
+  AND F.MES_ANO_FOLHA = '01/09/2023'
+  AND F.RUBRICA = 996
+  AND F.VALOR = (
+*   SELECT MAX(F.VALOR) MEDIA
+*   FROM ERGON.VINCULOS V JOIN ERGON.FICHAS_FINANCEIRAS F
+*     ON V.NUMFUNC = F.NUMFUNC
+*     AND V.NUMERO = F.NUMVINC
+*   WHERE
+*     V.EMP_CODIGO = 1
+*     AND F.MES_ANO_FOLHA = '01/09/2023'
+*     AND F.RUBRICA = 996)
+ORDER BY 2; 
+```
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

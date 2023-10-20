@@ -1,0 +1,682 @@
+---
+title: "Introdução a bases de dados e SQL"
+subtitle: "Parte 5"
+author: "Heitor Barros"
+institute: "FP/SUBGGC/CGRH/CTAP"
+date: ""
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    css: xaringan-themer.css
+---
+class: center, middle
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_accent(
+  base_color = "#004b80", 
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Montserrat", "300", "300i"),
+  code_font_google   = google_font("Fira Mono"),
+  extra_css = list(
+  ".small-code .remark-code" = list("font-size" = "70%")
+)
+)
+```
+
+```{r xaringan-logo, echo=FALSE}
+xaringanExtra::use_logo(
+  image_url = "logo.png",
+  position = xaringanExtra::css_position(top = "1em", right = "1em"),
+  width = "200px"
+)
+```
+# OPERAÇÕES DE CONJUNTO
+---
+## OPERAÇÕES DE CONJUNTO
+
+Operações de conjuntos são operações entre dois ou mais conjuntos de entrada (**SELECT**), ou seja, uma seleção para juntar ou comparar esses conjuntos (tabelas ou campos). Abordaremos a utilização dos operadores de UNIÃO, INTERSEÇÃO e DIFERENÇA na linguagem SQL.
+
+```{r conjuntos1, echo=FALSE, message=F, warning=F,out.width="50%", fig.align='center', dpi=600}
+library(ggplot2)
+library(patchwork)
+library(ggforce)
+library(dplyr)
+library(latex2exp)
+
+y=seq(-.75,.75, by=.001) 
+x=sqrt(.75^2-y^2)
+x2=x+1
+y2=y+1
+x3=-x+2
+df=data.frame(x2,y2) |> 
+    filter(y2<1+sqrt(.75^2-.5^2) & y2 > 1-sqrt(.75^2-.5^2)) |> 
+    rbind(data.frame(x2=x3,y2=y2) |> 
+    filter(y2<1+sqrt(.75^2-.5^2) & y2 > 1-sqrt(.75^2-.5^2)))
+
+
+
+p1 <- ggplot() +
+      geom_circle(aes(x0 = c(1),y0 = c(1), r = rep(.75,1)), size = 2, fill = "darkgreen") +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
+      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A$",bold = T, output="character"),
+               size = 8, parse=TRUE, color = "darkred") +
+      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
+      theme_void() + 
+      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
+            panel.background = element_rect(fill = "#fff2d7", size = 0.5, linetype = "solid"),
+            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
+
+p2 <- ggplot() +
+      geom_circle(aes(x0 = c(1),y0 = c(1), r = rep(.75,1)), size = 2, fill = "#fff2d7") +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
+      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A'$",bold = T, output="character"),
+               size = 8, parse=TRUE, color = "darkred") +
+      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
+      theme_void() + 
+      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
+            panel.background = element_rect(fill = "darkgreen", size = 0.5, linetype = "solid"),
+            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
+
+p3 <- ggplot() +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, fill = "darkgreen") +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
+      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A\\cup B$",bold = T, output="character"),
+               size = 8, parse=TRUE, color = "darkred") +
+      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
+      theme_void() + 
+      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
+            panel.background = element_rect(fill = "#fff2d7", size = 0.5, linetype = "solid"),
+            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
+
+p4 <- ggplot() +
+      geom_polygon(data = df, aes(x=x2,y=y2), fill = "darkgreen") +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
+      # geom_point(aes(x= 1.5,  y = 1+sqrt(.75^2-.5^2)), color ="red") +
+      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
+      # geom_text(aes(x = 0.25, y = 2, label = "u"), size = 10) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A\\cap B$",bold = T, output="character"), 
+               size = 8, parse=TRUE, color = "darkred") +
+      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
+      theme_void() + 
+      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
+            panel.background = element_rect(fill = "#fff2d7", size = 0.5, linetype = "solid"),
+            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
+
+p5 <- ggplot() +
+      geom_circle(aes(x0 = c(1),y0 = c(1), r = rep(.75,1)), size = 2, fill = "darkgreen") +
+      geom_circle(aes(x0 = c(2),y0 = c(1), r = rep(.75,1)), size = 2, fill = "#fff2d7") +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
+      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A - B$",bold = T, output="character"),
+               size = 8, parse=TRUE, color = "darkred") +
+      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
+      theme_void() + 
+      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
+            panel.background = element_rect(fill = "#fff2d7", size = 0.5, linetype = "solid"),
+            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
+
+p6 <- ggplot() +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, fill = "darkgreen") +
+      geom_polygon(data = df, aes(x=x2,y=y2), fill = "#fff2d7") +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
+      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A\\cup B - A\\cap B$",bold = T, output="character"),
+               size = 4, parse=TRUE, color = "darkred") +
+      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
+      theme_void() + 
+      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
+            panel.background = element_rect(fill = "#fff2d7", size = 0.5, linetype = "solid"),
+            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
+
+
+p1+p2+p3+p4+p5+p6+plot_layout(ncol = 3, guides = 'collect',)
+```
+
+---
+### OPERAÇÕES DE CONJUNTO
+
+**Exemplo 1:** Operador **UNION**.
+```{sql eval = F}
+SELECT 
+  NUMFUNC, RUBRICA, VALOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS
+WHERE 
+  MES_ANO_FOLHA = '01/09/2023'
+  AND NUM_FOLHA = 1
+  AND EMP_CODIGO = 1
+UNION
+SELECT 
+  NUMFUNC, RUBRICA, VALOR
+FROM 
+  ERGON.CONS
+WHERE 
+  DTINI = '01/09/2023'
+  AND EMP_CODIGO = 1
+ORDER BY 1;
+```
+
+O operador **UNION** combina o resultado de duas ou mais consultas em um resultado único, retornando todas as linhas pertencentes a todas as consultas envolvidas na execução. Para utilizar o **UNION**, é necessário que a quantidade de colunas e suas ordens sejam identicas e que os tipos de dados sejam compatíveis. 
+
+---
+### OPERAÇÕES DE CONJUNTO
+**Exemplo 1:** Operador **UNION**.
+.pull-left[
+Conforme podemos observar no ***Exemplo 1***, podemos utilizar cláusulas **WHERE** e **ORDER BY** em consultas que contém o operador **UNION**. Para isso, a cláusula **WHERE** deve ser utilizada em cada consulta e a cláusula **ORDER BY**, apenas uma vez, como última linha do comando. Não é necessário que as colunas das consultas utilizadas tenham o mesmo nome, apenas que tenham o mesmo tipo. O SGBD utiliza o nome das colunas da última consulta.
+É possível utilizar o operador **UNION** diversas vezes em uma mesma consulta. 
+```{r conjuntos, echo=FALSE, message=F, warning=F,out.width="50%", fig.align='center', dpi=600}
+library(ggplot2)
+library(patchwork)
+library(ggforce)
+library(dplyr)
+library(latex2exp)
+
+y=seq(-.75,.75, by=.001) 
+x=sqrt(.75^2-y^2)
+x2=x+1
+y2=y+1
+x3=-x+2
+df=data.frame(x2,y2) |> 
+    filter(y2<1+sqrt(.75^2-.5^2) & y2 > 1-sqrt(.75^2-.5^2)) |> 
+    rbind(data.frame(x2=x3,y2=y2) |> 
+    filter(y2<1+sqrt(.75^2-.5^2) & y2 > 1-sqrt(.75^2-.5^2)))
+
+p3 <- ggplot() +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, fill = "darkgreen") +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
+      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A\\cup B$",bold = T, output="character"),
+               size = 8, parse=TRUE, color = "darkred") +
+      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
+      theme_void() + 
+      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
+            panel.background = element_rect(fill = "#fff2d7", size = 0.5, linetype = "solid"),
+            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
+
+p3
+```
+
+
+]
+
+.pull-right[
+```{r echo=FALSE, out.width="80%", fig.align='center', dpi=600}
+knitr::include_graphics("images/UNION1.png")
+```
+]
+---
+### OPERAÇÕES DE CONJUNTO
+**Exemplo 2:** Operador **UNION ALL**.
+```{sql eval = F}
+SELECT 
+  NUMFUNC, RUBRICA, VALOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS
+WHERE 
+  MES_ANO_FOLHA = '01/09/2023'
+  AND NUMFUNC = 2936895
+  AND RUBRICA = 904
+UNION ALL
+SELECT 
+  NUMFUNC, RUBRICA, VALOR
+FROM 
+  ERGON.CONS
+WHERE 
+  DTINI = '01/09/2023'
+  AND NUMFUNC = 2936895
+  AND RUBRICA = 904
+ORDER BY 1;
+```
+
+Por padrão o operador **UNION** remove linhas duplicadas. Se queremos que o resultado exiba todos os registros de todas as consultas usadas, devemos usar o operador **UNION ALL**.
+
+---
+### OPERAÇÕES DE CONJUNTO
+**Exemplo 2:** Operador **UNION ALL**.
+.pull-left[
+```{r echo=FALSE, out.width="70%", fig.align='center', dpi=600, fig.cap='Usando UNION ALL'}
+knitr::include_graphics("images/UNION2.png")
+```
+]
+
+.pull-right[
+```{r echo=FALSE, out.width="70%", fig.align='center', dpi=600, fig.cap='Usando UNION'}
+knitr::include_graphics("images/UNION3.png")
+```
+]
+---
+### OPERAÇÕES DE CONJUNTO
+**Exemplo 3:** Operador **INTERSECT**.
+```{sql eval = F}
+SELECT 
+  NUMFUNC, RUBRICA, VALOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS
+WHERE 
+  MES_ANO_FOLHA = '01/09/2023'
+  AND NUM_FOLHA = 1
+  AND EMP_CODIGO = 1
+INTERSECT 
+SELECT 
+  NUMFUNC, RUBRICA, VALOR
+FROM 
+  ERGON.CONS
+WHERE 
+  DTINI = '01/09/2023'
+  AND EMP_CODIGO = 1
+ORDER BY 1;
+```
+
+O operador **INTERSECT** retorna a interseção de dois ou mais conjuntos de resultados. Assim como na união, cada conjunto de resultados é definido por um comando **SELECT**. Se um registro existe em ambos os conjuntos ele será incluído no resultado final.
+
+
+---
+### OPERAÇÕES DE CONJUNTO
+**Exemplo 3:** Operador **INTERSECT**.
+.pull-left[
+O uso do operador **INTERSECT** é similar ao uso do operador **UNION**. Logo, as colunas selecionadas nas consultas devem ser do mesmo tipo. Também devemos usar cláusulas **WHERE** separadas para cada consulta e uma única cláusula **ORDER BY**. 
+
+```{r conjuntos2, echo=FALSE, message=F, warning=F,out.width="50%", fig.align='center', dpi=600}
+library(ggplot2)
+library(patchwork)
+library(ggforce)
+library(dplyr)
+library(latex2exp)
+
+y=seq(-.75,.75, by=.001) 
+x=sqrt(.75^2-y^2)
+x2=x+1
+y2=y+1
+x3=-x+2
+df=data.frame(x2,y2) |> 
+    filter(y2<1+sqrt(.75^2-.5^2) & y2 > 1-sqrt(.75^2-.5^2)) |> 
+    rbind(data.frame(x2=x3,y2=y2) |> 
+    filter(y2<1+sqrt(.75^2-.5^2) & y2 > 1-sqrt(.75^2-.5^2)))
+
+p4 <- ggplot() +
+      geom_polygon(data = df, aes(x=x2,y=y2), fill = "darkgreen") +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
+      # geom_point(aes(x= 1.5,  y = 1+sqrt(.75^2-.5^2)), color ="red") +
+      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
+      # geom_text(aes(x = 0.25, y = 2, label = "u"), size = 10) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A\\cap B$",bold = T, output="character"), 
+               size = 8, parse=TRUE, color = "darkred") +
+      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
+      theme_void() + 
+      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
+            panel.background = element_rect(fill = "#fff2d7", size = 0.5, linetype = "solid"),
+            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
+
+p4
+```
+]
+
+.pull-right[
+```{r echo=FALSE, out.width="80%", fig.align='center', dpi=600}
+knitr::include_graphics("images/UNION4.png")
+```
+]
+
+---
+### OPERAÇÕES DE CONJUNTO
+**Exemplo 4:** Operador **MINUS**.
+```{sql eval = F}
+SELECT 
+  NUMFUNC, RUBRICA, VALOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS
+WHERE 
+  MES_ANO_FOLHA = '01/09/2023'
+  AND NUM_FOLHA = 1
+  AND EMP_CODIGO = 1
+MINUS
+SELECT 
+  NUMFUNC, RUBRICA, VALOR
+FROM 
+  ERGON.CONS
+WHERE 
+  DTINI = '01/09/2023'
+  AND EMP_CODIGO = 1
+ORDER BY 1;
+```
+
+O operador **MINUS** é utilizado para retornar todas as linhas do primeiro conjunto de resultados (definido pelo primeiro **SELECT**) e então remover deste resultado todas as linhas do segundo conjunto de resultados (definido pelo segundo **SELECT**). Em alguns SGBDs, o operador é chamado de **EXCEPT**. 
+
+---
+### OPERAÇÕES DE CONJUNTO
+**Exemplo 4:** Operador **MINUS**.
+.pull-left[
+O operador **MINUS** não é comutativo. Uma operação *A MINUS B* tem um resultado diferente de uma operação *B MINUS A*.
+
+```{r conjuntos3, echo=FALSE, message=F, warning=F,out.width="50%", fig.align='center', dpi=600}
+library(ggplot2)
+library(patchwork)
+library(ggforce)
+library(dplyr)
+library(latex2exp)
+
+y=seq(-.75,.75, by=.001) 
+x=sqrt(.75^2-y^2)
+x2=x+1
+y2=y+1
+x3=-x+2
+df=data.frame(x2,y2) |> 
+    filter(y2<1+sqrt(.75^2-.5^2) & y2 > 1-sqrt(.75^2-.5^2)) |> 
+    rbind(data.frame(x2=x3,y2=y2) |> 
+    filter(y2<1+sqrt(.75^2-.5^2) & y2 > 1-sqrt(.75^2-.5^2)))
+
+p5 <- ggplot() +
+      geom_circle(aes(x0 = c(1),y0 = c(1), r = rep(.75,1)), size = 2, fill = "darkgreen") +
+      geom_circle(aes(x0 = c(2),y0 = c(1), r = rep(.75,1)), size = 2, fill = "#fff2d7") +
+      geom_circle(aes(x0 = c(1,2),y0 = c(1,1), r = rep(.75,2)), size = 2, n = 1000) +
+      geom_text(aes(x = c(.5,2.5), y = rep(.15,2), label = c("A","B")), size = 6) +
+      geom_text(aes(x = 0.25, y = 2, label = "U"), size = 6) +
+      annotate("text",x = 1.5, y = 2, label = TeX("$A - B$",bold = T, output="character"),
+               size = 8, parse=TRUE, color = "darkred") +
+      coord_equal(xlim = c(0,3), ylim = c(0,2.25)) +
+      theme_void() + 
+      theme(panel.border = element_rect(colour = "black", fill = NA, linewidth = 2),
+            panel.background = element_rect(fill = "#fff2d7", size = 0.5, linetype = "solid"),
+            plot.margin = unit(c(.25,.25,.25,.25), "cm"))
+
+p5
+```
+
+]
+.pull-right[
+```{r echo=FALSE, out.width="80%", fig.align='center', dpi=600}
+knitr::include_graphics("images/UNION5.png")
+```
+]
+---
+```{r xaringan-editable, echo=FALSE}
+xaringanExtra::use_editable()
+```
+
+### Exercícios
+
+1. A consulta a seguir retorna todos os valores por matrícula da rubrica 999 da folha 1 de setembro de 2023. Adicione uma consulta que retorne os valores da rubrica 996 do mesmo mês usando o operador **UNION**. Organize o resultado final por matrículas.
+
+.can-edit[
+```{sql eval = F}
+-- FORMA EXPLICITA
+SELECT DISTINCT
+    V.MATRIC
+    , F.RUBRICA
+    , F.VALOR
+FROM 
+    ERGON.VINCULOS V
+    JOIN ERGON.FICHAS_FINANCEIRAS F
+    ON V.NUMFUNC = F.NUMFUNC
+    AND V.NUMERO = F.NUMVINC
+WHERE
+    F.MES_ANO_FOLHA = '01/09/2023'
+    AND F.NUM_FOLHA = 1
+    AND F.RUBRICA = 999;
+```
+]
+
+---
+```{r xaringan-editable0, echo=FALSE}
+xaringanExtra::use_editable()
+```
+
+### Exercícios
+
+1. A consulta a seguir retorna todos os valores por matrícula da rubrica 999 da folha 1 de setembro de 2023. Adicione uma consulta que retorne os valores da rubrica 996 do mesmo mês usando o operador **UNION**. Organize o resultado final por matrículas.
+
+.can-edit[
+```{sql eval = F}
+-- FORMA IMPLICITA 
+SELECT DISTINCT
+    V.MATRIC
+    , F.RUBRICA
+    , F.VALOR
+FROM 
+    ERGON.VINCULOS V
+    , ERGON.FICHAS_FINANCEIRAS F
+WHERE
+    V.NUMFUNC = F.NUMFUNC
+    AND V.NUMERO = F.NUMVINC
+    AND F.MES_ANO_FOLHA = '01/09/2023'
+    AND F.NUM_FOLHA = 1
+    AND F.RUBRICA = 999;
+```
+]
+
+
+---
+```{r xaringan-editable2, echo=FALSE}
+xaringanExtra::use_editable()
+```
+
+### Exercícios
+<ol start="2">
+<li> A consulta abaixo retorna o nome, a matricula e o cargo de professores com matrículas ativas lotados no CIEP Procópio Ferreira (SETOR = 11859). Adicione uma consulta para remover os registros dos Professores Adjuntos de Educação Infantil usando o operador **MINUS**.
+</ol>
+.can-edit[
+```{sql eval = F}
+-- FORMA EXPLICITA
+COL NOME FOR A50 
+SELECT DISTINCT
+  V.MATRIC
+  , F.NOME
+  , C.NOME CARGO
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.FUNCIONARIOS F
+  ON V.NUMFUNC = F.NUMERO
+  JOIN ERGON.PROVIMENTOS_EV P
+  ON V.NUMFUNC = P.NUMFUNC
+  AND V.NUMERO = P.NUMVINC
+  JOIN ERGON.CARGOS_ C
+  ON P.CARGO = C.CARGO
+WHERE
+  V.DTVAC IS NULL -- REMOVE MATRÍCULAS COM DATA DE VACÂNCIA
+  AND P.SETOR = '11859' -- CAMPO COM CÓDIGO DO SETOR
+  AND C.NOME LIKE 'PROF%'; 
+```
+]
+---
+```{r xaringan-editable3, echo=FALSE}
+xaringanExtra::use_editable()
+```
+
+### Exercícios
+<ol start="2">
+<li> A consulta abaixo retorna o nome, a matricula e o cargo de professores com matrículas ativas lotados no CIEP Procópio Ferreira (SETOR = 11859). Adicione uma consulta para remover os registros dos Professores Adjuntos de Educação Infantil usando o operador **MINUS**.
+</ol>
+.can-edit[
+```{sql eval = F}
+-- FORMA IMPLÍCITA
+COL NOME FOR A50 
+SELECT DISTINCT
+  V.MATRIC
+  , F.NOME
+  , C.NOME CARGO
+FROM 
+  ERGON.VINCULOS V
+  , ERGON.FUNCIONARIOS F
+  , ERGON.PROVIMENTOS_EV P
+  , ERGON.CARGOS_ C
+WHERE
+  V.NUMFUNC = F.NUMERO
+  AND V.NUMFUNC = P.NUMERO
+  AND V.NUMERO = P.NUMVINC
+  AND P.CARGO = C.CARGO
+  AND V.DTVAC IS NULL -- REMOVE MATRÍCULAS COM DATA DE VACÂNCIA
+  AND P.SETOR = '11859' -- CAMPO COM CÓDIGO DO SETOR
+  AND C.NOME LIKE 'PROF%';
+```
+]
+---
+class: center, middle
+
+# SUBCONSULTAS
+
+---
+### SUBCONSULTAS
+
+Uma subconsulta (subquery) consiste em um comando **SELECT** que existe dentro de um outro comando SQL. O comando externo é chamado de comando “pai” da subconsulta.
+O uso mais comum para as subconsultas é dentro de outra instrução **SELECT**, com o objetivo de retornar resultados que, de alguma forma, serão utilizados pela consulta pai. No entanto, as subqueries também são aceitas em comandos **INSERT**, **UPDATE**, **DELETE** e no **CREATE TABLE**. No uso de subconsultas na cláusula **SELECT**, o chamado *“SELECT dentro de SELECT”*, as subconsultas podem ser de diferentes tipos:
+
+<ul style="font-size:18px">
+<li> <strong>Subconsulta de única linha (single-row):</strong> retornará sempre uma única linha em seu resultado (independente do número de colunas).
+<li> <strong>Subconsulta de múltiplas linhas (multiple-row):</strong> pode retornar zero, uma ou mais linhas em seu resultado (independente do número de colunas). Não é garantido que muitas linhas serão retornadas, mas como isto pode acontecer, a consulta pai deverá estar estruturada para receber muitas linhas. 
+<li> <strong>Subconsulta de única coluna (single-column):</strong> retornará sempre uma única coluna no resultado (independente do número de linhas).
+<li> <strong>Subconsulta de múltiplas colunas (multiple-column):</strong> pode retornar uma ou mais colunas em seu resultado (independente do número de linhas).
+<li> <strong>Subconsulta escalar:</strong> retornará sempre um resultado contendo uma linha e uma única coluna (ou seja, um único valor). Desta forma, uma subconsulta escalar corresponde a uma subconsulta single-row, single-column.
+<li> <strong>Subconsulta correlacionada (correlated subquery):</strong> este tipo de subconsulta contém uma referência para uma ou mais colunas da tabela pai dentro de sua própria definição. Normalmente, uma condição especificada no <strong>WHERE</strong> da subconsulta envolverá a comparação de uma coluna da consulta pai com uma coluna da subconsulta, permitindo assim, a efetivação de associações entre uma linha da
+tabela pai com uma linha gerada pela subconsulta. 
+</ul>
+
+---
+### SUBCONSULTAS
+
+**Exemplo 1:** Subconsultas escalares na cláusula **WHERE**.
+</br></br>
+Suponha que queiramos obter uma lista de servidores que tiveram um salário bruto maior do que a média salarial da prefeitura em um determinado mês. Para isso, poderíamos realizar duas consultas separadas para chegar ao resultado procurado.
+
+```{sql eval = F}
+-- Consulta 1: retorna a média salarial
+SELECT 
+  AVG(F.VALOR) MEDIA
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE
+  V.EMP_CODIGO = 1
+  AND F.MES_ANO_FOLHA = '01/09/2023'
+  AND F.RUBRICA = 996; 
+```
+
+---
+### SUBCONSULTAS
+
+**Exemplo 1:** Subconsultas escalares na cláusula **WHERE**.
+</br></br>
+Suponha que queiramos obter uma lista de servidores que tiveram um salário bruto maior do que a média salarial da prefeitura em um determinado mês. Para isso, poderíamos realizar duas consultas separadas para chegar ao resultado procurado.
+
+```{sql eval = F}
+-- Consulta 2: retorna os servidores com salário bruto maior do que a média salarial
+SELECT 
+  V.MATRIC
+  , F.VALOR
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE
+  V.EMP_CODIGO = 1
+  AND F.MES_ANO_FOLHA = '01/09/2023'
+  AND F.RUBRICA = 996
+  AND F.VALOR > 6874.67
+ORDER BY 2; 
+```
+
+---
+### SUBCONSULTAS
+
+**Exemplo 1:** Subconsultas escalares na cláusula **WHERE**.
+</br></br>
+Logo, a primeira consulta retornou o valor da média salarial da prefeitura em setembro, que foi de 6874,67, um valor escalar. Em seguida, elaboramos um segundo **SELECT** onde esse valor escalar foi utilizado na cláusula **WHERE**, mais especificamente na condição F.VALOR > 6874.67. 
+</br>
+Entretanto, a linguagem SQL nos permite combinar esses dois **SELECTs** em um único comando, bastando para isso transformar o primeiro **SELECT** em uma subconsulta que retornará um valor escalar para o primeiro **SELECT**.
+
+---
+### SUBCONSULTAS
+
+**Exemplo 1:** Subconsultas escalares na cláusula **WHERE**.
+.small-code[
+```{sql eval = F}
+SELECT 
+  V.MATRIC 
+  , F.VALOR
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE
+  V.EMP_CODIGO = 1
+  AND F.MES_ANO_FOLHA = '01/09/2023'
+  AND F.RUBRICA = 996
+  AND F.VALOR > (
+    SELECT #<<
+      AVG(F.VALOR) MEDIA #<<
+    FROM #<<
+      ERGON.VINCULOS V #<<
+      JOIN ERGON.FICHAS_FINANCEIRAS F #<<
+      ON V.NUMFUNC = F.NUMFUNC #<<
+      AND V.NUMERO = F.NUMVINC #<<
+    WHERE #<<
+      V.EMP_CODIGO = 1 #<<
+      AND F.MES_ANO_FOLHA = '01/09/2023' #<<
+      AND F.RUBRICA = 996 #<<
+  )
+ORDER BY 2; 
+```
+]
+---
+### SUBCONSULTAS
+
+**Exemplo 1:** Subconsultas escalares na cláusula **WHERE**.
+</br></br>
+A consulta interna (subconsulta) é executada primeiro pelo SGBD (por isso mesmo, ela é está especificada entre parênteses). O resultado de sua execução corresponde a uma relação contendo uma linha e uma coluna (valor escalar), que armazena o valor
+médio. Tendo sido determinado, este valor médio é então utilizado no **WHERE** da consulta externa. 
+</br></br>
+O valor retornado pela subconsulta foi utilizado em um teste do tipo “maior que” (operador **“ > ”**). Este tipo de teste pode ser utilizado apenas para avaliar um valor escalar. Caso a subquery não fosse do tipo escalar (retornasse mais de uma linha ou
+mais de uma coluna), o teste com **“ > ”** ficaria sem sentido e ocorreria um erro de execução do comando SQL. Apenas as subqueries do tipo escalar podem ser utilizadas em testes que envolvam os operadores **=, <>, <, >, >= e <=**. 
+</br></br>
+As subconsultas podem ser utilizadas normalmente em qualquer tipo de **SELECT**, incluindo os que possuem **JOIN**, **GROUP BY** e funções de grupo.
+
+---
+### SUBCONSULTAS
+
+**Exemplo 2:** Subconsultas escalares na cláusula **WHERE**.
+
+.small-code[
+```{sql eval = F}
+-- Maior salário bruto em setembro
+SELECT 
+  V.MATRIC , F.VALOR
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE
+  V.EMP_CODIGO = 1
+  AND F.MES_ANO_FOLHA = '01/09/2023'
+  AND F.RUBRICA = 996
+  AND F.VALOR = (
+    SELECT MAX(F.VALOR) MEDIA #<<
+    FROM ERGON.VINCULOS V JOIN ERGON.FICHAS_FINANCEIRAS F #<<
+      ON V.NUMFUNC = F.NUMFUNC #<<
+      AND V.NUMERO = F.NUMVINC #<<
+    WHERE #<<
+      V.EMP_CODIGO = 1 #<<
+      AND F.MES_ANO_FOLHA = '01/09/2023' #<< 
+      AND F.RUBRICA = 996) #<<
+ORDER BY 2; 
+```
+]
