@@ -23,7 +23,8 @@ style_mono_accent(
   text_font_google   = google_font("Montserrat", "300", "300i"),
   code_font_google   = google_font("Fira Mono"),
   extra_css = list(
-  ".small-code .remark-code" = list("font-size" = "70%")
+  ".small-code .remark-code" = list("font-size" = "70%"),
+  ".smaller-code .remark-code" = list("font-size" = "60%")
 )
 )
 ```
@@ -526,6 +527,43 @@ WHERE
 ```
 ]
 ---
+### OPERAÇÕES DE CONJUNTO
+**Exemplo 5:** Colunas com valores fixos.
+.pull-left[
+.small-code[
+```{sql eval = F}
+SELECT 
+  RUBRICA
+  , SUM(VALOR) VALOR_MES_ATUAL
+  , 0 VALOR_MES_ANTERIOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS
+WHERE 
+  MES_ANO_FOLHA = '01/10/2023'
+  AND RUBRICA = 1
+  AND EMP_CODIGO = 1
+GROUP BY RUBRICA
+UNION
+SELECT 
+  RUBRICA
+  , 0 VALOR_MES_ATUAL
+  , SUM(VALOR) VALOR_MES_ANTERIOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS
+WHERE 
+  MES_ANO_FOLHA = '01/09/2023'
+  AND RUBRICA = 1
+  AND EMP_CODIGO = 1
+GROUP BY RUBRICA;
+```
+]
+]
+.pull-right[
+```{r echo=FALSE, out.width="80%", fig.align='center', dpi=600}
+knitr::include_graphics("images/UNION6.png")
+```
+]
+---
 class: center, middle
 
 # SUBCONSULTAS
@@ -606,6 +644,7 @@ Entretanto, a linguagem SQL nos permite combinar esses dois **SELECTs** em um ú
 ### SUBCONSULTAS
 
 **Exemplo 1:** Subconsultas escalares na cláusula **WHERE**.
+.pull-left[
 .small-code[
 ```{sql eval = F}
 SELECT 
@@ -636,6 +675,15 @@ WHERE
 ORDER BY 2; 
 ```
 ]
+]
+
+.pull-right[
+```{r echo=FALSE, out.width="80%", fig.align='center', dpi=600}
+knitr::include_graphics("images/SUBCONSULTA1.png")
+```
+]
+
+
 ---
 ### SUBCONSULTAS
 
@@ -653,7 +701,7 @@ As subconsultas podem ser utilizadas normalmente em qualquer tipo de **SELECT**,
 ### SUBCONSULTAS
 
 **Exemplo 2:** Subconsultas escalares na cláusula **WHERE**.
-
+.pull-left[
 .small-code[
 ```{sql eval = F}
 -- Maior salário bruto em setembro
@@ -680,3 +728,193 @@ WHERE
 ORDER BY 2; 
 ```
 ]
+]
+.pull-right[
+```{r echo=FALSE, out.width="80%", fig.align='center', dpi=600}
+knitr::include_graphics("images/SUBCONSULTA2.png")
+```
+]
+
+---
+### SUBCONSULTAS
+**Exemplo 3:** Subconsultas multi-row na Cláusula **WHERE**.
+.pull-left[
+.small-code[
+```{sql eval = F}
+SELECT DISTINCT
+  F.RUBRICA
+  , R.NOME
+  , F.VALOR
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+  JOIN ERGON.RUBRICAS R
+  ON R.RUBRICA = F.RUBRICA
+WHERE
+  F.MES_ANO_FOLHA = '01/09/2023'
+  AND F.NUM_FOLHA = 1
+  AND V.MATRIC = '160.805-8'
+  AND F.RUBRICA IN (
+    SELECT DISTINCT  #<<
+      RUBRICA  #<<
+    FROM  #<<
+      ERGON.FATORES_RUBRICA_GERAL  #<<
+    WHERE #<<
+      FATOR = 'BASE IR'  #<<
+      AND DTFIM IS NULL  #<<
+  )
+ORDER BY 2; 
+```
+]
+]
+.pull-right[
+
+Uma subconsulta multi-row é aquela que retorna mais de uma linha. O operador **IN** é um dos poucos operadores que podem ser utilizados com este tipo de subconsulta na cláusula **WHERE**, pois ele é aplicado sobre listas de valores. 
+</br></br>
+No *Exemplo 5*, a subconsulta destacada retorna a lista de rubricas do fator <strong style="color:red;">'BASE IR'</strong>. Depois, esses valores são usados para restringir os registros da consulta externa.
+</br></br>
+Além do **IN**, também é possível utilizar os operadores **ANY**, **SOME** e **ALL** para lidar com subconsultas multi-row no **WHERE**.
+]
+---
+### SUBCONSULTAS
+**Exemplo 3:** Subconsultas multi-row na Cláusula **WHERE**.
+.pull-left[
+.small-code[
+```{sql eval = F}
+SELECT DISTINCT
+  F.RUBRICA
+  , R.NOME
+  , F.VALOR
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+  JOIN ERGON.RUBRICAS R
+  ON R.RUBRICA = F.RUBRICA
+WHERE
+  F.MES_ANO_FOLHA = '01/09/2023'
+  AND F.NUM_FOLHA = 1
+  AND V.MATRIC = '160.805-8'
+  AND F.RUBRICA IN (
+    SELECT DISTINCT  #<<
+      RUBRICA  #<<
+    FROM  #<<
+      ERGON.FATORES_RUBRICA_GERAL  #<<
+    WHERE #<<
+      FATOR = 'BASE IR'  #<<
+      AND DTFIM IS NULL  #<<
+  )
+ORDER BY 2; 
+```
+]
+]
+.pull-right[
+```{r echo=FALSE, out.width="80%", fig.align='center', dpi=600}
+knitr::include_graphics("images/SUBCONSULTA3.png")
+```
+]
+
+
+---
+### OPERADORES ANY, SOME E ALL
+
+Os operadores **ANY**, **SOME** e **ALL** são usados para comparar um valor a uma lista ou subconsulta. Devem ser usados em conjunto com os operadores de comparação **=, <>, >, <, <= e >= **.
+
+.pull-left[
+* **ANY:** Retorna *TRUE* se <strong style="color:red;">qualquer uma</strong> das condições é verdadeira.
+
+```{sql eval = F}
+--USANDO ANY
+SELECT DISTINCT RUBRICA
+FROM ERGON.RUBRICAS
+WHERE RUBRICA = ANY(1,10,1000)
+ORDER BY 1;
+
+--USANDO OR
+SELECT DISTINCT RUBRICA
+FROM ERGON.RUBRICAS
+WHERE 
+  RUBRICA = 1 
+  OR RUBRICA = 10
+  OR RUBRICA = 1000
+ORDER BY 1;
+```
+
+* **SOME:** Funcionamento identico ao **ANY**.
+]
+.pull-right[
+```{r echo=FALSE, out.width="70%", fig.align='center', dpi=600}
+knitr::include_graphics("images/any.png")
+```
+]
+---
+### OPERADORES ANY, SOME E ALL
+
+Os operadores **ANY**, **SOME** e **ALL** são usados para comparar um valor a uma lista ou subconsulta. Devem ser usados em conjunto com os operadores de comparação **=, <>, >, <, <= e >= **.
+
+* **ALL:** Retorna *TRUE* se <strong style="color:red;">todas</strong> as condições são verdadeiras.
+```{sql eval = F}
+--USANDO ALL
+SELECT DISTINCT RUBRICA
+FROM ERGON.RUBRICAS
+WHERE RUBRICA > ALL(1,10,1000)
+ORDER BY 1;
+
+--USANDO AND
+SELECT DISTINCT RUBRICA
+FROM ERGON.RUBRICAS
+WHERE RUBRICA > 1 AND RUBRICA > 10 AND RUBRICA > 1000
+ORDER BY 1;
+```
+
+---
+### SUBCONSULTAS
+**Exemplo 4:** Subconsultas na Cláusula **FROM**.
+.pull-left[
+.smaller-code[
+```{sql eval = F}
+SELECT DISTINCT
+  V.MATRIC
+  , F.VALOR
+  , A.VALOR BASE_IR
+  , A.VALOR2 ACERTO_IR
+FROM
+  ERGON.VINCULOS V
+  JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+  LEFT JOIN ( #<<
+    SELECT     #<<
+      NUMFUNC  #<<
+      , NUMVINC #<<
+      , VALOR #<<
+      , VALOR2 #<<
+    FROM  #<<
+      ERGON.VANTAGENS  #<<
+    WHERE  #<<
+      VANTAGEM = 'ACERTO IR' #<<
+      AND DTINI = '01/09/2023' #<<
+      AND DTFIM = '30/09/2023' #<<
+  ) A #<<
+  ON A.NUMFUNC = V.NUMFUNC 
+  AND A.NUMVINC = V.NUMERO 
+WHERE 
+  F.MES_ANO_FOLHA = '01/09/2023' 
+  AND F.RUBRICA = 627 
+  AND F.NUM_FOLHA = 1 
+  AND F.EMP_CODIGO = 1
+ORDER BY 3;
+```
+]
+]
+.pull-right[
+
+Subconsultas podem ser utilizadas na cláusula **FROM**, com o intuito de gerar resultados que poderão ser utilizados como se fossem uma tabela real (por este motivo uma subconsulta é normalmente chamada de “tabela virtual”). Esta forma de utilização de
+subconsultas é muito comum.
+]
+---
+### SUBCONSULTAS
+**Exemplo 4:** Subconsultas na Cláusula **FROM**.
