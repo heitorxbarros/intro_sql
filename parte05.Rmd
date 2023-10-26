@@ -151,6 +151,7 @@ p1+p2+p3+p4+p5+p6+plot_layout(ncol = 3, guides = 'collect',)
 ### OPERAÇÕES DE CONJUNTO
 
 **Exemplo 1:** Operador **UNION**.
+.pull-left[
 ```{sql eval = F}
 SELECT 
   NUMFUNC, RUBRICA, VALOR
@@ -170,9 +171,10 @@ WHERE
   AND EMP_CODIGO = 1
 ORDER BY 1;
 ```
-
+]
+.pull-right[
 O operador **UNION** combina o resultado de duas ou mais consultas em um resultado único, retornando todas as linhas pertencentes a todas as consultas envolvidas na execução. Para utilizar o **UNION**, é necessário que a quantidade de colunas e suas ordens sejam identicas e que os tipos de dados sejam compatíveis. 
-
+]
 ---
 ### OPERAÇÕES DE CONJUNTO
 **Exemplo 1:** Operador **UNION**.
@@ -223,6 +225,7 @@ knitr::include_graphics("images/UNION1.png")
 ---
 ### OPERAÇÕES DE CONJUNTO
 **Exemplo 2:** Operador **UNION ALL**.
+.pull-left[
 ```{sql eval = F}
 SELECT 
   NUMFUNC, RUBRICA, VALOR
@@ -243,9 +246,10 @@ WHERE
   AND RUBRICA = 904
 ORDER BY 1;
 ```
-
+]
+.pull-right[
 Por padrão o operador **UNION** remove linhas duplicadas. Se queremos que o resultado exiba todos os registros de todas as consultas usadas, devemos usar o operador **UNION ALL**.
-
+]
 ---
 ### OPERAÇÕES DE CONJUNTO
 **Exemplo 2:** Operador **UNION ALL**.
@@ -263,6 +267,7 @@ knitr::include_graphics("images/UNION3.png")
 ---
 ### OPERAÇÕES DE CONJUNTO
 **Exemplo 3:** Operador **INTERSECT**.
+.pull-left[
 ```{sql eval = F}
 SELECT 
   NUMFUNC, RUBRICA, VALOR
@@ -282,9 +287,10 @@ WHERE
   AND EMP_CODIGO = 1
 ORDER BY 1;
 ```
-
+]
+.pull-right[
 O operador **INTERSECT** retorna a interseção de dois ou mais conjuntos de resultados. Assim como na união, cada conjunto de resultados é definido por um comando **SELECT**. Se um registro existe em ambos os conjuntos ele será incluído no resultado final.
-
+]
 
 ---
 ### OPERAÇÕES DE CONJUNTO
@@ -337,6 +343,7 @@ knitr::include_graphics("images/UNION4.png")
 ---
 ### OPERAÇÕES DE CONJUNTO
 **Exemplo 4:** Operador **MINUS**.
+.pull-left[
 ```{sql eval = F}
 SELECT 
   NUMFUNC, RUBRICA, VALOR
@@ -356,9 +363,10 @@ WHERE
   AND EMP_CODIGO = 1
 ORDER BY 1;
 ```
-
+]
+.pull-right[
 O operador **MINUS** é utilizado para retornar todas as linhas do primeiro conjunto de resultados (definido pelo primeiro **SELECT**) e então remover deste resultado todas as linhas do segundo conjunto de resultados (definido pelo segundo **SELECT**). Em alguns SGBDs, o operador é chamado de **EXCEPT**. 
-
+]
 ---
 ### OPERAÇÕES DE CONJUNTO
 **Exemplo 4:** Operador **MINUS**.
@@ -415,6 +423,7 @@ xaringanExtra::use_editable()
 1. A consulta a seguir retorna todos os valores por matrícula da rubrica 999 da folha 1 de setembro de 2023. Adicione uma consulta que retorne os valores da rubrica 996 do mesmo mês usando o operador **UNION**. Organize o resultado final por matrículas.
 
 .can-edit[
+.smaller-code[
 ```{sql eval = F}
 -- FORMA EXPLICITA
 SELECT DISTINCT
@@ -432,7 +441,7 @@ WHERE
     AND F.RUBRICA = 999;
 ```
 ]
-
+]
 ---
 ```{r xaringan-editable0, echo=FALSE}
 xaringanExtra::use_editable()
@@ -443,6 +452,7 @@ xaringanExtra::use_editable()
 1. A consulta a seguir retorna todos os valores por matrícula da rubrica 999 da folha 1 de setembro de 2023. Adicione uma consulta que retorne os valores da rubrica 996 do mesmo mês usando o operador **UNION**. Organize o resultado final por matrículas.
 
 .can-edit[
+.smaller-code[
 ```{sql eval = F}
 -- FORMA IMPLICITA 
 SELECT DISTINCT
@@ -460,7 +470,7 @@ WHERE
     AND F.RUBRICA = 999;
 ```
 ]
-
+]
 
 ---
 ```{r xaringan-editable2, echo=FALSE}
@@ -472,6 +482,7 @@ xaringanExtra::use_editable()
 <li> A consulta abaixo retorna o nome, a matricula e o cargo de professores com matrículas ativas lotados no CIEP Procópio Ferreira (SETOR = 11859). Adicione uma consulta para remover os registros dos Professores Adjuntos de Educação Infantil usando o operador **MINUS**.
 </ol>
 .can-edit[
+.smaller-code[
 ```{sql eval = F}
 -- FORMA EXPLICITA
 COL NOME FOR A50 
@@ -494,6 +505,7 @@ WHERE
   AND C.NOME LIKE 'PROF%'; 
 ```
 ]
+]
 ---
 ```{r xaringan-editable3, echo=FALSE}
 xaringanExtra::use_editable()
@@ -504,6 +516,7 @@ xaringanExtra::use_editable()
 <li> A consulta abaixo retorna o nome, a matricula e o cargo de professores com matrículas ativas lotados no CIEP Procópio Ferreira (SETOR = 11859). Adicione uma consulta para remover os registros dos Professores Adjuntos de Educação Infantil usando o operador **MINUS**.
 </ol>
 .can-edit[
+.smaller-code[
 ```{sql eval = F}
 -- FORMA IMPLÍCITA
 COL NOME FOR A50 
@@ -525,6 +538,7 @@ WHERE
   AND P.SETOR = '11859' -- CAMPO COM CÓDIGO DO SETOR
   AND C.NOME LIKE 'PROF%';
 ```
+]
 ]
 ---
 ### OPERAÇÕES DE CONJUNTO
@@ -717,7 +731,7 @@ WHERE
   AND F.MES_ANO_FOLHA = '01/09/2023'
   AND F.RUBRICA = 996
   AND F.VALOR = (
-    SELECT MAX(F.VALOR) MEDIA #<<
+    SELECT MAX(F.VALOR) MAXIMO #<<
     FROM ERGON.VINCULOS V JOIN ERGON.FICHAS_FINANCEIRAS F #<<
       ON V.NUMFUNC = F.NUMFUNC #<<
       AND V.NUMERO = F.NUMVINC #<<
@@ -773,7 +787,7 @@ ORDER BY 2;
 
 Uma subconsulta multi-row é aquela que retorna mais de uma linha. O operador **IN** é um dos poucos operadores que podem ser utilizados com este tipo de subconsulta na cláusula **WHERE**, pois ele é aplicado sobre listas de valores. 
 </br></br>
-No *Exemplo 5*, a subconsulta destacada retorna a lista de rubricas do fator <strong style="color:red;">'BASE IR'</strong>. Depois, esses valores são usados para restringir os registros da consulta externa.
+No *Exemplo 3*, a subconsulta destacada retorna a lista de rubricas do fator <strong style="color:red;">'BASE IR'</strong>. Depois, esses valores são usados para restringir os registros da consulta externa.
 </br></br>
 Além do **IN**, também é possível utilizar os operadores **ANY**, **SOME** e **ALL** para lidar com subconsultas multi-row no **WHERE**.
 ]
@@ -854,7 +868,7 @@ knitr::include_graphics("images/any.png")
 ### OPERADORES ANY, SOME E ALL
 
 Os operadores **ANY**, **SOME** e **ALL** são usados para comparar um valor a uma lista ou subconsulta. Devem ser usados em conjunto com os operadores de comparação **=, <>, >, <, <= e >= **.
-
+.pull-left[
 * **ALL:** Retorna *TRUE* se <strong style="color:red;">todas</strong> as condições são verdadeiras.
 ```{sql eval = F}
 --USANDO ALL
@@ -866,10 +880,18 @@ ORDER BY 1;
 --USANDO AND
 SELECT DISTINCT RUBRICA
 FROM ERGON.RUBRICAS
-WHERE RUBRICA > 1 AND RUBRICA > 10 AND RUBRICA > 1000
+WHERE 
+  RUBRICA > 1 
+  AND RUBRICA > 10 
+  AND RUBRICA > 1000
 ORDER BY 1;
 ```
-
+]
+.pull-right[
+```{r echo=FALSE, out.width="70%", fig.align='center', dpi=600}
+knitr::include_graphics("images/all.png")
+```
+]
 ---
 ### SUBCONSULTAS
 **Exemplo 4:** Subconsultas na Cláusula **FROM**.
@@ -887,7 +909,7 @@ FROM
   ON V.NUMFUNC = F.NUMFUNC
   AND V.NUMERO = F.NUMVINC
   LEFT JOIN ( #<<
-    SELECT     #<<
+    SELECT DISTINCT #<<
       NUMFUNC  #<<
       , NUMVINC #<<
       , VALOR #<<
@@ -914,7 +936,93 @@ ORDER BY 3;
 
 Subconsultas podem ser utilizadas na cláusula **FROM**, com o intuito de gerar resultados que poderão ser utilizados como se fossem uma tabela real (por este motivo uma subconsulta é normalmente chamada de “tabela virtual”). Esta forma de utilização de
 subconsultas é muito comum.
+</br></br>
+No *Exemplo 4*, a subconsulta destacada retorna as colunas **NUMFUNC**, **NUMVINC**, **VALOR** e **VALOR2** dos registros cujo campo **VANTAGEM** é igual a *'ACERTO IR'*. Posteriormente, o SGBD faz um **LEFT JOIN** das tabelas **VINCULOS** e **FICHAS_FINANCEIRAS** com o resultado da subconsulta.
 ]
 ---
 ### SUBCONSULTAS
 **Exemplo 4:** Subconsultas na Cláusula **FROM**.
+
+.pull-left[
+.smaller-code[
+```{sql eval = F}
+SELECT DISTINCT
+  V.MATRIC
+  , F.VALOR
+  , A.VALOR BASE_IR
+  , A.VALOR2 ACERTO_IR
+FROM
+  ERGON.VINCULOS V
+  JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+  LEFT JOIN ( #<<
+    SELECT DISTINCT #<<
+      NUMFUNC  #<<
+      , NUMVINC #<<
+      , VALOR #<<
+      , VALOR2 #<<
+    FROM  #<<
+      ERGON.VANTAGENS  #<<
+    WHERE  #<<
+      VANTAGEM = 'ACERTO IR' #<<
+      AND DTINI = '01/09/2023' #<<
+      AND DTFIM = '30/09/2023' #<<
+  ) A #<<
+  ON A.NUMFUNC = V.NUMFUNC 
+  AND A.NUMVINC = V.NUMERO 
+WHERE 
+  F.MES_ANO_FOLHA = '01/09/2023' 
+  AND F.RUBRICA = 627 
+  AND F.NUM_FOLHA = 1 
+  AND F.EMP_CODIGO = 1
+ORDER BY 3;
+```
+]
+]
+
+.pull-right[
+```{r echo=FALSE, out.width="70%", fig.align='center', dpi=600}
+knitr::include_graphics("images/SUBCONSULTA.png")
+```
+]
+
+---
+### SUBCONSULTAS
+**Exemplo 5:** Subconsultas correlacionadas.
+.pull-left[
+.small-code[
+```{sql eval = F}
+SELECT 
+  V.MATRIC , F.NUM_FOLHA, F.VALOR 
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE
+  V.EMP_CODIGO = 1
+  AND F.MES_ANO_FOLHA = '01/09/2023'
+  AND F.RUBRICA = 996
+  AND F.VALOR = (
+    SELECT MAX(F2.VALOR) MAXIMO #<<
+    FROM #<<
+      ERGON.VINCULOS V #<<
+      JOIN ERGON.FICHAS_FINANCEIRAS F2 #<<
+      ON V.NUMFUNC = F2.NUMFUNC #<<
+      AND V.NUMERO = F2.NUMVINC #<<
+    WHERE #<<
+      V.EMP_CODIGO = 1 #<<
+      AND F2.MES_ANO_FOLHA = '01/09/2023' #<<
+      AND F2.RUBRICA = 996 #<<
+      AND F2.NUM_FOLHA = F.NUM_FOLHA #<<
+      ) 
+ORDER BY 2;
+```
+]
+]
+.pull-right[
+Todos os exemplos apresentados até agora envolveram o uso de **subconsultas autônomas**. Ou seja, subconsultas que executariam de forma bem-sucedida caso fossem separadas da consulta pai. De maneira oposta, as **subconsultas correlacionadas** incluem referências para elementos da consulta pai e, por isso, não podem ser executadas de forma independente.
+</br></br>
+No *Exemplo 5*, a coluna *F.NUM_FOLHA* é usada na subconsulta e cada registro da consulta pai é comparado com o resultado da subconsulta.   
+]
