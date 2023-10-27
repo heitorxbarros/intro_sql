@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="author" content="Heitor Barros" />
     <script src="libs/header-attrs-2.20/header-attrs.js"></script>
-    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"db5ab94562e246acb6f7e1348ba489b8","expires":14}</script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x3c6db521f4b46cabcc1e226c48c72df","expires":14}</script>
     <script src="libs/himalaya-1.1.0/himalaya.js"></script>
     <script src="libs/js-cookie-3.0.0/js.cookie.js"></script>
     <link href="libs/editable-0.2.6/editable.css" rel="stylesheet" />
@@ -833,12 +833,12 @@ WHERE
   AND F.VALOR = (
 *   SELECT MAX(F2.VALOR) MAXIMO
 *   FROM
-*     ERGON.VINCULOS V
+*     ERGON.VINCULOS V2
 *     JOIN ERGON.FICHAS_FINANCEIRAS F2
-*     ON V.NUMFUNC = F2.NUMFUNC
-*     AND V.NUMERO = F2.NUMVINC
+*     ON V2.NUMFUNC = F2.NUMFUNC
+*     AND V2.NUMERO = F2.NUMVINC
 *   WHERE
-*     V.EMP_CODIGO = 1
+*     V2.EMP_CODIGO = 1
 *     AND F2.MES_ANO_FOLHA = '01/09/2023'
 *     AND F2.RUBRICA = 996
 *     AND F2.NUM_FOLHA = F.NUM_FOLHA
@@ -848,9 +848,48 @@ ORDER BY 2;
 ]
 ]
 .pull-right[
-Todos os exemplos apresentados até agora envolveram o uso de **subconsultas autônomas**. Ou seja, subconsultas que executariam de forma bem-sucedida caso fossem separadas da consulta pai. De maneira oposta, as **subconsultas correlacionadas** incluem referências para elementos da consulta pai e, por isso, não podem ser executadas de forma independente.
+Todos os exemplos apresentados até agora envolveram o uso de **subconsultas autônomas**. Ou seja, subconsultas que executariam de forma bem-sucedida caso fossem separadas da consulta pai. De maneira oposta, as **subconsultas correlacionadas** incluem referências para elementos da consulta pai e, por isso, não podem ser executadas de forma independente. Desta forma, a subconsulta
+correlacionada é sempre reexecutada para cada linha gerada pela consulta pai (se a consulta pai retornar **n** linhas, a subconsulta será executada **n** vezes, uma para cada linha).
 &lt;/br&gt;&lt;/br&gt;
-No *Exemplo 5*, a coluna *F.NUM_FOLHA* é usada na subconsulta e cada registro da consulta pai é comparado com o resultado da subconsulta.   
+No *Exemplo 5*, a coluna &lt;strong style="color:red;"&gt;*F.NUM_FOLHA*&lt;/strong&gt; é usada na subconsulta e cada registro da consulta pai é comparado com o resultado da subconsulta.   
+]
+---
+### SUBCONSULTAS
+**Exemplo 5:** Subconsultas correlacionadas.
+.pull-left[
+.small-code[
+
+```sql
+SELECT 
+  V.MATRIC , F.NUM_FOLHA, F.VALOR 
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE
+  V.EMP_CODIGO = 1
+  AND F.MES_ANO_FOLHA = '01/09/2023'
+  AND F.RUBRICA = 996
+  AND F.VALOR = (
+*   SELECT MAX(F2.VALOR) MAXIMO
+*   FROM
+*     ERGON.VINCULOS V2
+*     JOIN ERGON.FICHAS_FINANCEIRAS F2
+*     ON V2.NUMFUNC = F2.NUMFUNC
+*     AND V2.NUMERO = F2.NUMVINC
+*   WHERE
+*     V2.EMP_CODIGO = 1
+*     AND F2.MES_ANO_FOLHA = '01/09/2023'
+*     AND F2.RUBRICA = 996
+*     AND F2.NUM_FOLHA = F.NUM_FOLHA
+      ) 
+ORDER BY 2;
+```
+]
+]
+.pull-right[
+&lt;img src="images/SUBCONSULTA5.png" width="70%" style="display: block; margin: auto;" /&gt;
 ]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

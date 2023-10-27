@@ -1007,12 +1007,12 @@ WHERE
   AND F.VALOR = (
     SELECT MAX(F2.VALOR) MAXIMO #<<
     FROM #<<
-      ERGON.VINCULOS V #<<
+      ERGON.VINCULOS V2 #<<
       JOIN ERGON.FICHAS_FINANCEIRAS F2 #<<
-      ON V.NUMFUNC = F2.NUMFUNC #<<
-      AND V.NUMERO = F2.NUMVINC #<<
+      ON V2.NUMFUNC = F2.NUMFUNC #<<
+      AND V2.NUMERO = F2.NUMVINC #<<
     WHERE #<<
-      V.EMP_CODIGO = 1 #<<
+      V2.EMP_CODIGO = 1 #<<
       AND F2.MES_ANO_FOLHA = '01/09/2023' #<<
       AND F2.RUBRICA = 996 #<<
       AND F2.NUM_FOLHA = F.NUM_FOLHA #<<
@@ -1022,7 +1022,47 @@ ORDER BY 2;
 ]
 ]
 .pull-right[
-Todos os exemplos apresentados até agora envolveram o uso de **subconsultas autônomas**. Ou seja, subconsultas que executariam de forma bem-sucedida caso fossem separadas da consulta pai. De maneira oposta, as **subconsultas correlacionadas** incluem referências para elementos da consulta pai e, por isso, não podem ser executadas de forma independente.
+Todos os exemplos apresentados até agora envolveram o uso de **subconsultas autônomas**. Ou seja, subconsultas que executariam de forma bem-sucedida caso fossem separadas da consulta pai. De maneira oposta, as **subconsultas correlacionadas** incluem referências para elementos da consulta pai e, por isso, não podem ser executadas de forma independente. Desta forma, a subconsulta
+correlacionada é sempre reexecutada para cada linha gerada pela consulta pai (se a consulta pai retornar **n** linhas, a subconsulta será executada **n** vezes, uma para cada linha).
 </br></br>
-No *Exemplo 5*, a coluna *F.NUM_FOLHA* é usada na subconsulta e cada registro da consulta pai é comparado com o resultado da subconsulta.   
+No *Exemplo 5*, a coluna <strong style="color:red;">*F.NUM_FOLHA*</strong> é usada na subconsulta e cada registro da consulta pai é comparado com o resultado da subconsulta.   
+]
+---
+### SUBCONSULTAS
+**Exemplo 5:** Subconsultas correlacionadas.
+.pull-left[
+.small-code[
+```{sql eval = F}
+SELECT 
+  V.MATRIC , F.NUM_FOLHA, F.VALOR 
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.FICHAS_FINANCEIRAS F
+  ON V.NUMFUNC = F.NUMFUNC
+  AND V.NUMERO = F.NUMVINC
+WHERE
+  V.EMP_CODIGO = 1
+  AND F.MES_ANO_FOLHA = '01/09/2023'
+  AND F.RUBRICA = 996
+  AND F.VALOR = (
+    SELECT MAX(F2.VALOR) MAXIMO #<<
+    FROM #<<
+      ERGON.VINCULOS V2 #<<
+      JOIN ERGON.FICHAS_FINANCEIRAS F2 #<<
+      ON V2.NUMFUNC = F2.NUMFUNC #<<
+      AND V2.NUMERO = F2.NUMVINC #<<
+    WHERE #<<
+      V2.EMP_CODIGO = 1 #<<
+      AND F2.MES_ANO_FOLHA = '01/09/2023' #<<
+      AND F2.RUBRICA = 996 #<<
+      AND F2.NUM_FOLHA = F.NUM_FOLHA #<<
+      ) 
+ORDER BY 2;
+```
+]
+]
+.pull-right[
+```{r echo=FALSE, out.width="70%", fig.align='center', dpi=600}
+knitr::include_graphics("images/SUBCONSULTA5.png")
+```
 ]
