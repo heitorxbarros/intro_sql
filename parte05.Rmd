@@ -1066,3 +1066,13 @@ ORDER BY 2;
 knitr::include_graphics("images/SUBCONSULTA5.png")
 ```
 ]
+---
+### EXERCÍCIOS
+
+1. Crie uma consulta para recuperar matrículas dos servidores para quais o valor da rubrica 987 no mês de setembro seja menor do que a mediana para mesmo mês. Use as tabelas  <strong style="color:red;">ERGON.CONS</strong>  e  <strong style="color:red;">ERGON.VINCULOS</strong>. Obs.: A função utilizada para calcular a mediana é a **MEDIAN**.
+
+2. Crie uma consulta para recuperar as matrículas dos servidores ativos lotados no setor 1 e os valores do atributo 'PLANO META VARIAVEL' cuja data início (**DTINI**) é igual a 01/10/2023. As matrículas dos servidores que não tem o atributo cadastrado também devem aparecer no resultado final.
+
+3. Crie uma consulta para recuperar os vínculos mais recentes dos servidores lotados no setor 1. Não use a coluna **DTFIM** na cláusula **WHERE**.
+
+4. Crie uma consulta para recuperar as matrículas dos servidores que tem o atributo 'PLANO META FIXA' cuja data início (**DTINI**) é igual a 01/10/2023 e não tem o atributo 'PLANO META VARIAVEL' com a mesma data início.
