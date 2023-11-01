@@ -4,8 +4,8 @@
     <title>Introdução a bases de dados e SQL</title>
     <meta charset="utf-8" />
     <meta name="author" content="Heitor Barros" />
-    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
-    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x3c6db521f4b46cabcc1e226c48c72df","expires":14}</script>
+    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x556ca555519499381d9384907d4f294","expires":14}</script>
     <script src="libs/himalaya-1.1.0/himalaya.js"></script>
     <script src="libs/js-cookie-3.0.0/js.cookie.js"></script>
     <link href="libs/editable-0.2.6/editable.css" rel="stylesheet" />
@@ -891,6 +891,565 @@ ORDER BY 2;
 .pull-right[
 &lt;img src="images/SUBCONSULTA5.png" width="70%" style="display: block; margin: auto;" /&gt;
 ]
+---
+### EXERCÍCIOS
+
+1. Crie uma consulta para recuperar matrículas dos servidores para quais o valor da rubrica 987 no mês de setembro seja menor do que a mediana para mesmo mês. Use as tabelas  &lt;strong style="color:red;"&gt;ERGON.CONS&lt;/strong&gt;  e  &lt;strong style="color:red;"&gt;ERGON.VINCULOS&lt;/strong&gt;. Obs.: A função utilizada para calcular a mediana é a **MEDIAN**.
+
+2. Crie uma consulta para recuperar as matrículas dos servidores ativos lotados no setor 1 e os valores do atributo 'PLANO META VARIAVEL' cuja data início (**DTINI**) é igual a 01/10/2023. As matrículas dos servidores que não tem o atributo cadastrado também devem aparecer no resultado final.
+
+3. Crie uma consulta para recuperar os vínculos mais recentes dos servidores lotados no setor 1. Não use a coluna **DTFIM** na cláusula **WHERE**.
+
+4. Crie uma consulta para recuperar as matrículas dos servidores que tem o atributo 'PLANO META FIXA' cuja data início (**DTINI**) é igual a 01/10/2023 e não tem o atributo 'PLANO META VARIAVEL' com a mesma data início.
+
+---
+### EXERCÍCIOS
+&lt;ol start="5"&gt;
+&lt;li&gt; Modifique o &lt;em&gt;Exemplo 5&lt;/em&gt; de operações de conjunto para gerar a soma dos registros usando &lt;strong&gt;GROUP BY&lt;/strong&gt;.
+&lt;/ol&gt;
+
+.smaller-code[
+
+```sql
+SELECT 
+  RUBRICA
+  , SUM(VALOR) VALOR_MES_ATUAL
+  , 0 VALOR_MES_ANTERIOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS
+WHERE 
+  MES_ANO_FOLHA = '01/10/2023'
+  AND RUBRICA = 1
+  AND EMP_CODIGO = 1
+GROUP BY RUBRICA
+UNION
+SELECT 
+  RUBRICA
+  , 0 VALOR_MES_ATUAL
+  , SUM(VALOR) VALOR_MES_ANTERIOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS
+WHERE 
+  MES_ANO_FOLHA = '01/09/2023'
+  AND RUBRICA = 1
+  AND EMP_CODIGO = 1
+GROUP BY RUBRICA;
+```
+]
+
+---
+class: center, middle
+# COMANDOS DO SQL*PLUS
+
+---
+### COMANDOS DO SQL*PLUS
+
+O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Oracle e oferece uma variedade de comandos exclusivos que facilitam o trabalho com consultas SQL e relatórios. A seguir, comentaremos alguns dos principais comandos do **SQL\*Plus**.
+
+* **@ (sinal de arroba)**: Executa declarações do SQL\*Plus no script especificado. O script pode ser chamado do sistema de arquivos local ou de um servidor web. Ex.: O comando *'@C:/TEMP/TESTE.sql'* executa o arquivo SQL *'TESTE.sql'* localizado na pasta *'C:/TEMP/'*.
+
+* **@@ (sinal de arroba duplo)**: Este comando é semelhante ao comando **@ (sinal de arroba)**. É útil para a execução de scripts aninhados, pois procura o script especificado no mesmo caminho (pasta) do script que o chama.
+
+* **/ (barra)**: Executa o comando SQL ou bloco PL/SQL. Pode ser usado no final de uma consulta para executar o bloco, se usado no lugar do **';'**, ou reexecutar o bloco.
+
+* **EXIT**: Encerra o SQL\*Plus.
+
+* **SPOOL**: Armazena os resultados de uma consulta em um arquivo do sistema operacional e, opcionalmente, envia o arquivo para uma impressora. Ex.: O comando *'SPOOL C:/TEMP/Arquivo1.TXT'* armazena o resultado no arquivo chamado *'Arquivo1.TXT'*. O comando deve contar antes dos códigos da consulta e o comando *'SPOOL OFF;'* deve constar no final do arquivo *'.sql'*. É possível salvar arquivos com as extensões *'.txt'*, *'.csv'*, *'.html'*, *'.sql'* e *'.log'*.
+
+---
+### COMANDOS DO SQL*PLUS
+
+* **DEFINE**: Especifica um usuário ou variável predefinida e atribui um valor CHAR a ela, ou lista o valor e o tipo de variável única ou de todas as variáveis. Ex.: DEFINE MES = 01/02/2020. É possível usar o valor definido posteriormente na consulta.
+
+
+* **SET**: Define uma variável de sistema para alterar as configurações do ambiente do SQL*Plus para sua sessão atual, por exemplo, para: personalizar a formatação HTML, habilitar ou desabilitar a impressão de cabeçalhos de coluna, definir o número de linhas por página ou definir a largura de exibição dos dados. Ex.: SET TIME ON;
+
+<div id="qzoqeihgdu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:900px;height:300px;">
+<style>#qzoqeihgdu table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#qzoqeihgdu thead, #qzoqeihgdu tbody, #qzoqeihgdu tfoot, #qzoqeihgdu tr, #qzoqeihgdu td, #qzoqeihgdu th {
+  border-style: none;
+}
+
+#qzoqeihgdu p {
+  margin: 0;
+  padding: 0;
+}
+
+#qzoqeihgdu .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 15px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 3px;
+  border-top-color: #D5D5D5;
+  border-right-style: solid;
+  border-right-width: 3px;
+  border-right-color: #D5D5D5;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #D5D5D5;
+  border-left-style: solid;
+  border-left-width: 3px;
+  border-left-color: #D5D5D5;
+}
+
+#qzoqeihgdu .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#qzoqeihgdu .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#qzoqeihgdu .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#qzoqeihgdu .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#qzoqeihgdu .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D5D5D5;
+}
+
+#qzoqeihgdu .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D5D5D5;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D5D5D5;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#qzoqeihgdu .gt_col_heading {
+  color: #FFFFFF;
+  background-color: #004D80;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#qzoqeihgdu .gt_column_spanner_outer {
+  color: #FFFFFF;
+  background-color: #004D80;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#qzoqeihgdu .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#qzoqeihgdu .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#qzoqeihgdu .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D5D5D5;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#qzoqeihgdu .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#qzoqeihgdu .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D5D5D5;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D5D5D5;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#qzoqeihgdu .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D5D5D5;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D5D5D5;
+  vertical-align: middle;
+}
+
+#qzoqeihgdu .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#qzoqeihgdu .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#qzoqeihgdu .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D5D5D5;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-left-color: #D5D5D5;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-right-color: #D5D5D5;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#qzoqeihgdu .gt_stub {
+  color: #FFFFFF;
+  background-color: #929292;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D5D5D5;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qzoqeihgdu .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#qzoqeihgdu .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#qzoqeihgdu .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#qzoqeihgdu .gt_summary_row {
+  color: #FFFFFF;
+  background-color: #5F5F5F;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qzoqeihgdu .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D5D5D5;
+}
+
+#qzoqeihgdu .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#qzoqeihgdu .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D5D5D5;
+}
+
+#qzoqeihgdu .gt_grand_summary_row {
+  color: #FFFFFF;
+  background-color: #929292;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qzoqeihgdu .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D5D5D5;
+}
+
+#qzoqeihgdu .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D5D5D5;
+}
+
+#qzoqeihgdu .gt_striped {
+  background-color: #F4F4F4;
+}
+
+#qzoqeihgdu .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D5D5D5;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D5D5D5;
+}
+
+#qzoqeihgdu .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#qzoqeihgdu .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qzoqeihgdu .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#qzoqeihgdu .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#qzoqeihgdu .gt_left {
+  text-align: left;
+}
+
+#qzoqeihgdu .gt_center {
+  text-align: center;
+}
+
+#qzoqeihgdu .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#qzoqeihgdu .gt_font_normal {
+  font-weight: normal;
+}
+
+#qzoqeihgdu .gt_font_bold {
+  font-weight: bold;
+}
+
+#qzoqeihgdu .gt_font_italic {
+  font-style: italic;
+}
+
+#qzoqeihgdu .gt_super {
+  font-size: 65%;
+}
+
+#qzoqeihgdu .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#qzoqeihgdu .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#qzoqeihgdu .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#qzoqeihgdu .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#qzoqeihgdu .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#qzoqeihgdu .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#qzoqeihgdu .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="Comando">Comando</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="font-size: 18; font-weight: bold;" scope="col" id="Descrição">Descrição</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="Comando" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">SET AUTOTRACE</td>
+<td headers="Descrição" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Controla a exibição de informações de otimização de consultas.</td></tr>
+    <tr><td headers="Comando" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">SET FEEDBACK</td>
+<td headers="Descrição" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Controla a exibição de mensagens de feedback após a execução de comandos.</td></tr>
+    <tr><td headers="Comando" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">SET LINESIZE</td>
+<td headers="Descrição" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Define a largura máxima das linhas de saída em caracteres.</td></tr>
+    <tr><td headers="Comando" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">SET PAGESIZE</td>
+<td headers="Descrição" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Define o número de linhas por página ao exibir resultados de consulta.</td></tr>
+    <tr><td headers="Comando" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">SET SERVEROUTPUT</td>
+<td headers="Descrição" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Controla a exibição de mensagens do servidor PL/SQL.</td></tr>
+    <tr><td headers="Comando" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">SET SQLBLANKLINES</td>
+<td headers="Descrição" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Controla a exibição de linhas em branco em resultados de consulta.</td></tr>
+    <tr><td headers="Comando" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">SET TIMING</td>
+<td headers="Descrição" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Exibe o tempo gasto na execução de comandos SQL.</td></tr>
+    <tr><td headers="Comando" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">SET HEADING</td>
+<td headers="Descrição" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Controla a exibição de cabeçalhos de coluna.</td></tr>
+    <tr><td headers="Comando" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">SET ECHO</td>
+<td headers="Descrição" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Ativa ou desativa a exibição dos comandos SQL executados.</td></tr>
+    <tr><td headers="Comando" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">SET TERMOUT</td>
+<td headers="Descrição" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Ativa ou desativa a exibição de saída de script.</td></tr>
+    <tr><td headers="Comando" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">SET VERIFY</td>
+<td headers="Descrição" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Ativa ou desativa a verificação de sintaxe do SQL.</td></tr>
+    <tr><td headers="Comando" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">SET SERVEROUTPUT</td>
+<td headers="Descrição" class="gt_row gt_left" style="font-size: 22; font-weight: bold;">Controla a exibição de saída do servidor PL/SQL.</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+
+---
+### Referências
+
+* Material do Curso "Bases de Dados" - Prof. Eduardo Corrêa Gonçalves (ENCE/IBGE);
+* Livro Introdução à linguagem SQL - Thomas Nield (O'REILLY);
+* Documentação [SQL Language Reference](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/index.html#Oracle%C2%AE-Database) (ORACLE) 
+* Lista de [comandos SET](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqpug/SET-system-variable-summary.html#GUID-A6A5ADFF-4119-4BA4-A13E-BC8D29166FAE)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

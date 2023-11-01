@@ -1076,3 +1076,102 @@ knitr::include_graphics("images/SUBCONSULTA5.png")
 3. Crie uma consulta para recuperar os vínculos mais recentes dos servidores lotados no setor 1. Não use a coluna **DTFIM** na cláusula **WHERE**.
 
 4. Crie uma consulta para recuperar as matrículas dos servidores que tem o atributo 'PLANO META FIXA' cuja data início (**DTINI**) é igual a 01/10/2023 e não tem o atributo 'PLANO META VARIAVEL' com a mesma data início.
+
+---
+### EXERCÍCIOS
+<ol start="5">
+<li> Modifique o <em>Exemplo 5</em> de operações de conjunto para gerar a soma dos registros usando <strong>GROUP BY</strong>.
+</ol>
+
+.smaller-code[
+```{sql eval = F}
+SELECT 
+  RUBRICA
+  , SUM(VALOR) VALOR_MES_ATUAL
+  , 0 VALOR_MES_ANTERIOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS
+WHERE 
+  MES_ANO_FOLHA = '01/10/2023'
+  AND RUBRICA = 1
+  AND EMP_CODIGO = 1
+GROUP BY RUBRICA
+UNION
+SELECT 
+  RUBRICA
+  , 0 VALOR_MES_ATUAL
+  , SUM(VALOR) VALOR_MES_ANTERIOR
+FROM 
+  ERGON.FICHAS_FINANCEIRAS
+WHERE 
+  MES_ANO_FOLHA = '01/09/2023'
+  AND RUBRICA = 1
+  AND EMP_CODIGO = 1
+GROUP BY RUBRICA;
+```
+]
+
+---
+class: center, middle
+# COMANDOS DO SQL*PLUS
+
+---
+### COMANDOS DO SQL*PLUS
+
+O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Oracle e oferece uma variedade de comandos exclusivos que facilitam o trabalho com consultas SQL e relatórios. A seguir, comentaremos alguns dos principais comandos do **SQL\*Plus**.
+
+* **@ (sinal de arroba)**: Executa declarações do SQL\*Plus no script especificado. O script pode ser chamado do sistema de arquivos local ou de um servidor web. Ex.: O comando *'@C:/TEMP/TESTE.sql'* executa o arquivo SQL *'TESTE.sql'* localizado na pasta *'C:/TEMP/'*.
+
+* **@@ (sinal de arroba duplo)**: Este comando é semelhante ao comando **@ (sinal de arroba)**. É útil para a execução de scripts aninhados, pois procura o script especificado no mesmo caminho (pasta) do script que o chama.
+
+* **/ (barra)**: Executa o comando SQL ou bloco PL/SQL. Pode ser usado no final de uma consulta para executar o bloco, se usado no lugar do **';'**, ou reexecutar o bloco.
+
+* **EXIT**: Encerra o SQL\*Plus.
+
+* **SPOOL**: Armazena os resultados de uma consulta em um arquivo do sistema operacional e, opcionalmente, envia o arquivo para uma impressora. Ex.: O comando *'SPOOL C:/TEMP/Arquivo1.TXT'* armazena o resultado no arquivo chamado *'Arquivo1.TXT'*. O comando deve contar antes dos códigos da consulta e o comando *'SPOOL OFF;'* deve constar no final do arquivo *'.sql'*. É possível salvar arquivos com as extensões *'.txt'*, *'.csv'*, *'.html'*, *'.sql'* e *'.log'*.
+
+---
+### COMANDOS DO SQL*PLUS
+
+* **DEFINE**: Especifica um usuário ou variável predefinida e atribui um valor CHAR a ela, ou lista o valor e o tipo de variável única ou de todas as variáveis. Ex.: DEFINE MES = 01/02/2020. É possível usar o valor definido posteriormente na consulta.
+
+
+* **SET**: Define uma variável de sistema para alterar as configurações do ambiente do SQL*Plus para sua sessão atual, por exemplo, para: personalizar a formatação HTML, habilitar ou desabilitar a impressão de cabeçalhos de coluna, definir o número de linhas por página ou definir a largura de exibição dos dados. Ex.: SET TIME ON;
+
+```{r tab0, echo = F}
+data.frame(
+  Comando = c("SET AUTOTRACE", "SET FEEDBACK", "SET LINESIZE", "SET PAGESIZE", "SET SERVEROUTPUT", "SET SQLBLANKLINES", "SET TIMING", "SET HEADING", "SET ECHO", "SET TERMOUT", "SET VERIFY", "SET SERVEROUTPUT"),
+  Descrição = c(
+    "Controla a exibição de informações de otimização de consultas.",
+    "Controla a exibição de mensagens de feedback após a execução de comandos.",
+    "Define a largura máxima das linhas de saída em caracteres.",
+    "Define o número de linhas por página ao exibir resultados de consulta.",
+    "Controla a exibição de mensagens do servidor PL/SQL.",
+    "Controla a exibição de linhas em branco em resultados de consulta.",
+    "Exibe o tempo gasto na execução de comandos SQL.",
+    "Controla a exibição de cabeçalhos de coluna.",
+    "Ativa ou desativa a exibição dos comandos SQL executados.",
+    "Ativa ou desativa a exibição de saída de script.",
+    "Ativa ou desativa a verificação de sintaxe do SQL.",
+    "Controla a exibição de saída do servidor PL/SQL."
+  )
+) |> 
+  gt::gt() |> 
+  gt::tab_style(style = gt::cell_text(weight = "bold",size = 18), 
+                locations = gt::cells_column_labels()) |> 
+  gt::tab_options(table.font.size = 15,
+                  container.width = 900,
+                  container.height = 300) |> 
+  gt::tab_style(style = gt::cell_text(weight = "bold",size = 22), 
+                locations = gt::cells_body()) |> 
+  gt::opt_stylize(style = 5, color = "blue", add_row_striping = F)
+
+```
+
+---
+### Referências
+
+* Material do Curso "Bases de Dados" - Prof. Eduardo Corrêa Gonçalves (ENCE/IBGE);
+* Livro Introdução à linguagem SQL - Thomas Nield (O'REILLY);
+* Documentação [SQL Language Reference](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/index.html#Oracle%C2%AE-Database) (ORACLE) 
+* Lista de [comandos SET](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqpug/SET-system-variable-summary.html#GUID-A6A5ADFF-4119-4BA4-A13E-BC8D29166FAE)
