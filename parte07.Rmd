@@ -1,0 +1,195 @@
+---
+title: "Introdução a bases de dados e SQL"
+subtitle: "Parte 7"
+author: "Heitor Barros"
+institute: "FP/SUBGGC/CGRH/CTAP"
+date: ""
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    css: xaringan-themer.css
+---
+class: center, middle
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_accent(
+  base_color = "#004b80", 
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Montserrat", "300", "300i"),
+  code_font_google   = google_font("Fira Mono"),
+  extra_css = list(
+  ".small-code .remark-code" = list("font-size" = "70%"),
+  ".smaller-code .remark-code" = list("font-size" = "60%")
+)
+)
+```
+
+```{r xaringan-logo, echo=FALSE}
+xaringanExtra::use_logo(
+  image_url = "logo.png",
+  position = xaringanExtra::css_position(top = "1em", right = "1em"),
+  width = "200px"
+)
+```
+# FUNÇÕES DE JANELA
+---
+## FUNÇÕES DE JANELA
+
+Uma função de janela (window function) executa um cálculo sobre um conjunto de linhas que, de alguma forma, estão relacionadas à linha corrente. Este conjunto de linhas é chamado da janela. Essas funções diferenciam-se de outras funções da SQL pelas seguintes características:
+* Presença da cláusula **OVER**. Basicamente, se uma função tem a cláusula **OVER** ela vai operar como uma função de janela, incluindo as já conhecidas funções **COUNT, SUM, AVG, MAX e MIN** – isto é, **OVER** muda o comportamento dessas funções). A cláusula **OVER** é usada para a definição da janela (assim como GROUP BY é usada para definir grupos).
+
+---
+### FUNÇÕES DE JANELA
+
+**Exemplo 1**: Usando **OVER** com **PARTITION BY**
+.small-code[
+```{sql eval = F}
+SELECT
+  F.MES_ANO_FOLHA
+  , R.NOME
+  , COUNT(DISTINCT F.RUBRICA) OVER (PARTITION BY MES_ANO_FOLHA) QTD_RUBRICAS
+FROM 
+  ERGON.FICHAS_FINANCEIRAS F
+  JOIN ERGON.RUBRICAS R
+  ON F.RUBRICA = R.RUBRICA
+WHERE 
+  MES_ANO_FOLHA IN ('01/01/2023','01/02/2023','01/03/2023','01/04/2023')
+  AND NUM_FOLHA = 1;
+```
+]
+
+* No exemplo, o *COUNT(DISTINCT F.RUBRICA) OVER (PARTITION BY MES_ANO_FOLHA)* é responsável por contabilizar a quantidade de rubricas em cada mês.
+* O **OVER** está trabalhando junto com o **PARTITION BY** entre parênteses.
+* O **OVER** é utilizado para “mudar o comportamento” do **COUNT**, fazendo com que o **GROUP BY** não seja mais exigido.
+* Por sua vez, é o **PARTITION BY** que fará o papel similar ao do **GROUP BY**. Neste exemplo, ele serve para determinar que o **MES_ANO_FOLHA** define as partições dos resultados. Uma partição consiste em todas as linhas que possuam o mesmo valor
+para todas as colunas indicadas no **PARTITION BY**.
+
+Além da **COUNT**, é possível usar, da mesma maneira, as funções **SUM, AVG, MAX e MIN** com o **OVER + PARTITION BY**.
+
+---
+### FUNÇÕES DE JANELA
+
+#### Computando Rankings
+SQL também disponibiliza funções de janela para computar rankings. São elas: **CUME_DIST()**, **DENSE_RANK()**, **NTILE()**, **RANK()**, **ROW_NUMBER()** e **PERCENT_RANK()**.
+Essas funções geram resultados tendo por base um conjunto de linhas é relacionada à linha corrente. Elas e normalmente baseiam-se no valor ordenado (**ORDER BY**) de um campo.
+
+---
+### FUNÇÕES DE JANELA
+
+#### Computando Rankings
+
+**Exemplo 2**: Usando **DENSE_RANK()** para computar o ranking de uma linha em um conjunto ordenado de linhas sem deixar "gaps" no caso de empate.
+
+```{sql eval = F}
+SELECT
+  NOME
+  , IDADE
+  , DENSE_RANK() OVER (ORDER BY IDADE DESC) RANKING_IDADE
+FROM
+  (
+  SELECT
+    NOME
+    , ROUND(MONTHS_BETWEEN("09/11/2023", DTNASC) / 12, 0) IDADE
+  FROM
+    ERGON.FUNCIONARIOS
+);
+```
+
+---
+### FUNÇÕES DE JANELA
+
+#### Computando Rankings
+
+**Exemplo 3**: Usando **RANK()** (funcionamento igual ao DENSE_RANK(), mas deixa "gaps").
+```{sql eval = F}
+SELECT
+  NOME
+  , IDADE
+  , RANK() OVER (ORDER BY IDADE DESC) RANKING_IDADE
+FROM
+  (
+  SELECT
+    NOME
+    , ROUND(MONTHS_BETWEEN("09/11/2023", DTNASC) / 12, 0) IDADE
+  FROM
+    ERGON.FUNCIONARIOS
+  WHERE
+    ROWNUM <= 10
+);
+```
+
+
+---
+### FUNÇÕES DE JANELA
+
+#### Computando Rankings
+
+**Exemplo 4**: Usando **ROW_NUMBER()** para associar um número inteiro em sequencia para cada linha.
+```{sql eval = F}
+SELECT
+  NOME
+  , IDADE
+  , ROW_NUMBER() OVER (ORDER BY IDADE DESC) NUMERO
+FROM
+  (
+  SELECT
+    NOME
+    , ROUND(MONTHS_BETWEEN("09/11/2023", DTNASC) / 12, 0) IDADE
+  FROM
+    ERGON.FUNCIONARIOS
+  WHERE
+    ROWNUM <= 10
+);
+```
+
+---
+### FUNÇÕES DE JANELA
+
+#### Computando Rankings
+
+**Exemplo 5**: Usando **RANK()** com **PARTITION BY** e **ORDER BY**.
+```{sql eval = F}
+SELECT DISTINCT
+    F.MES_ANO_DIREITO 
+    , V.MATRIC
+    , F.VALOR
+    , ROW_NUMBER() OVER (PARTITION BY F.MES_ANO_DIREITO ORDER BY F.VALOR DESC) AS RANK_MENSAL
+FROM 
+    ERGON.VINCULOS V
+    JOIN ERGON.FICHAS_FINANCEIRAS F
+    ON F.NUMFUNC = V.NUMFUNC
+    AND F.NUMVINC = V.NUMERO
+WHERE
+    F.MES_ANO_DIREITO IN ('01/01/2023','01/02/2023','01/03/2023','01/04/2023') 
+    AND F.MES_ANO_FOLHA IN ('01/01/2023','01/02/2023','01/03/2023','01/04/2023') 
+    AND F.RUBRICA = 996;
+```
+
+---
+### OUTRAS FUNÇÕES DE JANELA
+
+* **FIRST_VALUE()**: Esta função analítica retorna o valor da coluna especificada para a primeira linha em um conjunto de resultados, após a ordenação de acordo com a cláusula **ORDER BY**. É útil para encontrar o valor inicial em um conjunto ordenado de dados.
+
+* **LAST_VALUE()**: Ao contrário da função **FIRST_VALUE()**, a função **LAST_VALUE()** retorna o valor da coluna especificada para a última linha em um conjunto de resultados após a ordenação. É útil para encontrar o valor final em um conjunto de dados ordenado.
+
+* **LAG()**: A função **LAG()** permite acessar o valor de uma coluna a partir da linha anterior em um conjunto ordenado de dados. Isso é útil para fazer comparações entre valores consecutivos em uma tabela.
+
+* **LEAD()**: Em contraste com **LAG()**, a função **LEAD()** permite acessar o valor da coluna a partir da linha seguinte em um conjunto ordenado de dados. Isso é útil para comparar valores entre a linha atual e a próxima.
+
+* **NTH_VALUE()**: A função **NTH_VALUE()** permite acessar o valor da coluna a partir da linha que ocupa uma posição específica em um conjunto ordenado de dados. Você precisa especificar o índice da posição desejada. Isso é útil quando você precisa encontrar valores de linhas não apenas adjacentes.
+
+* **NTILE()**: A função **NTILE()** é usada para dividir um conjunto de dados ordenado em "n" partes iguais, onde "n" é especificado como um argumento. Cada parte contém aproximadamente a mesma quantidade de linhas. Isso é útil para criar grupos ou intervalos de dados com base em quantis.
+
+---
+### Referências
+
+* Material do Curso "Bases de Dados" - Prof. Eduardo Corrêa Gonçalves (ENCE/IBGE);
+* Livro Introdução à linguagem SQL - Thomas Nield (O'REILLY);
+* Documentação [SQL Language Reference](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/index.html#Oracle%C2%AE-Database) (ORACLE) 
+* [Base dos Dados](https://basedosdados.github.io/mais/access_data_bq/)
+* [Datalake - Prefeitura do Rio](https://www.dados.rio/datalake)

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introdução a bases de dados e SQL</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Heitor Barros" />
+    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Introdução a bases de dados e SQL
+]
+.subtitle[
+## Parte 7
+]
+.author[
+### Heitor Barros
+]
+.institute[
+### FP/SUBGGC/CGRH/CTAP
+]
+
+---
+
+class: center, middle
+
+
+<div>
+<style type="text/css">.xaringan-extra-logo {
+width: 200px;
+height: 128px;
+z-index: 0;
+background-image: url(logo.png);
+background-size: contain;
+background-repeat: no-repeat;
+position: absolute;
+top:1em;right:1em;
+}
+</style>
+<script>(function () {
+  let tries = 0
+  function addLogo () {
+    if (typeof slideshow === 'undefined') {
+      tries += 1
+      if (tries < 10) {
+        setTimeout(addLogo, 100)
+      }
+    } else {
+      document.querySelectorAll('.remark-slide-content:not(.title-slide):not(.inverse):not(.hide_logo)')
+        .forEach(function (slide) {
+          const logo = document.createElement('div')
+          logo.classList = 'xaringan-extra-logo'
+          logo.href = null
+          slide.appendChild(logo)
+        })
+    }
+  }
+  document.addEventListener('DOMContentLoaded', addLogo)
+})()</script>
+</div>
+# FUNÇÕES DE JANELA
+---
+## FUNÇÕES DE JANELA
+
+Uma função de janela (window function) executa um cálculo sobre um conjunto de linhas que, de alguma forma, estão relacionadas à linha corrente. Este conjunto de linhas é chamado da janela. Essas funções diferenciam-se de outras funções da SQL pelas seguintes características:
+* Presença da cláusula **OVER**. Basicamente, se uma função tem a cláusula **OVER** ela vai operar como uma função de janela, incluindo as já conhecidas funções **COUNT, SUM, AVG, MAX e MIN** – isto é, **OVER** muda o comportamento dessas funções). A cláusula **OVER** é usada para a definição da janela (assim como GROUP BY é usada para definir grupos).
+
+---
+### FUNÇÕES DE JANELA
+
+**Exemplo 1**: Usando **OVER** com **PARTITION BY**
+.small-code[
+
+```sql
+SELECT
+  F.MES_ANO_FOLHA
+  , R.NOME
+  , COUNT(DISTINCT F.RUBRICA) OVER (PARTITION BY MES_ANO_FOLHA) QTD_RUBRICAS
+FROM 
+  ERGON.FICHAS_FINANCEIRAS F
+  JOIN ERGON.RUBRICAS R
+  ON F.RUBRICA = R.RUBRICA
+WHERE 
+  MES_ANO_FOLHA IN ('01/01/2023','01/02/2023','01/03/2023','01/04/2023')
+  AND NUM_FOLHA = 1;
+```
+]
+
+* No exemplo, o *COUNT(DISTINCT F.RUBRICA) OVER (PARTITION BY MES_ANO_FOLHA)* é responsável por contabilizar a quantidade de rubricas em cada mês.
+* O **OVER** está trabalhando junto com o **PARTITION BY** entre parênteses.
+* O **OVER** é utilizado para “mudar o comportamento” do **COUNT**, fazendo com que o **GROUP BY** não seja mais exigido.
+* Por sua vez, é o **PARTITION BY** que fará o papel similar ao do **GROUP BY**. Neste exemplo, ele serve para determinar que o **MES_ANO_FOLHA** define as partições dos resultados. Uma partição consiste em todas as linhas que possuam o mesmo valor
+para todas as colunas indicadas no **PARTITION BY**.
+
+Além da **COUNT**, é possível usar, da mesma maneira, as funções **SUM, AVG, MAX e MIN** com o **OVER + PARTITION BY**.
+
+---
+### FUNÇÕES DE JANELA
+
+#### Computando Rankings
+SQL também disponibiliza funções de janela para computar rankings. São elas: **CUME_DIST()**, **DENSE_RANK()**, **NTILE()**, **RANK()**, **ROW_NUMBER()** e **PERCENT_RANK()**.
+Essas funções geram resultados tendo por base um conjunto de linhas é relacionada à linha corrente. Elas e normalmente baseiam-se no valor ordenado (**ORDER BY**) de um campo.
+
+---
+### FUNÇÕES DE JANELA
+
+#### Computando Rankings
+
+**Exemplo 2**: Usando **DENSE_RANK()** para computar o ranking de uma linha em um conjunto ordenado de linhas sem deixar "gaps" no caso de empate.
+
+
+```sql
+SELECT
+  NOME
+  , IDADE
+  , DENSE_RANK() OVER (ORDER BY IDADE DESC) RANKING_IDADE
+FROM
+  (
+  SELECT
+    NOME
+    , ROUND(MONTHS_BETWEEN("09/11/2023", DTNASC) / 12, 0) IDADE
+  FROM
+    ERGON.FUNCIONARIOS
+);
+```
+
+---
+### FUNÇÕES DE JANELA
+
+#### Computando Rankings
+
+**Exemplo 3**: Usando **RANK()** (funcionamento igual ao DENSE_RANK(), mas deixa "gaps").
+
+```sql
+SELECT
+  NOME
+  , IDADE
+  , RANK() OVER (ORDER BY IDADE DESC) RANKING_IDADE
+FROM
+  (
+  SELECT
+    NOME
+    , ROUND(MONTHS_BETWEEN("09/11/2023", DTNASC) / 12, 0) IDADE
+  FROM
+    ERGON.FUNCIONARIOS
+  WHERE
+    ROWNUM &lt;= 10
+);
+```
+
+
+---
+### FUNÇÕES DE JANELA
+
+#### Computando Rankings
+
+**Exemplo 4**: Usando **ROW_NUMBER()** para associar um número inteiro em sequencia para cada linha.
+
+```sql
+SELECT
+  NOME
+  , IDADE
+  , ROW_NUMBER() OVER (ORDER BY IDADE DESC) NUMERO
+FROM
+  (
+  SELECT
+    NOME
+    , ROUND(MONTHS_BETWEEN("09/11/2023", DTNASC) / 12, 0) IDADE
+  FROM
+    ERGON.FUNCIONARIOS
+  WHERE
+    ROWNUM &lt;= 10
+);
+```
+
+---
+### FUNÇÕES DE JANELA
+
+#### Computando Rankings
+
+**Exemplo 5**: Usando **RANK()** com **PARTITION BY** e **ORDER BY**.
+
+```sql
+SELECT DISTINCT
+    F.MES_ANO_DIREITO 
+    , V.MATRIC
+    , F.VALOR
+    , ROW_NUMBER() OVER (PARTITION BY F.MES_ANO_DIREITO ORDER BY F.VALOR DESC) AS RANK_MENSAL
+FROM 
+    ERGON.VINCULOS V
+    JOIN ERGON.FICHAS_FINANCEIRAS F
+    ON F.NUMFUNC = V.NUMFUNC
+    AND F.NUMVINC = V.NUMERO
+WHERE
+    F.MES_ANO_DIREITO IN ('01/01/2023','01/02/2023','01/03/2023','01/04/2023') 
+    AND F.MES_ANO_FOLHA IN ('01/01/2023','01/02/2023','01/03/2023','01/04/2023') 
+    AND F.RUBRICA = 996;
+```
+
+---
+### OUTRAS FUNÇÕES DE JANELA
+
+* **FIRST_VALUE()**: Esta função analítica retorna o valor da coluna especificada para a primeira linha em um conjunto de resultados, após a ordenação de acordo com a cláusula **ORDER BY**. É útil para encontrar o valor inicial em um conjunto ordenado de dados.
+
+* **LAST_VALUE()**: Ao contrário da função **FIRST_VALUE()**, a função **LAST_VALUE()** retorna o valor da coluna especificada para a última linha em um conjunto de resultados após a ordenação. É útil para encontrar o valor final em um conjunto de dados ordenado.
+
+* **LAG()**: A função **LAG()** permite acessar o valor de uma coluna a partir da linha anterior em um conjunto ordenado de dados. Isso é útil para fazer comparações entre valores consecutivos em uma tabela.
+
+* **LEAD()**: Em contraste com **LAG()**, a função **LEAD()** permite acessar o valor da coluna a partir da linha seguinte em um conjunto ordenado de dados. Isso é útil para comparar valores entre a linha atual e a próxima.
+
+* **NTH_VALUE()**: A função **NTH_VALUE()** permite acessar o valor da coluna a partir da linha que ocupa uma posição específica em um conjunto ordenado de dados. Você precisa especificar o índice da posição desejada. Isso é útil quando você precisa encontrar valores de linhas não apenas adjacentes.
+
+* **NTILE()**: A função **NTILE()** é usada para dividir um conjunto de dados ordenado em "n" partes iguais, onde "n" é especificado como um argumento. Cada parte contém aproximadamente a mesma quantidade de linhas. Isso é útil para criar grupos ou intervalos de dados com base em quantis.
+
+---
+### Referências
+
+* Material do Curso "Bases de Dados" - Prof. Eduardo Corrêa Gonçalves (ENCE/IBGE);
+* Livro Introdução à linguagem SQL - Thomas Nield (O'REILLY);
+* Documentação [SQL Language Reference](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/index.html#Oracle%C2%AE-Database) (ORACLE) 
+* [Base dos Dados](https://basedosdados.github.io/mais/access_data_bq/)
+* [Datalake - Prefeitura do Rio](https://www.dados.rio/datalake)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
