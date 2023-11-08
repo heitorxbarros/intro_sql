@@ -4,7 +4,7 @@
     <title>Introdução a bases de dados e SQL</title>
     <meta charset="utf-8" />
     <meta name="author" content="Heitor Barros" />
-    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.20/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -94,6 +94,7 @@ A estrutura **CASE WHEN** permite com que uma série de condições seja avaliad
 ```sql
 SELECT DISTINCT
   V.MATRIC
+  , F.DTNASC
   , CASE
       WHEN F.DTNASC &lt;= '08/11/1943' THEN '80 ANOS OU MAIS'
       WHEN F.DTNASC &gt; '08/11/1943' AND F.DTNASC &lt;= '08/11/1963' THEN 'ENTRE 60 E 80 ANOS'
@@ -121,6 +122,7 @@ SELECT
 FROM (  
   SELECT DISTINCT
     V.MATRIC
+    , F.DTNASC
     , CASE
         WHEN F.DTNASC &lt;= '08/11/1943' THEN '80 ANOS OU MAIS'
         WHEN F.DTNASC &gt; '08/11/1943' AND F.DTNASC &lt;= '08/11/1963' THEN 'ENTRE 60 E 80 ANOS'
@@ -233,7 +235,7 @@ Recebe como parâmetro uma string *s* e retorna o seu comprimento (medido em nú
 .small-code[
 
 ```sql
-SELECT DISTINCT NUMFUNC, NOME, LENGTH(NOME)
+SELECT DISTINCT NUMERO, NOME, LENGTH(NOME)
 FROM ERGON.FUNCIONARIOS
 WHERE ROWNUM &lt;= 10;
 ```
@@ -287,7 +289,7 @@ Retorna a substring de s que inicia em uma determinada posição e tem um determ
 .small-code[
 
 ```sql
-SELECT DISTINCT MES_ANO_FOLHA, SUBSTR(MES_ANO_DIREITO, 4) MES_ANO, SUBSTR(MES_ANO_DIREITO, 4, 2) MES
+SELECT DISTINCT MES_ANO_FOLHA, SUBSTR(MES_ANO_FOLHA, 4) MES_ANO, SUBSTR(MES_ANO_FOLHA, 4, 2) MES
 FROM ERGON.FICHAS_FINANCEIRAS
 WHERE MES_ANO_FOLHA IN ('01/01/2023','01/02/2023','01/03/2023','01/04/2023');
 ```
@@ -300,9 +302,9 @@ Na verdade a concatenação não é uma função, mas um operador que pode ser a
 .small-code[
 
 ```sql
-SELECT DISTINCT MES_ANO_FOLHA, 'ANO: ' || SUBSTR(MES_ANO_DIREITO, 7) AS MES
+SELECT DISTINCT MES_ANO_FOLHA, 'ANO: ' || SUBSTR(MES_ANO_FOLHA, 7) AS MES
 FROM ERGON.FICHAS_FINANCEIRAS
-WHERE MES_ANO_FOLHA IN ('01/01/2023','01/02/2023','01/03/2023','01/04/2023');
+WHERE MES_ANO_FOLHA = '01/01/2023';
 ```
 ]
 
@@ -314,7 +316,7 @@ Retorna o primeiro valor não nulo em uma lista de argumentos. Comportamento igu
 .small-code[
 
 ```sql
-SELECT DISTINCT NUMFUNC, DTAPOSENT, DTVAC, COALESCE(DTAPOSENT,DTVAC,'09/11/2023')            
+SELECT DISTINCT NUMFUNC, DTAPOSENT, DTVAC, COALESCE(DTAPOSENT,DTVAC,TO_DATE('09/11/2023','DD/MM/YYYY'))            
 FROM ERGON.VINCULOS 
 WHERE ROWNUM &lt;= 10000;
 ```
@@ -326,9 +328,10 @@ Arredonda o número n para um certo número de casas decimais, especificado no p
 .small-code[
 
 ```sql
-SELECT DISTINCT RUBRICA, MEAN(VALOR) MEDIA, ROUND(MEAN(VALOR), 2) MEDIA_ARR          
+SELECT DISTINCT RUBRICA, AVG(VALOR) MEDIA, ROUND(AVG(VALOR), 2) MEDIA_ARR          
 FROM ERGON.FICHAS_FINANCEIRAS 
-WHERE MES_ANO_FOLHA = '01/10/2023' AND NUM_FOLHA = 1;
+WHERE MES_ANO_FOLHA = '01/10/2023' AND NUM_FOLHA = 1
+GROUP BY RUBRICA;
 ```
 ]
 
@@ -340,7 +343,7 @@ Retorna o valor absoluto (módulo) de um número.
 .small-code[
 
 ```sql
-SELECT DISTINCT RUBRICA, ABS(VALOR)          
+SELECT DISTINCT RUBRICA, VALOR, ABS(VALOR)          
 FROM ERGON.FICHAS_FINANCEIRAS 
 WHERE MES_ANO_FOLHA = '01/10/2023' AND NUM_FOLHA = 1 AND VALOR &lt; 100
 ORDER BY 1 DESC;
@@ -356,7 +359,7 @@ Suponha que queiramos recuperar os 10 funcionarios com maiores nomes. Podemos us
 ```sql
 SELECT *
 FROM (
-  SELECT DISTINCT NUMFUNC, NOME, LENGTH(NOME)
+  SELECT DISTINCT NUMERO, NOME, LENGTH(NOME)
   FROM ERGON.FUNCIONARIOS
   ORDER BY 3 DESC)
 WHERE ROWNUM &lt;= 10;

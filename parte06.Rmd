@@ -66,6 +66,7 @@ A estrutura **CASE WHEN** permite com que uma série de condições seja avaliad
 ```{sql eval = F}
 SELECT DISTINCT
   V.MATRIC
+  , F.DTNASC
   , CASE
       WHEN F.DTNASC <= '08/11/1943' THEN '80 ANOS OU MAIS'
       WHEN F.DTNASC > '08/11/1943' AND F.DTNASC <= '08/11/1963' THEN 'ENTRE 60 E 80 ANOS'
@@ -92,6 +93,7 @@ SELECT
 FROM (  
   SELECT DISTINCT
     V.MATRIC
+    , F.DTNASC
     , CASE
         WHEN F.DTNASC <= '08/11/1943' THEN '80 ANOS OU MAIS'
         WHEN F.DTNASC > '08/11/1943' AND F.DTNASC <= '08/11/1963' THEN 'ENTRE 60 E 80 ANOS'
@@ -198,7 +200,7 @@ Uma função escalar trabalha da seguinte forma: ela recebe um ou mais parâmetr
 Recebe como parâmetro uma string *s* e retorna o seu comprimento (medido em número de caracteres, incluindo os espaços em branco).
 .small-code[
 ```{sql eval = F}
-SELECT DISTINCT NUMFUNC, NOME, LENGTH(NOME)
+SELECT DISTINCT NUMERO, NOME, LENGTH(NOME)
 FROM ERGON.FUNCIONARIOS
 WHERE ROWNUM <= 10;
 ```
@@ -248,7 +250,7 @@ WHERE ROWNUM <= 1000 AND COMPLENDER LIKE 'APT %';
 Retorna a substring de s que inicia em uma determinada posição e tem um determinado comprimento.
 .small-code[
 ```{sql eval = F}
-SELECT DISTINCT MES_ANO_FOLHA, SUBSTR(MES_ANO_DIREITO, 4) MES_ANO, SUBSTR(MES_ANO_DIREITO, 4, 2) MES
+SELECT DISTINCT MES_ANO_FOLHA, SUBSTR(MES_ANO_FOLHA, 4) MES_ANO, SUBSTR(MES_ANO_FOLHA, 4, 2) MES
 FROM ERGON.FICHAS_FINANCEIRAS
 WHERE MES_ANO_FOLHA IN ('01/01/2023','01/02/2023','01/03/2023','01/04/2023');
 ```
@@ -260,9 +262,9 @@ WHERE MES_ANO_FOLHA IN ('01/01/2023','01/02/2023','01/03/2023','01/04/2023');
 Na verdade a concatenação não é uma função, mas um operador que pode ser aplicado a valores alfanuméricos, servindo para combinar duas ou mais strings em uma só.
 .small-code[
 ```{sql eval = F}
-SELECT DISTINCT MES_ANO_FOLHA, 'ANO: ' || SUBSTR(MES_ANO_DIREITO, 7) AS MES
+SELECT DISTINCT MES_ANO_FOLHA, 'ANO: ' || SUBSTR(MES_ANO_FOLHA, 7) AS MES
 FROM ERGON.FICHAS_FINANCEIRAS
-WHERE MES_ANO_FOLHA IN ('01/01/2023','01/02/2023','01/03/2023','01/04/2023');
+WHERE MES_ANO_FOLHA = '01/01/2023';
 ```
 ]
 
@@ -273,7 +275,7 @@ WHERE MES_ANO_FOLHA IN ('01/01/2023','01/02/2023','01/03/2023','01/04/2023');
 Retorna o primeiro valor não nulo em uma lista de argumentos. Comportamento igual a função NVL quando usado com apenas dois argumentos.
 .small-code[
 ```{sql eval = F}
-SELECT DISTINCT NUMFUNC, DTAPOSENT, DTVAC, COALESCE(DTAPOSENT,DTVAC,'09/11/2023')            
+SELECT DISTINCT NUMFUNC, DTAPOSENT, DTVAC, COALESCE(DTAPOSENT,DTVAC,TO_DATE('09/11/2023','DD/MM/YYYY'))            
 FROM ERGON.VINCULOS 
 WHERE ROWNUM <= 10000;
 ```
@@ -284,9 +286,10 @@ WHERE ROWNUM <= 10000;
 Arredonda o número n para um certo número de casas decimais, especificado no parâmetro d. Caso d seja omitido, arredonda para o inteiro mais próximo (se o valor da parte decimal é maior ou igual a .5, arredonda pra cima; senão, arredonda para baixo).
 .small-code[
 ```{sql eval = F}
-SELECT DISTINCT RUBRICA, MEAN(VALOR) MEDIA, ROUND(MEAN(VALOR), 2) MEDIA_ARR          
+SELECT DISTINCT RUBRICA, AVG(VALOR) MEDIA, ROUND(AVG(VALOR), 2) MEDIA_ARR          
 FROM ERGON.FICHAS_FINANCEIRAS 
-WHERE MES_ANO_FOLHA = '01/10/2023' AND NUM_FOLHA = 1;
+WHERE MES_ANO_FOLHA = '01/10/2023' AND NUM_FOLHA = 1
+GROUP BY RUBRICA;
 ```
 ]
 
@@ -297,7 +300,7 @@ WHERE MES_ANO_FOLHA = '01/10/2023' AND NUM_FOLHA = 1;
 Retorna o valor absoluto (módulo) de um número.
 .small-code[
 ```{sql eval = F}
-SELECT DISTINCT RUBRICA, ABS(VALOR)          
+SELECT DISTINCT RUBRICA, VALOR, ABS(VALOR)          
 FROM ERGON.FICHAS_FINANCEIRAS 
 WHERE MES_ANO_FOLHA = '01/10/2023' AND NUM_FOLHA = 1 AND VALOR < 100
 ORDER BY 1 DESC;
@@ -312,7 +315,7 @@ Suponha que queiramos recuperar os 10 funcionarios com maiores nomes. Podemos us
 ```{sql eval = F}
 SELECT *
 FROM (
-  SELECT DISTINCT NUMFUNC, NOME, LENGTH(NOME)
+  SELECT DISTINCT NUMERO, NOME, LENGTH(NOME)
   FROM ERGON.FUNCIONARIOS
   ORDER BY 3 DESC)
 WHERE ROWNUM <= 10;
