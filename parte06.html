@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introdução a bases de dados e SQL</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Heitor Barros" />
+    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Introdução a bases de dados e SQL
+]
+.subtitle[
+## Parte 6
+]
+.author[
+### Heitor Barros
+]
+.institute[
+### FP/SUBGGC/CGRH/CTAP
+]
+
+---
+
+class: center, middle
+
+
+<div>
+<style type="text/css">.xaringan-extra-logo {
+width: 200px;
+height: 128px;
+z-index: 0;
+background-image: url(logo.png);
+background-size: contain;
+background-repeat: no-repeat;
+position: absolute;
+top:1em;right:1em;
+}
+</style>
+<script>(function () {
+  let tries = 0
+  function addLogo () {
+    if (typeof slideshow === 'undefined') {
+      tries += 1
+      if (tries < 10) {
+        setTimeout(addLogo, 100)
+      }
+    } else {
+      document.querySelectorAll('.remark-slide-content:not(.title-slide):not(.inverse):not(.hide_logo)')
+        .forEach(function (slide) {
+          const logo = document.createElement('div')
+          logo.classList = 'xaringan-extra-logo'
+          logo.href = null
+          slide.appendChild(logo)
+        })
+    }
+  }
+  document.addEventListener('DOMContentLoaded', addLogo)
+})()</script>
+</div>
+# FUNÇÕES CONDICIONAIS
+---
+## FUNÇÕES CONDICIONAIS
+
+Funções condicionais desempenham um papel crucial na manipulação de dados em SQL, permitindo que você execute ações com base em condições específicas. Em um Sistema de Gerenciamento de Banco de Dados (SGBD) Oracle, essas funções oferecem flexibilidade e controle sobre as consultas e operações que você realiza em seus dados. As funções condicionais, como o **CASE**, o **DECODE** e o **NVL**, permitem que você realize transformações condicionais, avaliando valores e tomando decisões com base em critérios predefinidos. Essas funções são ferramentas valiosas para filtrar, classificar e transformar dados de acordo com as necessidades de sua aplicação, tornando o Oracle um SGBD poderoso para a consulta e manipulação de informações de forma condicional. 
+
+---
+### CASE WHEN
+
+A estrutura **CASE WHEN** permite com que uma série de condições seja avaliada, retornando um valor quando a primeira condição for alcançada. É similar ao **IF-THEN-ELSE** ou o **CASE** de algumas linguagens de programação.
+
+#### **Definição 1**: Sintaxe da expressão **CASE WHEN**.
+
+```sql
+CASE
+  WHEN condição1 THEN resultado1
+  WHEN condição2 THEN resultado2
+  WHEN condiçãoN THEN resultadoN
+  ELSE resultado
+END;
+```
+
+---
+### CASE WHEN
+
+A estrutura **CASE WHEN** permite com que uma série de condições seja avaliada, retornando um valor quando a primeira condição for alcançada. É similar ao **IF-THEN-ELSE** ou o **CASE** de algumas linguagens de programação.
+
+**Exemplo 1:** Expressão **CASE WHEN**.
+
+```sql
+SELECT DISTINCT
+  V.MATRIC
+  , CASE
+      WHEN F.DTNASC &lt;= '08/11/1943' THEN '80 ANOS OU MAIS'
+      WHEN F.DTNASC &gt; '08/11/1943' AND F.DTNASC &lt;= '08/11/1963' THEN 'ENTRE 60 E 80 ANOS'
+      WHEN F.DTNASC &gt; '08/11/1963' AND F.DTNASC &lt;= '08/11/1983' THEN 'ENTRE 40 E 60 ANOS'
+      WHEN F.DTNASC &gt; '08/11/1983' AND F.DTNASC &lt;= '08/11/2003' THEN 'ENTRE 20 E 40 ANOS'
+      ELSE 'MENOS DE 20 ANOS'
+  END AS FAIXA_IDADE
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.FUNCIONARIOS F
+  ON F.NUMERO = V.NUMFUNC
+WHERE
+  V.EMP_CODIGO = 1;
+```
+
+---
+### CASE WHEN
+
+**Exemplo 2:** Expressão **CASE WHEN** em subconsultas.
+
+```sql
+SELECT
+  FAIXA_IDADE "FAIXA DE IDADE"
+  , COUNT(DISTINCT MATRIC)
+FROM (  
+  SELECT DISTINCT
+    V.MATRIC
+    , CASE
+        WHEN F.DTNASC &lt;= '08/11/1943' THEN '80 ANOS OU MAIS'
+        WHEN F.DTNASC &gt; '08/11/1943' AND F.DTNASC &lt;= '08/11/1963' THEN 'ENTRE 60 E 80 ANOS'
+        WHEN F.DTNASC &gt; '08/11/1963' AND F.DTNASC &lt;= '08/11/1983' THEN 'ENTRE 40 E 60 ANOS'
+        WHEN F.DTNASC &gt; '08/11/1983' AND F.DTNASC &lt;= '08/11/2003' THEN 'ENTRE 20 E 40 ANOS'
+        ELSE 'MENOS DE 20 ANOS'
+    END AS FAIXA_IDADE
+  FROM 
+    ERGON.VINCULOS V
+    JOIN ERGON.FUNCIONARIOS F
+    ON F.NUMERO = V.NUMFUNC
+  WHERE
+    V.EMP_CODIGO = 1
+  )
+GROUP BY FAIXA_IDADE;
+```
+
+---
+### DECODE
+
+A função **DECODE** permite com que uma condição seja avaliada, retornando um valor quando a condição for alcançada, de maneira similar a uma lógica **IF-THEN-ELSE** de outras linguagens de programação.
+&lt;/br&gt;
+A função compara o valor do primeiro argumento com o valor do segundo e, caso sejam iguais, retorna o terceiro.
+&lt;/br&gt;&lt;/br&gt;
+**Exemplo 3**: Função **DECODE**.
+
+```sql
+SELECT DISTINCT
+  SETOR
+  , NOMESETOR
+  , FLEX_CAMPO_05
+  , DECODE(FLEX_CAMPO_05, 1800, 'SAUDE') AS SECRETARIA
+FROM 
+  ERGON.HSETOR_
+WHERE
+  DATAFIM IS NULL;
+```
+
+---
+### DECODE
+
+#### **Definição 2**: Sintaxe da função **DECODE**.
+
+
+```sql
+DECODE(expressão, valor1, resultado1, valor2, resultado2, ..., default)
+```
+Onde:
+* **expressão**: A expressão que você deseja avaliar.
+* **valor1, valor2, ...**: Valores que serão comparados com a expressão.
+* **resultado1, resultado2, ...**: Valores a serem retornados se a expressão corresponder a um dos valores de pesquisa.
+* **default**: Valor a ser retornado se a expressão não corresponder a nenhum dos valores de pesquisa.
+
+---
+### DECODE
+**Exemplo 4**: Função **DECODE** com mais de 3 argumentos.
+
+```sql
+SELECT DISTINCT
+  SETOR
+  , NOMESETOR
+  , FLEX_CAMPO_05
+  , DECODE(FLEX_CAMPO_05, 1800, 'SAUDE', 1600, 'EDUCACAO','OUTROS') AS SECRETARIA
+FROM 
+  ERGON.HSETOR_
+WHERE
+  DATAFIM IS NULL;
+```
+
+---
+### NVL
+
+A função **NVL é uma função que permite substituir valores nulos (**NULL**) por um valor padrão especificado. Ela é comumente usada para tratar valores nulos em consultas ou operações, fornecendo um valor alternativo quando um valor nulo é encontrado.
+
+#### **Definição 3**: Sintaxe da função **NVL**.
+
+```sql
+DECODE(expressão, default)
+```
+
+**Exemplo 5**: Função **NVL**.
+
+```sql
+SELECT DISTINCT
+  NUMFUNC
+  , NUMVINC
+  , VANTAGEM
+  , DTFIM
+  , NVL(DTFIM, '09/11/2023') DTFIM2
+FROM 
+  ERGON.VANTAGENS
+WHERE
+  DTFIM IS NULL;
+```
+
+---
+class: center, middle
+
+# FUNÇÕES ESCALARES
+
+---
+### FUNÇÕES ESCALARES
+
+Também conhecidas como **Single-Row Functions**, são funções que retornam um único resultado para cada linha de uma consulta.
+Uma função escalar trabalha da seguinte forma: ela recebe um ou mais parâmetros como entrada, realiza algum processamento interno sobre esses parâmetros e retorna um valor único como saída.
+
+* **LENGTH**
+&lt;/br&gt; 
+Recebe como parâmetro uma string *s* e retorna o seu comprimento (medido em número de caracteres, incluindo os espaços em branco).
+.small-code[
+
+```sql
+SELECT DISTINCT NUMFUNC, NOME, LENGTH(NOME)
+FROM ERGON.FUNCIONARIOS
+WHERE ROWNUM &lt;= 10;
+```
+]
+&lt;/br&gt;
+* **LOWER e UPPER**
+&lt;/br&gt;
+Recebem como parâmetro uma string *s* e retornam os seus caracteres ASCII convertidos para minúsculo e maiúsculo, respectivamente.
+.small-code[
+
+```sql
+SELECT DISTINCT BAIRROENDER, LOWER(BAIRROENDER), UPPER(BAIRROENDER)
+FROM ERGON.FUNCIONARIOS
+WHERE ROWNUM &lt;= 1000;
+```
+]
+
+---
+### FUNÇÕES ESCALARES
+
+* **REPLACE**
+&lt;/br&gt; 
+Modifica todas as ocorrências de uma substring por outra substring to na string s.
+.small-code[
+
+```sql
+SELECT DISTINCT NOME, REPLACE(NOME, 'ANA', 'MARIANA')
+FROM ERGON.FUNCIONARIOS
+WHERE ROWNUM &lt;= 1000 AND NOME LIKE 'ANA%';
+```
+]
+&lt;/br&gt;
+* **TRIM, LTRIM, RTRIM**
+&lt;/br&gt;
+A função **TRIM** remove todas as ocorrências do caractere c de ambos os lados da string s (caso c seja omitido, remove os espaços em branco). **LTRIM** faz a remoção apenas no lado esquerdo e **RTRIM** no direito.
+.small-code[
+
+```sql
+SELECT DISTINCT COMPLENDER, LTRIM(COMPLENDER,'APT'), TRIM(LTRIM(COMPLENDER,'APT'))
+FROM ERGON.FUNCIONARIOS
+WHERE ROWNUM &lt;= 1000 AND COMPLENDER LIKE 'APT %';
+```
+]
+
+---
+### FUNÇÕES ESCALARES
+
+* **SUBSTR**
+&lt;/BR&gt;
+Retorna a substring de s que inicia em uma determinada posição e tem um determinado comprimento.
+.small-code[
+
+```sql
+SELECT DISTINCT MES_ANO_FOLHA, SUBSTR(MES_ANO_DIREITO, 4) MES_ANO, SUBSTR(MES_ANO_DIREITO, 4, 2) MES
+FROM ERGON.FICHAS_FINANCEIRAS
+WHERE MES_ANO_FOLHA IN ('01/01/2023','01/02/2023','01/03/2023','01/04/2023');
+```
+]
+&lt;/BR&gt;
+
+* **CONCATENAÇÃO**
+&lt;/BR&gt;
+Na verdade a concatenação não é uma função, mas um operador que pode ser aplicado a valores alfanuméricos, servindo para combinar duas ou mais strings em uma só.
+.small-code[
+
+```sql
+SELECT DISTINCT MES_ANO_FOLHA, 'ANO: ' || SUBSTR(MES_ANO_DIREITO, 7) AS MES
+FROM ERGON.FICHAS_FINANCEIRAS
+WHERE MES_ANO_FOLHA IN ('01/01/2023','01/02/2023','01/03/2023','01/04/2023');
+```
+]
+
+---
+### FUNÇÕES ESCALARES
+* **COALESCE**
+&lt;/BR&gt;
+Retorna o primeiro valor não nulo em uma lista de argumentos. Comportamento igual a função NVL quando usado com apenas dois argumentos.
+.small-code[
+
+```sql
+SELECT DISTINCT NUMFUNC, DTAPOSENT, DTVAC, COALESCE(DTAPOSENT,DTVAC,'09/11/2023')            
+FROM ERGON.VINCULOS 
+WHERE ROWNUM &lt;= 10000;
+```
+]
+
+* **ROUND**
+&lt;/BR&gt;
+Arredonda o número n para um certo número de casas decimais, especificado no parâmetro d. Caso d seja omitido, arredonda para o inteiro mais próximo (se o valor da parte decimal é maior ou igual a .5, arredonda pra cima; senão, arredonda para baixo).
+.small-code[
+
+```sql
+SELECT DISTINCT RUBRICA, MEAN(VALOR) MEDIA, ROUND(MEAN(VALOR), 2) MEDIA_ARR          
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/10/2023' AND NUM_FOLHA = 1;
+```
+]
+
+---
+### FUNÇÕES ESCALARES
+* **ABS**
+&lt;/BR&gt;
+Retorna o valor absoluto (módulo) de um número.
+.small-code[
+
+```sql
+SELECT DISTINCT RUBRICA, ABS(VALOR)          
+FROM ERGON.FICHAS_FINANCEIRAS 
+WHERE MES_ANO_FOLHA = '01/10/2023' AND NUM_FOLHA = 1 AND VALOR &lt; 100
+ORDER BY 1 DESC;
+```
+]
+
+---
+### LIMITANDO A QUANTIDADE DE LINHAS DE UM RESULTADOS 
+
+Suponha que queiramos recuperar os 10 funcionarios com maiores nomes. Podemos usar uma subconsulta para ordenar e depois uma consulta pai para limitar a quantidade de linhas usando a palavra-chave **ROWNUM**.
+
+
+```sql
+SELECT *
+FROM (
+  SELECT DISTINCT NUMFUNC, NOME, LENGTH(NOME)
+  FROM ERGON.FUNCIONARIOS
+  ORDER BY 3 DESC)
+WHERE ROWNUM &lt;= 10;
+```
+
+
+---
+### Referências
+
+* Material do Curso "Bases de Dados" - Prof. Eduardo Corrêa Gonçalves (ENCE/IBGE);
+* Livro Introdução à linguagem SQL - Thomas Nield (O'REILLY);
+* Documentação [SQL Language Reference](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/index.html#Oracle%C2%AE-Database) (ORACLE) 
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

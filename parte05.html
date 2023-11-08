@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="author" content="Heitor Barros" />
     <script src="libs/header-attrs-2.25/header-attrs.js"></script>
-    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x556ca555519499381d9384907d4f294","expires":14}</script>
+    <script type="application/json" id="xaringanExtra-editable-docid">{"id":"x8eacde0ead44443a00df376183d92ee","expires":14}</script>
     <script src="libs/himalaya-1.1.0/himalaya.js"></script>
     <script src="libs/js-cookie-3.0.0/js.cookie.js"></script>
     <link href="libs/editable-0.2.6/editable.css" rel="stylesheet" />
@@ -894,11 +894,11 @@ ORDER BY 2;
 ---
 ### EXERCÍCIOS
 
-1. Crie uma consulta para recuperar matrículas dos servidores para quais o valor da rubrica 987 no mês de setembro seja menor do que a mediana para mesmo mês. Use as tabelas  &lt;strong style="color:red;"&gt;ERGON.CONS&lt;/strong&gt;  e  &lt;strong style="color:red;"&gt;ERGON.VINCULOS&lt;/strong&gt;. Obs.: A função utilizada para calcular a mediana é a **MEDIAN**.
+1. Crie uma consulta para recuperar matrículas dos servidores para quais o valor da rubrica 904 no mês de setembro seja menor do que a mediana para mesmo mês. Use as tabelas  &lt;strong style="color:red;"&gt;ERGON.CONS&lt;/strong&gt;  e  &lt;strong style="color:red;"&gt;ERGON.VINCULOS&lt;/strong&gt;. Obs.: A função utilizada para calcular a mediana é a **MEDIAN**.
 
 2. Crie uma consulta para recuperar as matrículas dos servidores ativos lotados no setor 1 e os valores do atributo 'PLANO META VARIAVEL' cuja data início (**DTINI**) é igual a 01/10/2023. As matrículas dos servidores que não tem o atributo cadastrado também devem aparecer no resultado final.
 
-3. Crie uma consulta para recuperar os vínculos mais recentes dos servidores lotados no setor 1. Não use a coluna **DTFIM** na cláusula **WHERE**.
+3. Crie uma consulta para recuperar os provimentos mais recentes dos servidores lotados no setor 1. Não use a coluna **DTFIM** na cláusula **WHERE**.
 
 4. Crie uma consulta para recuperar as matrículas dos servidores que tem o atributo 'PLANO META FIXA' cuja data início (**DTINI**) é igual a 01/10/2023 e não tem o atributo 'PLANO META VARIAVEL' com a mesma data início.
 
@@ -936,7 +936,164 @@ WHERE
 GROUP BY RUBRICA;
 ```
 ]
+---
+### SOLUÇÕES
+1. Crie uma consulta para recuperar matrículas dos servidores para quais o valor da rubrica 904 no mês de setembro seja menor do que a mediana para mesmo mês. Use as tabelas  &lt;strong style="color:red;"&gt;ERGON.CONS&lt;/strong&gt;  e  &lt;strong style="color:red;"&gt;ERGON.VINCULOS&lt;/strong&gt;. Obs.: A função utilizada para calcular a mediana é a **MEDIAN**.
 
+.small-code[
+
+```sql
+SELECT DISTINCT
+  V.MATRIC
+ , C.VALOR 
+FROM
+  ERGON.VINCULOS V
+  JOIN ERGON.CONS C
+  ON V.NUMFUNC = C.NUMFUNC
+  AND V.NUMERO = C.NUMVINC
+WHERE
+  C.DTINI = '01/09/2023'
+  AND C.RUBRICA = 904
+  AND C.VALOR &lt; (
+	  SELECT 
+    	MEDIAN(VALOR)
+	  FROM 
+    	ERGON.CONS
+	  WHERE 
+    	DTINI = '01/09/2023'
+    	AND RUBRICA = 904);
+```
+]
+---
+### SOLUÇÕES
+&lt;ol start="2"&gt;
+&lt;li&gt; Crie uma consulta para recuperar as matrículas dos servidores ativos lotados no setor 1 e os valores do atributo 'PLANO META VARIAVEL' cuja data início (&lt;strong&gt;DTINI&lt;/strong&gt;) é igual a 01/10/2023. As matrículas dos servidores que não tem o atributo cadastrado também devem aparecer no resultado final.
+&lt;/ol&gt;
+
+.small-code[
+
+```sql
+SELECT
+  V.MATRIC, A.VALOR
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.PROVIMENTOS_EV P
+  ON V.NUMFUNC = P.NUMFUNC
+  AND V.NUMERO = P.NUMVINC
+  LEFT JOIN (
+	SELECT NUMFUNC, NUMVINC, VALOR
+	FROM ERGON.VANTAGENS 
+	WHERE VANTAGEM = 'PLANO META VARIAVEL'
+	AND DTINI = '01/10/2023') A
+  ON V.NUMFUNC = A.NUMFUNC
+  AND V.NUMERO = A.NUMVINC
+WHERE
+  P.SETOR = '1'
+  AND P.DTFIM IS NULL
+  AND V.DTVAC IS NULL;
+```
+]
+---
+### SOLUÇÕES
+&lt;ol start="3"&gt;
+&lt;li&gt; Crie uma consulta para recuperar os provimentos mais recentes dos servidores lotados no setor 1. Não use a coluna &lt;strong&gt;DTFIM&lt;/strong&gt; na cláusula &lt;strong&gt;WHERE&lt;/strong&gt;.
+&lt;/ol&gt;
+
+.small-code[
+
+```sql
+SELECT
+  V.MATRIC, A.VALOR
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.PROVIMENTOS_EV P
+  ON V.NUMFUNC = P.NUMFUNC
+  AND V.NUMERO = P.NUMVINC
+WHERE
+  P.SETOR = '1'
+  P.DTINI = (
+*   SELECT
+*     MAX(P2.DTINI)
+*   FROM
+*     ERGON.PROVIMENTOS_EV P2
+*   WHERE
+*     P.NUMFUNC = P2.NUMFUNC
+*     AND P.NUMVINC = P2.NUMVINC
+);
+```
+]
+---
+### SOLUÇÕES
+&lt;ol start="4"&gt;
+&lt;li&gt; Crie uma consulta para recuperar as matrículas dos servidores que tem o atributo 'PLANO META FIXA' cuja data início (&lt;strong&gt;DTINI&lt;/strong&gt;) é igual a 01/10/2023 e não tem o atributo 'PLANO META VARIAVEL' com a mesma data início.
+&lt;/ol&gt;
+
+```sql
+SELECT
+  V.MATRIC
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.VANTAGENS VA
+  ON V.NUMFUNC = VA.NUMFUNC
+  AND V.NUMERO = VA.NUMVINC
+WHERE
+  VA.VANTAGEM = 'PLANO META FIXA'
+  AND VA.DTINI = '01/10/2023'
+MINUS
+SELECT
+  V.MATRIC
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.VANTAGENS VA
+  ON V.NUMFUNC = VA.NUMFUNC
+  AND V.NUMERO = VA.NUMVINC
+WHERE
+  VA.VANTAGEM = 'PLANO META VARIAVEL'
+  AND VA.DTINI = '01/10/2023';
+```
+---
+### SOLUÇÕES
+
+&lt;ol start="5"&gt;
+&lt;li&gt; Modifique o &lt;em&gt;Exemplo 5&lt;/em&gt; de operações de conjunto para gerar a soma dos registros usando &lt;strong&gt;GROUP BY&lt;/strong&gt;.
+&lt;/ol&gt;
+
+.smaller-code[
+
+```sql
+SELECT
+ RUBRICA
+ , SUM(VALOR_MES_ATUAL)    VALOR_MES_ATUAL 
+ , SUM(VALOR_MES_ANTERIOR) VALOR_MES_ANTERIOR
+FROM (
+  SELECT 
+    RUBRICA
+    , SUM(VALOR) VALOR_MES_ATUAL
+    , 0 VALOR_MES_ANTERIOR
+  FROM 
+    ERGON.FICHAS_FINANCEIRAS
+  WHERE 
+    MES_ANO_FOLHA = '01/10/2023'
+    AND RUBRICA = 1
+    AND EMP_CODIGO = 1
+  GROUP BY RUBRICA
+  UNION
+  SELECT 
+    RUBRICA
+    , 0 VALOR_MES_ATUAL
+    , SUM(VALOR) VALOR_MES_ANTERIOR
+  FROM 
+    ERGON.FICHAS_FINANCEIRAS
+  WHERE 
+    MES_ANO_FOLHA = '01/09/2023'
+    AND RUBRICA = 1
+    AND EMP_CODIGO = 1
+  GROUP BY RUBRICA
+  ) A
+GROUP BY RUBRICA
+;
+```
+]
 ---
 class: center, middle
 # COMANDOS DO SQL*PLUS
@@ -964,23 +1121,23 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
 
 * **SET**: Define uma variável de sistema para alterar as configurações do ambiente do SQL*Plus para sua sessão atual, por exemplo, para: personalizar a formatação HTML, habilitar ou desabilitar a impressão de cabeçalhos de coluna, definir o número de linhas por página ou definir a largura de exibição dos dados. Ex.: SET TIME ON;
 
-<div id="qzoqeihgdu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:900px;height:300px;">
-<style>#qzoqeihgdu table {
+<div id="zdotggvlgd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:900px;height:300px;">
+<style>#zdotggvlgd table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#qzoqeihgdu thead, #qzoqeihgdu tbody, #qzoqeihgdu tfoot, #qzoqeihgdu tr, #qzoqeihgdu td, #qzoqeihgdu th {
+#zdotggvlgd thead, #zdotggvlgd tbody, #zdotggvlgd tfoot, #zdotggvlgd tr, #zdotggvlgd td, #zdotggvlgd th {
   border-style: none;
 }
 
-#qzoqeihgdu p {
+#zdotggvlgd p {
   margin: 0;
   padding: 0;
 }
 
-#qzoqeihgdu .gt_table {
+#zdotggvlgd .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1006,12 +1163,12 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   border-left-color: #D5D5D5;
 }
 
-#qzoqeihgdu .gt_caption {
+#zdotggvlgd .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#qzoqeihgdu .gt_title {
+#zdotggvlgd .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1023,7 +1180,7 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   border-bottom-width: 0;
 }
 
-#qzoqeihgdu .gt_subtitle {
+#zdotggvlgd .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1035,7 +1192,7 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   border-top-width: 0;
 }
 
-#qzoqeihgdu .gt_heading {
+#zdotggvlgd .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1047,13 +1204,13 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   border-right-color: #D3D3D3;
 }
 
-#qzoqeihgdu .gt_bottom_border {
+#zdotggvlgd .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D5D5D5;
 }
 
-#qzoqeihgdu .gt_col_headings {
+#zdotggvlgd .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D5D5D5;
@@ -1068,7 +1225,7 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   border-right-color: #D3D3D3;
 }
 
-#qzoqeihgdu .gt_col_heading {
+#zdotggvlgd .gt_col_heading {
   color: #FFFFFF;
   background-color: #004D80;
   font-size: 100%;
@@ -1088,7 +1245,7 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   overflow-x: hidden;
 }
 
-#qzoqeihgdu .gt_column_spanner_outer {
+#zdotggvlgd .gt_column_spanner_outer {
   color: #FFFFFF;
   background-color: #004D80;
   font-size: 100%;
@@ -1100,15 +1257,15 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   padding-right: 4px;
 }
 
-#qzoqeihgdu .gt_column_spanner_outer:first-child {
+#zdotggvlgd .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#qzoqeihgdu .gt_column_spanner_outer:last-child {
+#zdotggvlgd .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#qzoqeihgdu .gt_column_spanner {
+#zdotggvlgd .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D5D5D5;
@@ -1120,11 +1277,11 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   width: 100%;
 }
 
-#qzoqeihgdu .gt_spanner_row {
+#zdotggvlgd .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#qzoqeihgdu .gt_group_heading {
+#zdotggvlgd .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1150,7 +1307,7 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   text-align: left;
 }
 
-#qzoqeihgdu .gt_empty_group_heading {
+#zdotggvlgd .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1165,15 +1322,15 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   vertical-align: middle;
 }
 
-#qzoqeihgdu .gt_from_md > :first-child {
+#zdotggvlgd .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#qzoqeihgdu .gt_from_md > :last-child {
+#zdotggvlgd .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#qzoqeihgdu .gt_row {
+#zdotggvlgd .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1192,7 +1349,7 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   overflow-x: hidden;
 }
 
-#qzoqeihgdu .gt_stub {
+#zdotggvlgd .gt_stub {
   color: #FFFFFF;
   background-color: #929292;
   font-size: 100%;
@@ -1205,7 +1362,7 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   padding-right: 5px;
 }
 
-#qzoqeihgdu .gt_stub_row_group {
+#zdotggvlgd .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1219,15 +1376,15 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   vertical-align: top;
 }
 
-#qzoqeihgdu .gt_row_group_first td {
+#zdotggvlgd .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#qzoqeihgdu .gt_row_group_first th {
+#zdotggvlgd .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#qzoqeihgdu .gt_summary_row {
+#zdotggvlgd .gt_summary_row {
   color: #FFFFFF;
   background-color: #5F5F5F;
   text-transform: inherit;
@@ -1237,16 +1394,16 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   padding-right: 5px;
 }
 
-#qzoqeihgdu .gt_first_summary_row {
+#zdotggvlgd .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D5D5D5;
 }
 
-#qzoqeihgdu .gt_first_summary_row.thick {
+#zdotggvlgd .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#qzoqeihgdu .gt_last_summary_row {
+#zdotggvlgd .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1256,7 +1413,7 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   border-bottom-color: #D5D5D5;
 }
 
-#qzoqeihgdu .gt_grand_summary_row {
+#zdotggvlgd .gt_grand_summary_row {
   color: #FFFFFF;
   background-color: #929292;
   text-transform: inherit;
@@ -1266,7 +1423,7 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   padding-right: 5px;
 }
 
-#qzoqeihgdu .gt_first_grand_summary_row {
+#zdotggvlgd .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1276,7 +1433,7 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   border-top-color: #D5D5D5;
 }
 
-#qzoqeihgdu .gt_last_grand_summary_row_top {
+#zdotggvlgd .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1286,11 +1443,11 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   border-bottom-color: #D5D5D5;
 }
 
-#qzoqeihgdu .gt_striped {
+#zdotggvlgd .gt_striped {
   background-color: #F4F4F4;
 }
 
-#qzoqeihgdu .gt_table_body {
+#zdotggvlgd .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D5D5D5;
@@ -1299,7 +1456,7 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   border-bottom-color: #D5D5D5;
 }
 
-#qzoqeihgdu .gt_footnotes {
+#zdotggvlgd .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1313,7 +1470,7 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   border-right-color: #D3D3D3;
 }
 
-#qzoqeihgdu .gt_footnote {
+#zdotggvlgd .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1322,7 +1479,7 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   padding-right: 5px;
 }
 
-#qzoqeihgdu .gt_sourcenotes {
+#zdotggvlgd .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1336,7 +1493,7 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   border-right-color: #D3D3D3;
 }
 
-#qzoqeihgdu .gt_sourcenote {
+#zdotggvlgd .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1344,63 +1501,63 @@ O **SQL\*Plus** é uma ferramenta poderosa para interagir com bancos de dados Or
   padding-right: 5px;
 }
 
-#qzoqeihgdu .gt_left {
+#zdotggvlgd .gt_left {
   text-align: left;
 }
 
-#qzoqeihgdu .gt_center {
+#zdotggvlgd .gt_center {
   text-align: center;
 }
 
-#qzoqeihgdu .gt_right {
+#zdotggvlgd .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qzoqeihgdu .gt_font_normal {
+#zdotggvlgd .gt_font_normal {
   font-weight: normal;
 }
 
-#qzoqeihgdu .gt_font_bold {
+#zdotggvlgd .gt_font_bold {
   font-weight: bold;
 }
 
-#qzoqeihgdu .gt_font_italic {
+#zdotggvlgd .gt_font_italic {
   font-style: italic;
 }
 
-#qzoqeihgdu .gt_super {
+#zdotggvlgd .gt_super {
   font-size: 65%;
 }
 
-#qzoqeihgdu .gt_footnote_marks {
+#zdotggvlgd .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#qzoqeihgdu .gt_asterisk {
+#zdotggvlgd .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#qzoqeihgdu .gt_indent_1 {
+#zdotggvlgd .gt_indent_1 {
   text-indent: 5px;
 }
 
-#qzoqeihgdu .gt_indent_2 {
+#zdotggvlgd .gt_indent_2 {
   text-indent: 10px;
 }
 
-#qzoqeihgdu .gt_indent_3 {
+#zdotggvlgd .gt_indent_3 {
   text-indent: 15px;
 }
 
-#qzoqeihgdu .gt_indent_4 {
+#zdotggvlgd .gt_indent_4 {
   text-indent: 20px;
 }
 
-#qzoqeihgdu .gt_indent_5 {
+#zdotggvlgd .gt_indent_5 {
   text-indent: 25px;
 }
 </style>

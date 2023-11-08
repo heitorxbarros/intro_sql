@@ -1069,11 +1069,11 @@ knitr::include_graphics("images/SUBCONSULTA5.png")
 ---
 ### EXERCÍCIOS
 
-1. Crie uma consulta para recuperar matrículas dos servidores para quais o valor da rubrica 987 no mês de setembro seja menor do que a mediana para mesmo mês. Use as tabelas  <strong style="color:red;">ERGON.CONS</strong>  e  <strong style="color:red;">ERGON.VINCULOS</strong>. Obs.: A função utilizada para calcular a mediana é a **MEDIAN**.
+1. Crie uma consulta para recuperar matrículas dos servidores para quais o valor da rubrica 904 no mês de setembro seja menor do que a mediana para mesmo mês. Use as tabelas  <strong style="color:red;">ERGON.CONS</strong>  e  <strong style="color:red;">ERGON.VINCULOS</strong>. Obs.: A função utilizada para calcular a mediana é a **MEDIAN**.
 
 2. Crie uma consulta para recuperar as matrículas dos servidores ativos lotados no setor 1 e os valores do atributo 'PLANO META VARIAVEL' cuja data início (**DTINI**) é igual a 01/10/2023. As matrículas dos servidores que não tem o atributo cadastrado também devem aparecer no resultado final.
 
-3. Crie uma consulta para recuperar os vínculos mais recentes dos servidores lotados no setor 1. Não use a coluna **DTFIM** na cláusula **WHERE**.
+3. Crie uma consulta para recuperar os provimentos mais recentes dos servidores lotados no setor 1. Não use a coluna **DTFIM** na cláusula **WHERE**.
 
 4. Crie uma consulta para recuperar as matrículas dos servidores que tem o atributo 'PLANO META FIXA' cuja data início (**DTINI**) é igual a 01/10/2023 e não tem o atributo 'PLANO META VARIAVEL' com a mesma data início.
 
@@ -1110,7 +1110,159 @@ WHERE
 GROUP BY RUBRICA;
 ```
 ]
+---
+### SOLUÇÕES
+1. Crie uma consulta para recuperar matrículas dos servidores para quais o valor da rubrica 904 no mês de setembro seja menor do que a mediana para mesmo mês. Use as tabelas  <strong style="color:red;">ERGON.CONS</strong>  e  <strong style="color:red;">ERGON.VINCULOS</strong>. Obs.: A função utilizada para calcular a mediana é a **MEDIAN**.
 
+.small-code[
+```{sql eval = F}
+SELECT DISTINCT
+  V.MATRIC
+ , C.VALOR 
+FROM
+  ERGON.VINCULOS V
+  JOIN ERGON.CONS C
+  ON V.NUMFUNC = C.NUMFUNC
+  AND V.NUMERO = C.NUMVINC
+WHERE
+  C.DTINI = '01/09/2023'
+  AND C.RUBRICA = 904
+  AND C.VALOR < (
+	  SELECT 
+    	MEDIAN(VALOR)
+	  FROM 
+    	ERGON.CONS
+	  WHERE 
+    	DTINI = '01/09/2023'
+    	AND RUBRICA = 904);
+```
+]
+---
+### SOLUÇÕES
+<ol start="2">
+<li> Crie uma consulta para recuperar as matrículas dos servidores ativos lotados no setor 1 e os valores do atributo 'PLANO META VARIAVEL' cuja data início (<strong>DTINI</strong>) é igual a 01/10/2023. As matrículas dos servidores que não tem o atributo cadastrado também devem aparecer no resultado final.
+</ol>
+
+.small-code[
+```{sql eval = F}
+SELECT
+  V.MATRIC, A.VALOR
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.PROVIMENTOS_EV P
+  ON V.NUMFUNC = P.NUMFUNC
+  AND V.NUMERO = P.NUMVINC
+  LEFT JOIN (
+	SELECT NUMFUNC, NUMVINC, VALOR
+	FROM ERGON.VANTAGENS 
+	WHERE VANTAGEM = 'PLANO META VARIAVEL'
+	AND DTINI = '01/10/2023') A
+  ON V.NUMFUNC = A.NUMFUNC
+  AND V.NUMERO = A.NUMVINC
+WHERE
+  P.SETOR = '1'
+  AND P.DTFIM IS NULL
+  AND V.DTVAC IS NULL;
+```
+]
+---
+### SOLUÇÕES
+<ol start="3">
+<li> Crie uma consulta para recuperar os provimentos mais recentes dos servidores lotados no setor 1. Não use a coluna <strong>DTFIM</strong> na cláusula <strong>WHERE</strong>.
+</ol>
+
+.small-code[
+```{sql eval = F}
+SELECT
+  V.MATRIC, A.VALOR
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.PROVIMENTOS_EV P
+  ON V.NUMFUNC = P.NUMFUNC
+  AND V.NUMERO = P.NUMVINC
+WHERE
+  P.SETOR = '1'
+  P.DTINI = (
+    SELECT   #<<
+      MAX(P2.DTINI) #<<
+    FROM #<<
+      ERGON.PROVIMENTOS_EV P2 #<<
+    WHERE #<<
+      P.NUMFUNC = P2.NUMFUNC #<<
+      AND P.NUMVINC = P2.NUMVINC #<<
+);
+```
+]
+---
+### SOLUÇÕES
+<ol start="4">
+<li> Crie uma consulta para recuperar as matrículas dos servidores que tem o atributo 'PLANO META FIXA' cuja data início (<strong>DTINI</strong>) é igual a 01/10/2023 e não tem o atributo 'PLANO META VARIAVEL' com a mesma data início.
+</ol>
+```{sql eval = F}
+SELECT
+  V.MATRIC
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.VANTAGENS VA
+  ON V.NUMFUNC = VA.NUMFUNC
+  AND V.NUMERO = VA.NUMVINC
+WHERE
+  VA.VANTAGEM = 'PLANO META FIXA'
+  AND VA.DTINI = '01/10/2023'
+MINUS
+SELECT
+  V.MATRIC
+FROM 
+  ERGON.VINCULOS V
+  JOIN ERGON.VANTAGENS VA
+  ON V.NUMFUNC = VA.NUMFUNC
+  AND V.NUMERO = VA.NUMVINC
+WHERE
+  VA.VANTAGEM = 'PLANO META VARIAVEL'
+  AND VA.DTINI = '01/10/2023';
+```
+---
+### SOLUÇÕES
+
+<ol start="5">
+<li> Modifique o <em>Exemplo 5</em> de operações de conjunto para gerar a soma dos registros usando <strong>GROUP BY</strong>.
+</ol>
+
+.smaller-code[
+```{sql eval = F}
+SELECT
+ RUBRICA
+ , SUM(VALOR_MES_ATUAL)    VALOR_MES_ATUAL 
+ , SUM(VALOR_MES_ANTERIOR) VALOR_MES_ANTERIOR
+FROM (
+  SELECT 
+    RUBRICA
+    , SUM(VALOR) VALOR_MES_ATUAL
+    , 0 VALOR_MES_ANTERIOR
+  FROM 
+    ERGON.FICHAS_FINANCEIRAS
+  WHERE 
+    MES_ANO_FOLHA = '01/10/2023'
+    AND RUBRICA = 1
+    AND EMP_CODIGO = 1
+  GROUP BY RUBRICA
+  UNION
+  SELECT 
+    RUBRICA
+    , 0 VALOR_MES_ATUAL
+    , SUM(VALOR) VALOR_MES_ANTERIOR
+  FROM 
+    ERGON.FICHAS_FINANCEIRAS
+  WHERE 
+    MES_ANO_FOLHA = '01/09/2023'
+    AND RUBRICA = 1
+    AND EMP_CODIGO = 1
+  GROUP BY RUBRICA
+  ) A
+GROUP BY RUBRICA
+;
+```
+]
 ---
 class: center, middle
 # COMANDOS DO SQL*PLUS
